@@ -44,6 +44,11 @@ namespace Hellevator.Behavior.States
             get { return Hellevator.Current.FloorIndicator; }
         }
 
+        protected static IRelay HellLights
+        {
+            get { return Hellevator.Current.HellLights; }
+        }
+
         #endregion
 
         #region Sounds

@@ -22,6 +22,7 @@ namespace Hellevator.Behavior.States
             Chandelier.TurnOn();
             FloorIndicator.Floor = Floors.BlackRockCity;
             CarriageDoor.Open();
+            HellLights.TurnOn();
 
             PanelButton.Pressed += PanelButtonPressed;
         }
