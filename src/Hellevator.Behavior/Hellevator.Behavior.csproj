@@ -35,7 +35,8 @@
     <Compile Include="Interface\IAudioZone.cs" />
     <Compile Include="Interface\IButton.cs" />
     <Compile Include="Interface\IDoor.cs" />
-    <Compile Include="Interface\IHellevatorInterface.cs" />
+    <Compile Include="Interface\IEffectPlayer.cs" />
+    <Compile Include="Interface\IHellevator.cs" />
     <Compile Include="Interface\IFloorIndicator.cs" />
     <Compile Include="Interface\IRelay.cs" />
     <Compile Include="Interface\ITurntable.cs" />

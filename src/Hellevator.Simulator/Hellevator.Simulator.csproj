@@ -55,11 +55,28 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Carriage.xaml.cs">
+      <DependentUpon>Carriage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FloorIndicator.xaml.cs">
+      <DependentUpon>FloorIndicator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\SimulatorAudioZone.cs" />
     <Compile Include="ViewModels\SimulatorButton.cs" />
-    <Compile Include="ViewModels\SimulatorInterface.cs" />
+    <Compile Include="ViewModels\SimulatorDoor.cs" />
+    <Compile Include="ViewModels\SimulatorFloorIndicator.cs" />
+    <Compile Include="ViewModels\HellevatorSimulator.cs" />
     <Compile Include="ViewModels\SimulatorRelay.cs" />
+    <Compile Include="ViewModels\SimulatorTurntable.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Page Include="Carriage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FloorIndicator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -104,6 +121,10 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(TargetFileName) $(SolutionDir)..\download
+copy *.dll $(SolutionDir)..\download</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

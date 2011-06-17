@@ -7,9 +7,9 @@ namespace Hellevator.Behavior.States
     {
         protected override void Enter()
         {
-            Hellevator.CarriageZone.Stop();
-            Hellevator.InsideZone.Stop();
-            Hellevator.FloorIndicator.TurnOff();
+            CarriageZone.Stop();
+            InsideZone.Stop();
+            FloorIndicator.TurnOff();
             // carriage doors close.
         }
     }

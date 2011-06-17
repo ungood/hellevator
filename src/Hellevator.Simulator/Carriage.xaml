@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="Hellevator.Simulator.Carriage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+  mc:Ignorable="d">
+  <UserControl.Resources>
+    <Style x:Key="InsideStyle" TargetType="{x:Type Canvas}">
+      <Setter Property="Background" Value="Gray" />
+
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding HellLights.IsOn}" Value="true">
+          <Setter Property="Background" Value="#B2191E" />
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+
+    <Style x:Key="CarriageStyle" TargetType="{x:Type Canvas}">
+      <Setter Property="Background" Value="Gray" />
+
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding Chandelier.IsOn}" Value="true">
+          <Setter Property="Background" Value="#efefef" />
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+    
+    <Style x:Key="DoorStyle" TargetType="Line">
+      <Setter Property="StrokeDashArray" Value="" />
+      
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding CarriageDoor.IsOpen}" Value="true">
+          <Setter Property="StrokeDashArray" Value="13,26" />
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+  </UserControl.Resources>
+
+  <!-- The inside of the box. -->
+  <Canvas Width="400" Height="400" Style="{DynamicResource InsideStyle}">
+        
+    <Grid Width="400" Height="400">
+      <Border BorderBrush="Black" BorderThickness="5" />
+      
+      <!-- Axle STOP -->
+      <Line X1="400" Y1="0" X2="340" Y2="60" Stroke="Red" StrokeThickness="5"  />
+      
+      <!-- The Carriage -->
+      <Canvas Width="260" Height="260" Style="{DynamicResource CarriageStyle}">
+        <Canvas.RenderTransform>
+          <RotateTransform Angle="{Binding CarriageTurntable.Angle}" CenterX="130" CenterY="130" />
+        </Canvas.RenderTransform>
+      
+        <!-- Walls and Door -->
+        <Polyline Points="0,260 0,0 260,0 260,260" Stroke="Black" StrokeThickness="5"/>
+        <Line Style="{DynamicResource DoorStyle}" X1="0" X2="260" Y1="260" Y2="260" Stroke="Black" StrokeThickness="5" />
+        
+        <!-- Axle -->
+        <Line X1="240" Y1="20" X2="260" Y2="0" Stroke="Red" StrokeThickness="5" StrokeEndLineCap="Triangle" />
+      </Canvas>
+    </Grid>
+  </Canvas>
+</UserControl>

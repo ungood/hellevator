@@ -15,34 +15,35 @@
 // limitations under the License.
 #endregion
 
-using System.Threading.Tasks;
-using System.Windows;
-using Hellevator.Behavior.Scenarios;
-using Hellevator.Simulator.ViewModels;
+using Hellevator.Behavior.Interface;
 
-namespace Hellevator.Simulator
+namespace Hellevator.Simulator.ViewModels
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public class SimulatorFloorIndicator : ViewModelBase, IFloorIndicator
     {
-        public MainWindow()
-        {
-            InitializeComponent();
+        private float floor;
 
-            Loaded += HandleLoaded;
+        public float Floor
+        {
+            get { return floor; }
+            set
+            {
+                if(value == floor)
+                    return;
+
+                floor = value;
+                OnPropertyChanged("Floor");
+            }
+        }   
+
+        public void Flicker()
+        {
+            // TODO
         }
 
-        private void HandleLoaded(object sender, RoutedEventArgs e)
+        public void TurnOff()
         {
-            var simulator = new HellevatorSimulator();
-            var scenario = new CompleteScenario();
-
-            Task.Factory.StartNew(() => scenario.Run(simulator));
-
-            DataContext = simulator;
-            
+            // TODO
         }
     }
 }

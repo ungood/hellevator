@@ -4,7 +4,7 @@ using Microsoft.SPOT;
 
 namespace Hellevator.Physical
 {
-    public class PhysicalInterface : IHellevatorInterface
+    public class PhysicalHellevator : IHellevator
     {
         public IButton CallButton
         {

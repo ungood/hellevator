@@ -17,13 +17,13 @@ namespace Hellevator.Behavior.States
     {
         protected override void Enter()
         {
-            Hellevator.InsideZone.Play("CallButtonPressed_Inside");
-            Hellevator.CarriageZone.Play("CallButtonPressed_Carriage");
-            Hellevator.Chandelier.TurnOn();
-            Hellevator.FloorIndicator.Floor = Floors.BlackRockCity;
-            Hellevator.CarriageDoor.Open();
+            InsideZone.Play("CallButtonPressed_Inside");
+            CarriageZone.Play("CallButtonPressed_Carriage");
+            Chandelier.TurnOn();
+            FloorIndicator.Floor = Floors.BlackRockCity;
+            CarriageDoor.Open();
 
-            Hellevator.PanelButton.Pressed += PanelButtonPressed;
+            PanelButton.Pressed += PanelButtonPressed;
         }
 
         private void PanelButtonPressed()
