@@ -31,6 +31,9 @@
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Effects\Effect.cs" />
+    <Compile Include="Effects\GoingUpEffect.cs" />
+    <Compile Include="ExtensionAttribute.cs" />
     <Compile Include="Hellevator.cs" />
     <Compile Include="Interface\IAudioZone.cs" />
     <Compile Include="Interface\IButton.cs" />
@@ -41,17 +44,14 @@
     <Compile Include="Interface\IRelay.cs" />
     <Compile Include="Interface\ITurntable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scenarios\CompleteScenario.cs" />
+    <Compile Include="Scenarios\PurgatoryScenario.cs" />
     <Compile Include="Scenarios\Scenario.cs" />
     <Compile Include="States\AttractState.cs" />
     <Compile Include="States\CallButtonPressed.cs" />
+    <Compile Include="States\GoToHeaven.cs" />
     <Compile Include="States\State.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.SPOT.Native">
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Effects\" />
+    <Reference Include="Microsoft.SPOT.Native" />
   </ItemGroup>
 </Project>

@@ -36,21 +36,22 @@ namespace Hellevator.Simulator.ViewModels
             get { return panelButton; }
         }
 
-        private readonly SimulatorRelay chandelier = new SimulatorRelay();
-
+        private readonly SimulatorRelay fan = new SimulatorRelay();
         public IRelay Fan
         {
-            get { throw new NotImplementedException(); }
+            get { return fan; }
         }
 
+        private readonly SimulatorRelay chandelier = new SimulatorRelay();
         public IRelay Chandelier
         {
             get { return chandelier; }
         }
 
-        public IEffectPlayer FloorEffects
+        private readonly SimulatorEffectPlayer effectPlayer = new SimulatorEffectPlayer();
+        public IEffectPlayer EffectPlayer
         {
-            get { throw new NotImplementedException(); }
+            get { return effectPlayer; }
         }
 
         private readonly SimulatorRelay hellLights = new SimulatorRelay();
@@ -86,10 +87,10 @@ namespace Hellevator.Simulator.ViewModels
             get { return carriageDoor; }
         }
 
-        private readonly SimulatorTurntable carriageTurntable = new SimulatorTurntable();
-        public ITurntable CarriageTurntable
+        private readonly SimulatorTurntable turntable = new SimulatorTurntable();
+        public ITurntable Turntable
         {
-            get { return carriageTurntable; }
+            get { return turntable; }
         }
     }
 }

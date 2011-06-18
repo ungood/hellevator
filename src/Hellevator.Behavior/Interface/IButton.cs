@@ -1,9 +1,10 @@
-﻿namespace Hellevator.Behavior.Interface
-{
-    public delegate void PressedEventHandler();
+﻿using System;
+using System.Threading;
 
+namespace Hellevator.Behavior.Interface
+{
     public interface IButton
     {
-        event PressedEventHandler Pressed;
+        WaitHandle Pressed { get; }
     }
 }

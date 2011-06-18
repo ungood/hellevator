@@ -48,7 +48,7 @@
       <!-- The Carriage -->
       <Canvas Width="260" Height="260" Style="{DynamicResource CarriageStyle}">
         <Canvas.RenderTransform>
-          <RotateTransform Angle="{Binding CarriageTurntable.Angle}" CenterX="130" CenterY="130" />
+          <RotateTransform Angle="{Binding Turntable.Angle}" CenterX="130" CenterY="130" />
         </Canvas.RenderTransform>
       
         <!-- Walls and Door -->

@@ -15,14 +15,33 @@
 // limitations under the License.
 #endregion
 
+using System;
+using System.Threading;
+using System.Windows.Input;
 using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Simulator.ViewModels
 {
+    
+
     public class SimulatorButton : IButton
     {
-        public event PressedEventHandler Pressed;
+        public ICommand Click { get; private set; }
 
-        // TODO
+        public SimulatorButton()
+        {
+            Click = new RelayCommand(Execute);
+        }
+
+        private void Execute(object obj)
+        {
+            pressed.Set();
+        }
+
+        private readonly AutoResetEvent pressed = new AutoResetEvent(false);
+        public WaitHandle Pressed
+        {
+            get { return pressed; }
+        }
     }
 }

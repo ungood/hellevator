@@ -8,6 +8,11 @@
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     
+    <StackPanel>
+      <Button Content="Call" Command="{Binding CallButton.Click}" />
+      <Button Content="Panel" Command="{Binding PanelButton.Click}" />
+    </StackPanel>
+    
     <Simulator:Carriage Grid.Column="1" MinWidth="620" MinHeight="620" />
   </Grid> 
 </Window>

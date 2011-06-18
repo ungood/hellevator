@@ -61,9 +61,11 @@
     <Compile Include="FloorIndicator.xaml.cs">
       <DependentUpon>FloorIndicator.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\SimulatorAudioZone.cs" />
     <Compile Include="ViewModels\SimulatorButton.cs" />
     <Compile Include="ViewModels\SimulatorDoor.cs" />
+    <Compile Include="ViewModels\SimulatorEffectPlayer.cs" />
     <Compile Include="ViewModels\SimulatorFloorIndicator.cs" />
     <Compile Include="ViewModels\HellevatorSimulator.cs" />
     <Compile Include="ViewModels\SimulatorRelay.cs" />

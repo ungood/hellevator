@@ -37,12 +37,14 @@ namespace Hellevator.Simulator
         private void HandleLoaded(object sender, RoutedEventArgs e)
         {
             var simulator = new HellevatorSimulator();
-            var scenario = new CompleteScenario();
-
-            Task.Factory.StartNew(() => scenario.Run(simulator));
+            var scenario = new PurgatoryScenario();
 
             DataContext = simulator;
-            
+            Behavior.Hellevator.Current = simulator;
+            Task.Factory.StartNew(() => {
+                while(true)
+                    scenario.Run();
+            });
         }
     }
 }

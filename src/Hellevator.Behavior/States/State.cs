@@ -1,22 +1,25 @@
 using System;
+using System.Threading;
 using Hellevator.Behavior.Interface;
-using Microsoft.SPOT;
 
 namespace Hellevator.Behavior.States
 {
     public abstract class State
     {
         protected virtual void Enter() {}
-        protected virtual void Loop(TimeSpan time) {}
+        protected virtual WaitHandle[] WaitHandles
+        {
+            get { return new WaitHandle[0]; }
+        }
+        
         protected virtual void Exit() {}
 
         public void Run()
         {
             Enter();
-            // TODO
+            WaitHandle.WaitAll(WaitHandles);
+            Exit();
         }
-
-        public void TransistionNext() {}
 
         #region Inputs
 
@@ -71,7 +74,14 @@ namespace Hellevator.Behavior.States
         {
             get { return Hellevator.Current.CarriageDoor; }
         }
+
+        protected static ITurntable Turntable
+        {
+            get { return Hellevator.Current.Turntable; }
+        }
         
         #endregion
     }
 }
+
+

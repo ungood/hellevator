@@ -15,29 +15,19 @@
 // limitations under the License.
 #endregion
 
-using System.Threading;
+using System.Collections;
+using Hellevator.Behavior.States;
 
-namespace Hellevator.Behavior.Interface
+namespace Hellevator.Behavior.Scenarios
 {
-    public interface ITurntable
+    public class PurgatoryScenario : Scenario
     {
-        Destination CurrentDestination { get; }
-
-        WaitHandle RotateComplete { get; }
-
-        void Reset();
-        void Rotate(int degrees); // Positive = CCW, Negative = CW
-    }
-
-    public static class TurntableExtensions
-    {
-        public static void Goto(this ITurntable turntable, Destination destination)
+        protected override IEnumerable GetStates()
         {
-            if(turntable.CurrentDestination == Destination.Unknown)
-                turntable.Reset();
-
-            var degrees = ((int)destination - (int) turntable.CurrentDestination) * 90;
-            turntable.Rotate(degrees);
+            return new State[] {
+                new CallButtonPressed(),
+                new GoToHeaven()
+            };
         }
     }
 }

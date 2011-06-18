@@ -1,27 +1,26 @@
 using System;
-using Microsoft.SPOT;
 
 namespace Hellevator.Behavior.Interface
 {
     public interface IHellevator
     {
-        // Outside
+        // Inputs
         IButton CallButton { get; }
-
-        // Inside / Hell
-        IAudioZone InsideZone { get; }
+        IButton PanelButton { get; }
+        
+        // Lights
         IRelay HellLights { get; }
-
-        // Carriage
-        IDoor CarriageDoor { get; }
-        ITurntable CarriageTurntable { get; }
-        IRelay Fan { get; }
         IRelay Chandelier { get; }
-        IEffectPlayer FloorEffects { get; }
+        IEffectPlayer EffectPlayer { get; }
+        IFloorIndicator FloorIndicator { get; }
+
+        // Music
+        IAudioZone InsideZone { get; }
         IAudioZone CarriageZone { get; }
 
-        // Panel
-        IButton PanelButton { get; }
-        IFloorIndicator FloorIndicator { get; }
+        // Action
+        IDoor CarriageDoor { get; }
+        ITurntable Turntable { get; }
+        IRelay Fan { get; }
     }
 }
