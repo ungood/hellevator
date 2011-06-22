@@ -17,7 +17,7 @@
 
 using System.Threading.Tasks;
 using System.Windows;
-using Hellevator.Behavior.Scenarios;
+using Hellevator.Behavior;
 using Hellevator.Simulator.ViewModels;
 
 namespace Hellevator.Simulator
@@ -37,14 +37,8 @@ namespace Hellevator.Simulator
         private void HandleLoaded(object sender, RoutedEventArgs e)
         {
             var simulator = new HellevatorSimulator();
-            var scenario = new PurgatoryScenario();
-
             DataContext = simulator;
-            Behavior.Hellevator.Current = simulator;
-            Task.Factory.StartNew(() => {
-                while(true)
-                    scenario.Run();
-            });
+            Task.Factory.StartNew(() => HellevatorScript.Run(simulator));
         }
     }
 }

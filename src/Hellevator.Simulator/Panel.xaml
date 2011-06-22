@@ -5,16 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:Data="clr-namespace:Hellevator.Simulator.Data"
 		mc:Ignorable="d" Width="200" Height="400">
   <UserControl.Resources>
-    <Data:RedBrushConverter x:Key="RedBrushConverter" />
+    <Data:ColorToBrushConverter x:Key="BrushConverter" />
   </UserControl.Resources>
   <Border BorderBrush="Black" BorderThickness="5">
     <DockPanel LastChildFill="True">
       <Button DockPanel.Dock="Bottom" Content="HELL" Width="50" Command="{Binding PanelButton.Click}" />
 
-      <ItemsControl ItemsSource="{Binding FloorIndicator.Lights}">
+      <ItemsControl ItemsSource="{Binding PanelLights.Lights}">
         <ItemsControl.ItemTemplate>
           <DataTemplate>
-            <Ellipse Margin="20, 7" Width="15" Height="15" Stroke="Black" Fill="{Binding Path=Intensity,Converter={StaticResource RedBrushConverter}}" />
+            <Ellipse Margin="20, 7" Width="15" Height="15" Stroke="Black" Fill="{Binding Path=Color, Converter={StaticResource BrushConverter}}" />
           </DataTemplate>
         
         </ItemsControl.ItemTemplate>

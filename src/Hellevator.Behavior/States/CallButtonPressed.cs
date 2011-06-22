@@ -16,6 +16,7 @@
 #endregion
 
 using System.Threading;
+using Hellevator.Behavior.Animations;
 using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Behavior.States
@@ -33,16 +34,18 @@ namespace Hellevator.Behavior.States
     {
         protected override void Enter()
         {
-            InsideZone.Play("CallButtonPressed_Inside");
-            CarriageZone.Play("CallButtonPressed_Carriage");
-            Chandelier.TurnOn();
-            FloorIndicator.Floor = Floors.BlackRockCity;
-            CarriageDoor.Open();
+            Hellevator.InsideZone.Play("CallButtonPressed_Inside");
+            Hellevator.CarriageZone.Play("CallButtonPressed_Carriage");
+            Hellevator.CurrentFloor = Floors.BlackRockCity;
+            Hellevator.PanelPlayer.Play(new FloorIndicatorAnimation());
+            Hellevator.CarriageDoor.Open();
+            Thread.Sleep(500);
+            Hellevator.Chandelier.TurnOn();
         }
 
-        protected override WaitHandle[] WaitHandles
+        protected override void Wait()
         {
-            get { return new[] {PanelButton.Pressed}; }
+            Hellevator.PanelButton.Pressed.WaitOne();
         }
     }
 }

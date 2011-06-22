@@ -1,18 +1,15 @@
-using System;
-
 namespace Hellevator.Behavior.Interface
 {
     public interface IHellevator
     {
-        // Inputs
         IButton CallButton { get; }
         IButton PanelButton { get; }
         
         // Lights
         IRelay HellLights { get; }
         IRelay Chandelier { get; }
-        IEffectPlayer EffectPlayer { get; }
-        IFloorIndicator FloorIndicator { get; }
+        ILightStrip Effects { get; }
+        ILightStrip PanelLights { get; }
 
         // Music
         IAudioZone InsideZone { get; }

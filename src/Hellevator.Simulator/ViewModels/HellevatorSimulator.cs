@@ -16,82 +16,42 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
+using Hellevator.Behavior;
 using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Simulator.ViewModels
 {
     public class HellevatorSimulator : IHellevator
     {
-        private readonly SimulatorButton callButton = new SimulatorButton();
+        public IButton CallButton { get; private set; }
+        public IButton PanelButton { get; private set; }
+        public IRelay HellLights { get; private set; }
+        public IRelay Chandelier { get; private set; }
+        public ILightStrip Effects { get; private set; }
+        public ILightStrip PanelLights { get; private set; }
+        public IAudioZone InsideZone { get; private set; }
+        public IAudioZone CarriageZone { get; private set; }
+        public IDoor CarriageDoor { get; private set; }
+        public ITurntable Turntable { get; private set; }
+        public IRelay Fan { get; private set; }
 
-        public IButton CallButton
+        public HellevatorSimulator()
         {
-            get { return callButton; }
-        }
+            CallButton = new SimulatorButton();
+            PanelButton = new SimulatorButton();
 
-        private readonly SimulatorButton panelButton = new SimulatorButton();
+            HellLights = new SimulatorRelay();
+            Chandelier = new SimulatorRelay();
 
-        public IButton PanelButton
-        {
-            get { return panelButton; }
-        }
+            Effects = new SimulatorLightStrip(70);
+            PanelLights = new SimulatorLightStrip(24);
 
-        private readonly SimulatorRelay fan = new SimulatorRelay();
-        public IRelay Fan
-        {
-            get { return fan; }
-        }
+            InsideZone = new SimulatorAudioZone("Inside Zone");
+            CarriageZone = new SimulatorAudioZone("Carriage Zone");
 
-        private readonly SimulatorRelay chandelier = new SimulatorRelay();
-        public IRelay Chandelier
-        {
-            get { return chandelier; }
-        }
-
-        private readonly SimulatorEffectPlayer effectPlayer = new SimulatorEffectPlayer();
-        public IEffectPlayer EffectPlayer
-        {
-            get { return effectPlayer; }
-        }
-
-        private readonly SimulatorRelay hellLights = new SimulatorRelay();
-
-        public IRelay HellLights
-        {
-            get { return hellLights; }
-        }
-
-        private readonly SimulatorFloorIndicator floorIndicator = new SimulatorFloorIndicator();
-        public IFloorIndicator FloorIndicator
-        {
-            get { return floorIndicator; }
-        }
-
-        private readonly SimulatorAudioZone carriageZone = new SimulatorAudioZone("Carriage Zone");
-
-        public IAudioZone CarriageZone
-        {
-            get { return carriageZone; }
-        }
-
-        private readonly SimulatorAudioZone insideZone = new SimulatorAudioZone("Inside Zone");
-
-        public IAudioZone InsideZone
-        {
-            get { return insideZone; }
-        }
-
-        private readonly SimulatorDoor carriageDoor = new SimulatorDoor();
-        public IDoor CarriageDoor
-        {
-            get { return carriageDoor; }
-        }
-
-        private readonly SimulatorTurntable turntable = new SimulatorTurntable();
-        public ITurntable Turntable
-        {
-            get { return turntable; }
+            CarriageDoor = new SimulatorDoor();
+            Turntable = new SimulatorTurntable();
+            Fan = new SimulatorRelay();
         }
     }
 }

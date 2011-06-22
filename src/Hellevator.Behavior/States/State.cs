@@ -1,86 +1,35 @@
-using System;
-using System.Threading;
-using Hellevator.Behavior.Interface;
-
+#region License
+// Copyright 2011 Jason Walker
+// ungood@onetrue.name
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); 
+// you may not use this file except in compliance with the License. 
+// You may obtain a copy of the License at 
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+#endregion
 namespace Hellevator.Behavior.States
 {
     public abstract class State
     {
         protected virtual void Enter() {}
-        protected virtual WaitHandle[] WaitHandles
-        {
-            get { return new WaitHandle[0]; }
-        }
         
+        protected virtual void Wait() {}
+
         protected virtual void Exit() {}
 
         public void Run()
         {
             Enter();
-            WaitHandle.WaitAll(WaitHandles);
+            Wait();
             Exit();
         }
-
-        #region Inputs
-
-        protected static IButton CallButton
-        {
-            get { return Hellevator.Current.CallButton; }
-        }
-
-        protected static IButton PanelButton
-        {
-            get { return Hellevator.Current.PanelButton; }
-        }
-
-        #endregion  
-
-        #region Lights
-
-        protected static IRelay Chandelier
-        {
-            get { return Hellevator.Current.Chandelier; }
-        }
-
-        protected static IFloorIndicator FloorIndicator
-        {
-            get { return Hellevator.Current.FloorIndicator; }
-        }
-
-        protected static IRelay HellLights
-        {
-            get { return Hellevator.Current.HellLights; }
-        }
-
-        #endregion
-
-        #region Sounds
-
-        protected static IAudioZone CarriageZone
-        {
-            get { return Hellevator.Current.CarriageZone; }
-        }
-
-        protected static IAudioZone InsideZone
-        {
-            get { return Hellevator.Current.InsideZone; }
-        }
-
-        #endregion
-
-        #region Action
-
-        protected static IDoor CarriageDoor
-        {
-            get { return Hellevator.Current.CarriageDoor; }
-        }
-
-        protected static ITurntable Turntable
-        {
-            get { return Hellevator.Current.Turntable; }
-        }
-        
-        #endregion
     }
 }
 

@@ -7,15 +7,22 @@ namespace Hellevator.Behavior.States
     {
         protected override void Enter()
         {
-            CarriageDoor.Close();
-            Turntable.Goto(TurntableLocation.Hell);
+            Hellevator.CarriageDoor.Close();
+            Hellevator.Turntable.Goto(TurntableLocation.Hell);
             // TODO: Run Effects
-            FloorIndicator.Floor = 6.7;
+            Hellevator.CurrentFloor = 7;
+            //var thread = new Thread()
         }
 
-        protected override WaitHandle[] WaitHandles
+        protected override void Wait()
         {
-            get { return new[] {Turntable.FinishedGoing}; }
+            while(Hellevator.CurrentFloor >= 1)
+            {
+                Hellevator.CurrentFloor -= 0.01;
+                Thread.Sleep(10);
+            }
+            
+            Hellevator.Turntable.FinishedGoing.WaitOne();
         }
     }
 }
