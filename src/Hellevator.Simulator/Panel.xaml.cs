@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace Hellevator.Simulator
 {
     /// <summary>
-    /// Interaction logic for FloorIndicator.xaml
+    /// Interaction logic for Panel.xaml
     /// </summary>
-    public partial class FloorIndicator : UserControl
+    public partial class Panel : UserControl
     {
-        public FloorIndicator()
+        public Panel()
         {
             InitializeComponent();
         }

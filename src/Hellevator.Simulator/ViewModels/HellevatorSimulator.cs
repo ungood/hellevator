@@ -16,6 +16,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Simulator.ViewModels

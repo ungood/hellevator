@@ -15,26 +15,38 @@
 // limitations under the License.
 #endregion
 
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Simulator.ViewModels
 {
     public class SimulatorFloorIndicator : ViewModelBase, IFloorIndicator
     {
-        private float floor;
+        
+        private double floor;
 
-        public float Floor
+        public double Floor
         {
             get { return floor; }
             set
             {
-                if(value == floor)
-                    return;
-
                 floor = value;
-                OnPropertyChanged("Floor");
+                this.UpdateLights();
             }
-        }   
+        }
+
+        public ObservableCollection<LightViewModel> Lights { get; private set; }
+
+        public SimulatorFloorIndicator()
+        {
+            Lights = new ObservableCollection<LightViewModel>();
+            for(int i = 0; i < Floors.Total; i++)
+                Lights.Add(new LightViewModel());
+            
+            Floor = 1;
+        }
 
         public void Flicker()
         {
@@ -43,7 +55,31 @@ namespace Hellevator.Simulator.ViewModels
 
         public void TurnOff()
         {
-            // TODO
+            foreach(var light in Lights)
+                light.Intensity = 0;
+        }
+
+        public void SetLight(int i, double intensity)
+        {
+            Lights[i-1].Intensity = intensity;
+        }
+    }
+
+    public class LightViewModel : ViewModelBase
+    {
+        private double intensity;
+
+        public double Intensity
+        {
+            get { return intensity; }
+            set
+            {
+                if(value == intensity)
+                    return;
+
+                intensity = value;
+                OnPropertyChanged("Intensity");
+            }
         }
     }
 }

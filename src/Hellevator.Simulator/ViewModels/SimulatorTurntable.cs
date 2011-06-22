@@ -17,18 +17,19 @@
 
 #endregion
 
+using System;
 using System.Threading;
-using Hellevator.Behavior;
+using System.Threading.Tasks;
 using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Simulator.ViewModels
 {
     public class SimulatorTurntable : ViewModelBase, ITurntable
     {
-        private readonly AutoResetEvent rotateComplete = new AutoResetEvent(false);
+        private readonly AutoResetEvent finishedGoing = new AutoResetEvent(false);
         private float angle;
 
-        private Destination currentDestination;
+        private TurntableLocation location;
 
         public float Angle
         {
@@ -45,36 +46,53 @@ namespace Hellevator.Simulator.ViewModels
 
         #region ITurntable Members
 
-        public Destination CurrentDestination
+        public TurntableLocation Location
         {
-            get { return currentDestination; }
+            get { return location; }
             set
             {
-                if(value == currentDestination)
+                if(value == location)
                     return;
 
-                currentDestination = value;
-                OnPropertyChanged("CurrentDestination");
+                location = value;
+                OnPropertyChanged("Location");
             }
         }
 
-        public WaitHandle RotateComplete
+        public WaitHandle FinishedGoing
         {
-            get { return rotateComplete; }
+            get { return finishedGoing; }
         }
 
         public void Reset()
         {
-            CurrentDestination = Destination.Entrance;
+            Location = TurntableLocation.Entrance;
             Angle = 0;
         }
 
+        public void Goto(TurntableLocation destination)
+        {
+            if(Location == TurntableLocation.Unknown)
+                Reset();
+
+            var destAngle = (int) destination * 90;
+            var delta = destAngle > Angle ? .5F : -0.5F;
+            Task.Factory.StartNew(() => {
+                while(Math.Abs(Angle - destAngle) > 0.1F)
+                {
+                    Angle += delta;
+                    Thread.Sleep(10);
+                }
+                Location = destination;
+                finishedGoing.Set();
+            });
+        }
 
         public void Rotate(int degrees)
         {
             Angle += degrees;
 
-            rotateComplete.Set();
+            finishedGoing.Set();
         }
 
         #endregion

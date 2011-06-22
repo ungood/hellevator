@@ -30,7 +30,7 @@
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
-    <Compile Include="Constants.cs" />
+    <Compile Include="Effects\Color.cs" />
     <Compile Include="Effects\Effect.cs" />
     <Compile Include="Effects\GoingUpEffect.cs" />
     <Compile Include="ExtensionAttribute.cs" />
@@ -52,6 +52,6 @@
     <Compile Include="States\State.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.SPOT.Native" />
+    <Folder Include="Math\" />
   </ItemGroup>
 </Project>

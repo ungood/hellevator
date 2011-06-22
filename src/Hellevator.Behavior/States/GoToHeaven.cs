@@ -8,14 +8,14 @@ namespace Hellevator.Behavior.States
         protected override void Enter()
         {
             CarriageDoor.Close();
-            Turntable.Goto(Destination.Hell);
+            Turntable.Goto(TurntableLocation.Hell);
             // TODO: Run Effects
-
+            FloorIndicator.Floor = 6.7;
         }
 
         protected override WaitHandle[] WaitHandles
         {
-            get { return new[] {Turntable.RotateComplete}; }
+            get { return new[] {Turntable.FinishedGoing}; }
         }
     }
 }

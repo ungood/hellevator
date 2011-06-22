@@ -58,9 +58,11 @@
     <Compile Include="Carriage.xaml.cs">
       <DependentUpon>Carriage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FloorIndicator.xaml.cs">
-      <DependentUpon>FloorIndicator.xaml</DependentUpon>
+    <Compile Include="Data\RedBrushConverter.cs" />
+    <Compile Include="Panel.xaml.cs">
+      <DependentUpon>Panel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\LimitedQueue.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\SimulatorAudioZone.cs" />
     <Compile Include="ViewModels\SimulatorButton.cs" />
@@ -72,10 +74,6 @@
     <Compile Include="ViewModels\SimulatorTurntable.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Page Include="Carriage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="FloorIndicator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -91,6 +89,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Panel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

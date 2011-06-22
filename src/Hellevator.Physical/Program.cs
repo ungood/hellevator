@@ -1,6 +1,7 @@
 ﻿using System;
 using Hellevator.Behavior.Scenarios;
 using Microsoft.SPOT;
+using Math = System.Math;
 
 namespace Hellevator.Physical
 {

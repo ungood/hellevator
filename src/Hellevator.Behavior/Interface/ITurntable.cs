@@ -19,25 +19,23 @@ using System.Threading;
 
 namespace Hellevator.Behavior.Interface
 {
-    public interface ITurntable
+    public enum TurntableLocation
     {
-        Destination CurrentDestination { get; }
-
-        WaitHandle RotateComplete { get; }
-
-        void Reset();
-        void Rotate(int degrees); // Positive = CCW, Negative = CW
+        Unknown         = 0,
+        Hell            = 1,
+        Heaven          = 2,
+        Entrance        = 2,
+        Purgatory       = 3,
+        BlackRockCity   = 4,
     }
 
-    public static class TurntableExtensions
+    public interface ITurntable
     {
-        public static void Goto(this ITurntable turntable, Destination destination)
-        {
-            if(turntable.CurrentDestination == Destination.Unknown)
-                turntable.Reset();
+        TurntableLocation Location { get; }
 
-            var degrees = ((int)destination - (int) turntable.CurrentDestination) * 90;
-            turntable.Rotate(degrees);
-        }
+        WaitHandle FinishedGoing { get; }
+        
+        void Reset();
+        void Goto(TurntableLocation destination);
     }
 }
