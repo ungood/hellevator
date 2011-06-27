@@ -16,18 +16,22 @@
 #endregion
 
 using System.Collections;
-using Hellevator.Behavior.States;
+using System.Threading;
 
 namespace Hellevator.Behavior.Scenarios
 {
     public class PurgatoryScenario : Scenario
     {
-        protected override IEnumerable GetStates()
+        public override void Run()
         {
-            return new State[] {
-                new CallButtonPressed(),
-                new GoToHeaven()
-            };
+            WaitForGuest();
+            GoToHeaven();
+            Hellevator.PanelButton.Pressed.WaitOne();
+            GoToPurgatory();
+            Thread.Sleep(5000);
+            GoToExit();
+            Thread.Sleep(10000);
+            Reset();
         }
     }
 }

@@ -19,23 +19,13 @@ using System.Threading;
 
 namespace Hellevator.Behavior.Interface
 {
-    public enum TurntableLocation
-    {
-        Unknown         = 0,
-        Hell            = 1,
-        Heaven          = 2,
-        Entrance        = 2,
-        Purgatory       = 3,
-        BlackRockCity   = 4,
-    }
-
     public interface ITurntable
     {
-        TurntableLocation Location { get; }
+        Location Location { get; }
 
         WaitHandle FinishedGoing { get; }
         
         void Reset();
-        void Goto(TurntableLocation destination);
+        void Goto(Location destination);
     }
 }

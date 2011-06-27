@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="Hellevator.Simulator.Fan"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Hellevator.Simulator"
+    mc:Ignorable="d"
+    d:DesignHeight="100" d:DesignWidth="100">
+  <UserControl.Resources>
+    <Storyboard x:Key="Rotate">
+      <DoubleAnimation Storyboard.TargetName="fanRotate" Storyboard.TargetProperty="Angle"
+        By="-360" Duration="0:0:0.5" AutoReverse="False" RepeatBehavior="Forever" />
+    </Storyboard>
+    
+    <ControlTemplate x:Key="FanTemplate" TargetType="UserControl">
+      <Canvas Width="100" Height="100">
+        <Ellipse Canvas.Top="35" Canvas.Left="35" Width="30" Height="30" Stroke="Black" Fill="Black" />
+        <Line X1="20" Y1="20" X2="80" Y2="80" Stroke="Black" StrokeThickness="5"
+                StrokeEndLineCap="Triangle" StrokeStartLineCap="Triangle" />
+        <Line X1="20" Y1="80" X2="80" Y2="20" Stroke="Black" StrokeThickness="5"
+                StrokeEndLineCap="Triangle" StrokeStartLineCap="Triangle" />
+
+        <Canvas.RenderTransform>
+          <RotateTransform x:Name="fanRotate" CenterX="50" CenterY="50" Angle="0"/>
+        </Canvas.RenderTransform>
+      </Canvas>
+      
+      <ControlTemplate.Triggers>
+        <DataTrigger Binding="{Binding Fan.IsOn}" Value="true">
+          <DataTrigger.EnterActions>
+            <BeginStoryboard Storyboard="{StaticResource Rotate}" Name="RotateBegin" />
+          </DataTrigger.EnterActions>
+          <DataTrigger.ExitActions>
+            <StopStoryboard BeginStoryboardName="RotateBegin" />
+          </DataTrigger.ExitActions>
+        </DataTrigger>
+      </ControlTemplate.Triggers>
+    </ControlTemplate>
+  </UserControl.Resources>
+  
+  <UserControl.Style>
+    <Style TargetType="UserControl">
+      <Setter Property="Template" Value="{StaticResource FanTemplate}" />
+    </Style>
+  </UserControl.Style>
+</UserControl>

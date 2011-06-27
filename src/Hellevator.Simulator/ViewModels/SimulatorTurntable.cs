@@ -20,6 +20,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Hellevator.Behavior;
 using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Simulator.ViewModels
@@ -29,7 +30,7 @@ namespace Hellevator.Simulator.ViewModels
         private readonly AutoResetEvent finishedGoing = new AutoResetEvent(false);
         private float angle;
 
-        private TurntableLocation location;
+        private Location location;
 
         public float Angle
         {
@@ -46,7 +47,7 @@ namespace Hellevator.Simulator.ViewModels
 
         #region ITurntable Members
 
-        public TurntableLocation Location
+        public Location Location
         {
             get { return location; }
             set
@@ -66,16 +67,16 @@ namespace Hellevator.Simulator.ViewModels
 
         public void Reset()
         {
-            Location = TurntableLocation.Entrance;
+            Location = Location.Entrance;
             Angle = 0;
         }
 
-        public void Goto(TurntableLocation destination)
+        public void Goto(Location destination)
         {
-            if(Location == TurntableLocation.Unknown)
+            if(Location == Location.Unknown)
                 Reset();
 
-            var destAngle = (int) destination * 90;
+            var destAngle = GetDestinationAngle(destination);
             var delta = destAngle > Angle ? .5F : -0.5F;
             Task.Factory.StartNew(() => {
                 while(Math.Abs(Angle - destAngle) > 0.1F)
@@ -86,6 +87,21 @@ namespace Hellevator.Simulator.ViewModels
                 Location = destination;
                 finishedGoing.Set();
             });
+        }
+
+        private static int GetDestinationAngle(Location destination)
+        {
+            switch(destination)
+            {
+                case Location.Purgatory:
+                    return 90;
+                case Location.Hell:
+                    return -90;
+                case Location.BlackRockCity:
+                    return 180;
+                default:
+                    return 0;
+            }
         }
 
         public void Rotate(int degrees)

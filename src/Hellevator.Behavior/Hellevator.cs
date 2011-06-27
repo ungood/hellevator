@@ -1,3 +1,4 @@
+using System;
 using Hellevator.Behavior.Animations;
 using Hellevator.Behavior.Interface;
 
@@ -10,11 +11,43 @@ namespace Hellevator.Behavior
         public static void Initialize(IHellevator hardware)
         {
             Hardware = hardware;
-            PanelPlayer = new AnimationPlayer(hardware.PanelLights);
-            EffectPlayer = new AnimationPlayer(hardware.Effects);
+            PanelPlayer = new EffectPlayer(hardware.PanelLights);
+            EffectPlayer = new EffectPlayer(hardware.Effects);
         }
 
         public static double CurrentFloor { get; set; }
+
+        private static readonly Effect PanelGotoEffect = new FloorIndicatorEffect();
+
+        public static void Goto(Location destination, int msPerFloor, EasingFunction easing = null)
+        {
+            Turntable.Goto(destination);
+            PanelPlayer.Play(PanelGotoEffect);
+            EffectPlayer.Play(new RainbowEffect()); // TODO
+
+            var destFloor = destination.GetFloor();
+
+            if(easing == null)
+                easing = LinearEase.Identity;
+            var deltaFloors = Math.Abs((int) (destFloor - CurrentFloor));
+            var length = new TimeSpan(0, 0, 0, 0, msPerFloor * deltaFloors);
+
+            var animator = new Animator {
+                InitialValue = CurrentFloor,
+                FinalValue = destFloor,
+                EasingFunction = easing,
+                Length = length,
+                Set = SetCurrentFloor
+            };
+            animator.Animate();
+
+            Turntable.FinishedGoing.WaitOne(); // Make sure the turntable has done its thing.
+        }
+
+        private static void SetCurrentFloor(double value)
+        {
+            CurrentFloor = value;
+        }
 
         #region Inputs
 
@@ -42,9 +75,9 @@ namespace Hellevator.Behavior
             get { return Hardware.HellLights; }
         }
 
-        public static AnimationPlayer PanelPlayer { get; private set; }
+        public static EffectPlayer PanelPlayer { get; private set; }
 
-        public static AnimationPlayer EffectPlayer { get; private set; }
+        public static EffectPlayer EffectPlayer { get; private set; }
 
         #endregion
 
@@ -72,6 +105,11 @@ namespace Hellevator.Behavior
         public static ITurntable Turntable
         {
             get { return Hardware.Turntable; }
+        }
+
+        public static IRelay Fan
+        {
+            get { return Hardware.Fan; }
         }
         
         #endregion

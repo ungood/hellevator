@@ -42,9 +42,29 @@ namespace Hellevator.Simulator.ViewModels
     {
         public Color Color { get; set; }
 
+        private int intensity;
+
+        public int Intensity
+        {
+            get { return intensity; }
+            set
+            {
+                if(value == intensity)
+                    return;
+
+                intensity = value;
+                OnPropertyChanged("Intensity");
+            }
+        }
+
         public void Update()
         {
             OnPropertyChanged("Color");
+
+            const int denom = 255 * 255;
+            double max = Math.Max(Math.Max(Color.Red, Color.Blue), Color.Green);
+            max = max * max;
+            Intensity = (int) ((max / denom) * 20);
         }
     }
 }

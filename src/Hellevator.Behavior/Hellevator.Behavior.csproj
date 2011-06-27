@@ -30,17 +30,21 @@
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
-    <Compile Include="Animations\Animation.cs">
+    <Compile Include="Animations\Effect.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Animations\AnimationPlayer.cs">
+    <Compile Include="Animations\EffectPlayer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Animations\Animator.cs" />
     <Compile Include="Animations\Color.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Animations\FloorIndicatorAnimation.cs" />
-    <Compile Include="Constants.cs" />
+    <Compile Include="Animations\EasingFunction.cs" />
+    <Compile Include="Animations\FloorIndicatorEffect.cs" />
+    <Compile Include="Animations\ExponentialEase.cs" />
+    <Compile Include="Animations\LinearEase.cs" />
+    <Compile Include="Animations\RainbowEffect.cs" />
     <Compile Include="ExtensionAttribute.cs" />
     <Compile Include="Hellevator.cs" />
     <Compile Include="Interface\IAudioZone.cs" />
@@ -51,12 +55,12 @@
     <Compile Include="Interface\IRelay.cs" />
     <Compile Include="Interface\ITurntable.cs" />
     <Compile Include="HellevatorScript.cs" />
+    <Compile Include="Location.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenarios\PurgatoryScenario.cs" />
     <Compile Include="Scenarios\Scenario.cs" />
-    <Compile Include="States\AttractState.cs" />
-    <Compile Include="States\CallButtonPressed.cs" />
-    <Compile Include="States\GoToHeaven.cs" />
-    <Compile Include="States\State.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
 </Project>

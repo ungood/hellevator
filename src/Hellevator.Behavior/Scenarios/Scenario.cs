@@ -16,20 +16,62 @@
 #endregion
 
 using System.Collections;
-using Hellevator.Behavior.States;
 
 namespace Hellevator.Behavior.Scenarios
 {
     public abstract class Scenario
     {
-        public void Run()
+        public abstract void Run();
+
+        /// <summary>
+        /// Guest has pressed the call button, wait for them to get in the damned carriage.
+        /// </summary>
+        protected void WaitForGuest()
         {
-            foreach(State state in GetStates())
-            {
-                state.Run();
-            }
+            Hellevator.CurrentFloor = Location.Entrance.GetFloor();
+            Hellevator.CarriageDoor.Open();
+            Hellevator.Chandelier.TurnOn();
+            Hellevator.PanelButton.Pressed.WaitOne();
         }
 
-        protected abstract IEnumerable GetStates();
+        /// <summary>
+        /// Take the guest on the stairway to heaven.
+        /// </summary>
+        protected void GoToHeaven()
+        {
+            Hellevator.CarriageDoor.Close();
+            Hellevator.CarriageZone.Play("TheGirl");
+            Hellevator.Goto(Location.Heaven, 1500);
+            Hellevator.CarriageZone.Stop();
+            Hellevator.CarriageDoor.Open();
+        }
+
+        /// <summary>
+        /// Send the guest to land of the half-damned.
+        /// </summary>
+        protected void GoToPurgatory()
+        {
+            Hellevator.CarriageDoor.Close();
+            Hellevator.CarriageZone.Play("Kalimba");
+            Hellevator.InsideZone.Play("Sleep Away");
+            Hellevator.Goto(Location.Purgatory, 1000);
+            Hellevator.CarriageDoor.Open();
+        }
+
+        /// <summary>
+        /// Do not pass GO, do not collect $200.
+        /// </summary>
+        protected void GoToExit()
+        {
+            Hellevator.CarriageDoor.Close();
+            Hellevator.Goto(Location.BlackRockCity, 1500);
+            Hellevator.CarriageDoor.Open();
+        }
+        
+        protected void Reset()
+        {
+            Hellevator.CarriageDoor.Close();
+            Hellevator.Goto(Location.Entrance, 100);
+        }
     }
 }

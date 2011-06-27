@@ -16,6 +16,7 @@
 #endregion
 
 using System;
+using System.Threading;
 using Hellevator.Behavior;
 using Hellevator.Behavior.Interface;
 
@@ -34,6 +35,11 @@ namespace Hellevator.Simulator.ViewModels
         public IDoor CarriageDoor { get; private set; }
         public ITurntable Turntable { get; private set; }
         public IRelay Fan { get; private set; }
+        
+        public Thread CreateThread(ThreadStart start)
+        {
+            return new Thread(start);
+        }
 
         public HellevatorSimulator()
         {
@@ -43,11 +49,11 @@ namespace Hellevator.Simulator.ViewModels
             HellLights = new SimulatorRelay();
             Chandelier = new SimulatorRelay();
 
-            Effects = new SimulatorLightStrip(70);
+            Effects = new SimulatorLightStrip(50);
             PanelLights = new SimulatorLightStrip(24);
 
-            InsideZone = new SimulatorAudioZone("Inside Zone");
-            CarriageZone = new SimulatorAudioZone("Carriage Zone");
+            InsideZone = new SimulatorAudioZone("Inside Zone", -1);
+            CarriageZone = new SimulatorAudioZone("Carriage Zone", 1);
 
             CarriageDoor = new SimulatorDoor();
             Turntable = new SimulatorTurntable();

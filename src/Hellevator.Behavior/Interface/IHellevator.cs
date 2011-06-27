@@ -1,3 +1,5 @@
+using System.Threading;
+
 namespace Hellevator.Behavior.Interface
 {
     public interface IHellevator
@@ -19,5 +21,8 @@ namespace Hellevator.Behavior.Interface
         IDoor CarriageDoor { get; }
         ITurntable Turntable { get; }
         IRelay Fan { get; }
+
+        // Utility
+        Thread CreateThread(ThreadStart start);
     }
 }

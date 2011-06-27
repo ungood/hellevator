@@ -32,11 +32,19 @@ namespace Hellevator.Simulator
             InitializeComponent();
 
             Loaded += HandleLoaded;
+            Closing += HandleClosing;
+        }
+
+        private HellevatorSimulator simulator;
+
+        void HandleClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            AudioMixer.Instance.Close();
         }
 
         private void HandleLoaded(object sender, RoutedEventArgs e)
         {
-            var simulator = new HellevatorSimulator();
+            simulator = new HellevatorSimulator();
             DataContext = simulator;
             Task.Factory.StartNew(() => HellevatorScript.Run(simulator));
         }

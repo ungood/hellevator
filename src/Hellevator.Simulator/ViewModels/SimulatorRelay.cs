@@ -15,6 +15,7 @@
 // limitations under the License.
 #endregion
 
+using System;
 using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Simulator.ViewModels
@@ -34,6 +35,7 @@ namespace Hellevator.Simulator.ViewModels
                 isOn = value;
                 OnPropertyChanged("IsOn");
             }
+            
         }
 
         public void TurnOn()

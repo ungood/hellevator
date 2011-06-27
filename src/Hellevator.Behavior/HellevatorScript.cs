@@ -9,7 +9,11 @@ namespace Hellevator.Behavior
         {
             Hellevator.Initialize(hardware);
             var scenario = new PurgatoryScenario();
-            scenario.Run();
+
+            while(true)
+            {
+                scenario.Run();
+            }
         }
     }
 }

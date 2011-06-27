@@ -36,6 +36,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NAudio">
+      <HintPath>..\..\lib\NAudio\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -58,7 +61,14 @@
     <Compile Include="Carriage.xaml.cs">
       <DependentUpon>Carriage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Data\ColorConverter.cs" />
     <Compile Include="Data\ColorToBrushConverter.cs" />
+    <Compile Include="Fan.xaml.cs">
+      <DependentUpon>Fan.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LightStrip.xaml.cs">
+      <DependentUpon>LightStrip.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Panel.xaml.cs">
       <DependentUpon>Panel.xaml</DependentUpon>
     </Compile>
@@ -72,6 +82,14 @@
     <Compile Include="ViewModels\SimulatorTurntable.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Page Include="Carriage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Fan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LightStrip.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -121,6 +139,18 @@
       <Project>{DB06941B-7A5D-4E31-8585-DB5255DBC0DC}</Project>
       <Name>Hellevator.Behavior</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Audio\Kalimba.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\Sleep Away.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\TheGirl.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
