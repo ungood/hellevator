@@ -30,8 +30,6 @@ namespace Hellevator.Behavior.Scenarios
             GoToPurgatory();
             Thread.Sleep(5000);
             GoToExit();
-            Thread.Sleep(10000);
-            Reset();
         }
     }
 }

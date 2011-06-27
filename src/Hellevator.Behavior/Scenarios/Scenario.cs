@@ -67,11 +67,5 @@ namespace Hellevator.Behavior.Scenarios
             Hellevator.Goto(Location.BlackRockCity, 1500);
             Hellevator.CarriageDoor.Open();
         }
-        
-        protected void Reset()
-        {
-            Hellevator.CarriageDoor.Close();
-            Hellevator.Goto(Location.Entrance, 100);
-        }
     }
 }
