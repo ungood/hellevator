@@ -53,12 +53,15 @@
     <Compile Include="Interface\IHellevator.cs" />
     <Compile Include="Interface\ILightStrip.cs" />
     <Compile Include="Interface\IRelay.cs" />
+    <Compile Include="Interface\ITextDisplay.cs" />
     <Compile Include="Interface\ITurntable.cs" />
-    <Compile Include="HellevatorScript.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scenarios\HeavenHellScenario.cs" />
     <Compile Include="Scenarios\PurgatoryScenario.cs" />
+    <Compile Include="Scenarios\RandomScenario.cs" />
     <Compile Include="Scenarios\Scenario.cs" />
+    <Compile Include="Scenarios\ScenarioLoop.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

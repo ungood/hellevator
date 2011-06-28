@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // Copyright 2011 Jason Walker
 // ungood@onetrue.name
 // 
@@ -16,27 +16,32 @@
 #endregion
 
 using System.Collections;
-using System.Threading;
 
 namespace Hellevator.Behavior.Scenarios
 {
-    public class PurgatoryScenario : Scenario
+    public class ScenarioLoop : IEnumerable
     {
-        public static readonly PurgatoryScenario Instance = new PurgatoryScenario();
-
-        public override string Name
+        private readonly ArrayList scenarios = new ArrayList();
+        private int current;
+        
+        public void Add(Scenario scenario)
         {
-            get { return "PURGATORY"; }
+            scenarios.Add(scenario);
         }
 
-        public override void Run()
+        public Scenario Current
         {
-            WaitForGuest();
-            GoToHeaven();
-            Hellevator.PanelButton.Pressed.WaitOne();
-            GoToPurgatory();
-            Thread.Sleep(5000);
-            GoToExit();
+            get { return (Scenario)scenarios[current]; }
+        }
+
+        public void Next()
+        {
+            current = (current + 1) % scenarios.Count;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return scenarios.GetEnumerator();
         }
     }
 }

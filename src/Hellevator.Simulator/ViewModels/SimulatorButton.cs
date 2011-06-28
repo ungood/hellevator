@@ -17,6 +17,7 @@
 
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Hellevator.Behavior.Interface;
 
@@ -35,10 +36,19 @@ namespace Hellevator.Simulator.ViewModels
 
         private void Execute(object obj)
         {
+            var handler = Clicked;
+            if(handler != null)
+            {
+                Task.Factory.StartNew(() => handler());
+            }
+
             pressed.Set();
         }
 
         private readonly AutoResetEvent pressed = new AutoResetEvent(false);
+        
+        public event ClickedEventHandler Clicked;
+
         public WaitHandle Pressed
         {
             get { return pressed; }

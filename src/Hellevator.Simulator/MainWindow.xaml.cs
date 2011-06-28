@@ -46,7 +46,7 @@ namespace Hellevator.Simulator
         {
             simulator = new HellevatorSimulator();
             DataContext = simulator;
-            Task.Factory.StartNew(() => HellevatorScript.Run(simulator));
+            Task.Factory.StartNew(() => Behavior.Hellevator.Run(simulator), TaskCreationOptions.LongRunning);
         }
     }
 }

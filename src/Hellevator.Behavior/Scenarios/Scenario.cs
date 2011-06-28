@@ -16,11 +16,13 @@
 #endregion
 
 using System.Collections;
+using Hellevator.Behavior.Animations;
 
 namespace Hellevator.Behavior.Scenarios
 {
     public abstract class Scenario
     {
+        public abstract string Name { get; }
         public abstract void Run();
 
         /// <summary>
@@ -28,6 +30,8 @@ namespace Hellevator.Behavior.Scenarios
         /// </summary>
         protected void WaitForGuest()
         {
+            Hellevator.Debug.Print(2, "WAIT GUEST");
+
             Hellevator.CurrentFloor = Location.Entrance.GetFloor();
             Hellevator.CarriageDoor.Open();
             Hellevator.Chandelier.TurnOn();
@@ -39,6 +43,8 @@ namespace Hellevator.Behavior.Scenarios
         /// </summary>
         protected void GoToHeaven()
         {
+            Hellevator.Debug.Print(2, "TO: HEAVEN");
+
             Hellevator.CarriageDoor.Close();
             Hellevator.CarriageZone.Play("TheGirl");
             Hellevator.Goto(Location.Heaven, 1500);
@@ -51,6 +57,8 @@ namespace Hellevator.Behavior.Scenarios
         /// </summary>
         protected void GoToPurgatory()
         {
+            Hellevator.Debug.Print(2, "TO: PURGATORY");
+
             Hellevator.CarriageDoor.Close();
             Hellevator.CarriageZone.Play("Kalimba");
             Hellevator.InsideZone.Play("Sleep Away");
@@ -59,10 +67,31 @@ namespace Hellevator.Behavior.Scenarios
         }
 
         /// <summary>
+        /// TONIGHT WE DINE IN HELL!
+        /// </summary>
+        protected void GoToHell()
+        {
+            Hellevator.Debug.Print(2, "TO: HELL");
+
+            Hellevator.CarriageZone.Stop();
+            Hellevator.InsideZone.Stop();
+
+            Hellevator.CarriageDoor.Close();
+            Hellevator.Fan.TurnOn();
+            Hellevator.Goto(Location.Hell, 300, new ExponentialEase(5) { Mode = EasingMode.In });
+            Hellevator.Fan.TurnOff();
+            Hellevator.HellLights.TurnOn();
+            Hellevator.CarriageDoor.Open();
+            Hellevator.Chandelier.TurnOff();
+        }
+
+        /// <summary>
         /// Do not pass GO, do not collect $200.
         /// </summary>
         protected void GoToExit()
         {
+            Hellevator.Debug.Print(2, "TO: EXIT");
+
             Hellevator.CarriageDoor.Close();
             Hellevator.Goto(Location.BlackRockCity, 1500);
             Hellevator.CarriageDoor.Open();

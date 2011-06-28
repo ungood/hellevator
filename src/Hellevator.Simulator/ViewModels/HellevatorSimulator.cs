@@ -26,6 +26,7 @@ namespace Hellevator.Simulator.ViewModels
     {
         public IButton CallButton { get; private set; }
         public IButton PanelButton { get; private set; }
+        public IButton ModeButton { get; private set; }
         public IRelay HellLights { get; private set; }
         public IRelay Chandelier { get; private set; }
         public ILightStrip Effects { get; private set; }
@@ -35,6 +36,7 @@ namespace Hellevator.Simulator.ViewModels
         public IDoor CarriageDoor { get; private set; }
         public ITurntable Turntable { get; private set; }
         public IRelay Fan { get; private set; }
+        public ITextDisplay Debug { get; private set; }
         
         public Thread CreateThread(ThreadStart start)
         {
@@ -45,6 +47,7 @@ namespace Hellevator.Simulator.ViewModels
         {
             CallButton = new SimulatorButton();
             PanelButton = new SimulatorButton();
+            ModeButton = new SimulatorButton();
 
             HellLights = new SimulatorRelay();
             Chandelier = new SimulatorRelay();
@@ -58,6 +61,8 @@ namespace Hellevator.Simulator.ViewModels
             CarriageDoor = new SimulatorDoor();
             Turntable = new SimulatorTurntable();
             Fan = new SimulatorRelay();
+
+            Debug = new SimulatorTextDisplay();
         }
     }
 }

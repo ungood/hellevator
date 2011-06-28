@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // Copyright 2011 Jason Walker
 // ungood@onetrue.name
 // 
@@ -15,18 +15,15 @@
 // limitations under the License.
 #endregion
 
-using System.Collections;
-using System.Threading;
-
 namespace Hellevator.Behavior.Scenarios
 {
-    public class PurgatoryScenario : Scenario
+    public class HeavenHellScenario : Scenario
     {
-        public static readonly PurgatoryScenario Instance = new PurgatoryScenario();
+        public static readonly Scenario Instance = new HeavenHellScenario();
 
         public override string Name
         {
-            get { return "PURGATORY"; }
+            get { return "HEAVEN & HELL"; }
         }
 
         public override void Run()
@@ -34,8 +31,8 @@ namespace Hellevator.Behavior.Scenarios
             WaitForGuest();
             GoToHeaven();
             Hellevator.PanelButton.Pressed.WaitOne();
-            GoToPurgatory();
-            Thread.Sleep(5000);
+            GoToHell();
+            Hellevator.PanelButton.Pressed.WaitOne();
             GoToExit();
         }
     }

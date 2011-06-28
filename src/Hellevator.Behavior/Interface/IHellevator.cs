@@ -6,6 +6,7 @@ namespace Hellevator.Behavior.Interface
     {
         IButton CallButton { get; }
         IButton PanelButton { get; }
+        IButton ModeButton { get; }
         
         // Lights
         IRelay HellLights { get; }
@@ -23,6 +24,8 @@ namespace Hellevator.Behavior.Interface
         IRelay Fan { get; }
 
         // Utility
+        ITextDisplay Debug { get; }
+        
         Thread CreateThread(ThreadStart start);
     }
 }

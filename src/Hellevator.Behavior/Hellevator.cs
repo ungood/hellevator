@@ -1,19 +1,66 @@
 using System;
+using System.Threading;
 using Hellevator.Behavior.Animations;
 using Hellevator.Behavior.Interface;
+using Hellevator.Behavior.Scenarios;
 
 namespace Hellevator.Behavior
 {
     public static class Hellevator
     {
-        public static IHellevator Hardware { get; private set; }
+        #region Script
 
-        public static void Initialize(IHellevator hardware)
+        public static IHellevator Hardware { get; private set; }
+        private static readonly ScenarioLoop Loop = new ScenarioLoop {
+            RandomScenario.Instance,
+            PurgatoryScenario.Instance,
+            HeavenHellScenario.Instance,
+        };
+
+        public static void Run(IHellevator hardware)
         {
             Hardware = hardware;
             PanelPlayer = new EffectPlayer(hardware.PanelLights);
             EffectPlayer = new EffectPlayer(hardware.Effects);
+
+            var buttons = new[] {ModeButton.Pressed, CallButton.Pressed};
+
+            Reset();
+            while(true)
+            {
+                Debug.Print(1, Loop.Current.Name);
+                var buttonPressed = WaitHandle.WaitAny(buttons);
+                switch(buttonPressed)
+                {
+                    case 0:
+                        Loop.Next();
+                        break;
+                    case 1:
+                        Loop.Current.Run();
+                        Thread.Sleep(10 * 1000);
+                        Reset();
+                        break;
+                }
+            }
         }
+
+        private static void Reset()
+        {
+            CarriageDoor.Close();
+            Chandelier.TurnOff();
+            CarriageZone.Stop();
+            InsideZone.Stop();
+            Fan.TurnOff();
+            HellLights.TurnOff();
+            EffectPlayer.Stop();
+            PanelPlayer.Stop();
+            CurrentFloor = Location.Entrance.GetFloor();
+            Turntable.Reset();
+        }
+
+        #endregion
+
+        #region Current Floor
 
         public static double CurrentFloor { get; set; }
 
@@ -49,6 +96,8 @@ namespace Hellevator.Behavior
             CurrentFloor = value;
         }
 
+        #endregion
+
         #region Inputs
 
         public static IButton CallButton
@@ -59,6 +108,11 @@ namespace Hellevator.Behavior
         public static IButton PanelButton
         {
             get { return Hardware.PanelButton; }
+        }
+
+        public static IButton ModeButton
+        {
+            get { return Hardware.ModeButton; }
         }
 
         #endregion  
@@ -111,7 +165,12 @@ namespace Hellevator.Behavior
         {
             get { return Hardware.Fan; }
         }
-        
+
+        public static ITextDisplay Debug
+        {
+            get { return Hardware.Debug; }
+        }
+
         #endregion
         
     }
