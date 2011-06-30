@@ -44,16 +44,18 @@ namespace Hellevator.Behavior.Scenarios
 
         private Scenario GetRandom()
         {
-            switch(rand.Next(5))
+            switch(rand.Next(6))
             {
                 case 0:
+                    return HeavenScenario.Instance;
                 case 1:
                     return HeavenHellScenario.Instance;
                 case 2:
-                    return PurgatoryScenario.Instance;
                 case 3:
+                    return PurgatoryScenario.Instance;
                 case 4:
-                    return HeavenHellScenario.Instance;
+                case 5:
+                    return PurgatoryScenario.Instance;
                 default: // Shouldn't get here, but if we do, try again!
                     return Instance;
             }

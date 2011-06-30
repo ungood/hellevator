@@ -30,12 +30,28 @@ namespace Hellevator.Behavior.Scenarios
         /// </summary>
         protected void WaitForGuest()
         {
-            Hellevator.Debug.Print(2, "WAIT GUEST");
-
+            Hellevator.Debug.Print(2, "OPEN CARRIAGE");
+            
+            // Call button has been pressed
+            
             Hellevator.CurrentFloor = Location.Entrance.GetFloor();
-            Hellevator.CarriageDoor.Open();
             Hellevator.Chandelier.TurnOn();
+            Hellevator.CarriageDoor.Open();
+            
+            // Loop "elevator music" - carriage
+            // Play "warm up sounds" - inside
+            // Timed
+            // Loop "idle sounds" - inside
+            Hellevator.Debug.Print(2, "OPEN DOORS");
+            
+            // Outside door are open
             Hellevator.PanelButton.Pressed.WaitOne();
+            // effects - plays "Ding"
+            Hellevator.Debug.Print(2, "CLOSE CARRIAGE");
+            
+            // wait for doors to close
+            // carriage - ramp volume down
+            // effects  - "WELCOME TO THE HELLEVATOR~~~~~!"
         }
 
         /// <summary>

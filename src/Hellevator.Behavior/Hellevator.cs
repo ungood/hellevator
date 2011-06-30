@@ -13,8 +13,10 @@ namespace Hellevator.Behavior
         public static IHellevator Hardware { get; private set; }
         private static readonly ScenarioLoop Loop = new ScenarioLoop {
             RandomScenario.Instance,
-            PurgatoryScenario.Instance,
             HeavenHellScenario.Instance,
+            HeavenScenario.Instance,
+            PurgatoryScenario.Instance,
+            HellScenario.Instance
         };
 
         public static void Run(IHellevator hardware)
@@ -66,11 +68,14 @@ namespace Hellevator.Behavior
 
         private static readonly Effect PanelGotoEffect = new FloorIndicatorEffect();
 
+        private static readonly Effect elevatorMoveEffect = new MultiplierEffect(
+            new RainbowEffect(), new ElevatorEffect());
+
         public static void Goto(Location destination, int msPerFloor, EasingFunction easing = null)
         {
             Turntable.Goto(destination);
             PanelPlayer.Play(PanelGotoEffect);
-            EffectPlayer.Play(new RainbowEffect()); // TODO
+            EffectPlayer.Play(elevatorMoveEffect);
 
             var destFloor = destination.GetFloor();
 

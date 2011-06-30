@@ -13,7 +13,7 @@ namespace Hellevator.Behavior.Animations
         };
             
 
-        public override Color GetColor(int index, double floor, long time)
+        public override Color GetColor(int index, int numLights, double floor, long time)
         {
             index = index + 1;
             var prev = (int)Math.Floor(floor);

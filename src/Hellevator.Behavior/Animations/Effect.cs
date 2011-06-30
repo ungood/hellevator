@@ -6,6 +6,6 @@ namespace Hellevator.Behavior.Animations
 {
     public abstract class Effect
     {
-        public abstract Color GetColor(int index, double floor, long ticks);
+        public abstract Color GetColor(int index, int numLights, double floor, long ticks);
     }
 }

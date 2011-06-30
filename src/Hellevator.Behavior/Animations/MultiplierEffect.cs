@@ -15,20 +15,22 @@
 // limitations under the License.
 #endregion
 
-using System;
-
 namespace Hellevator.Behavior.Animations
 {
-    public class RainbowEffect : Effect
+    public class MultiplierEffect : Effect
     {
+        private readonly Effect left;
+        private readonly Effect right;
+
+        public MultiplierEffect(Effect left, Effect right)
+        {
+            this.left = left;
+            this.right = right;
+        }
+
         public override Color GetColor(int index, int numLights, double floor, long ticks)
         {
-            var floorProgress = floor;
-            var progress = (double) index / 30;
-            var hue = (floorProgress / 4);
-            hue -= Math.Floor(hue);
-
-            return Color.FromHSL(hue, 0.5, 0.5);
+            return left.GetColor(index, numLights, floor, ticks) * right.GetColor(index, numLights, floor, ticks);
         }
     }
 }

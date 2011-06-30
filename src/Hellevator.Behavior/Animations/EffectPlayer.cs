@@ -47,7 +47,7 @@ namespace Hellevator.Behavior.Animations
             
             for(var light = 0; light < Strip.NumLights; light++)
             {
-                var color = animation.GetColor(light, Hellevator.CurrentFloor, ticks);
+                var color = animation.GetColor(light, Strip.NumLights, Hellevator.CurrentFloor, ticks);
                 Strip.SetColor(light, color);
             }
             Strip.Update();

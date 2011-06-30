@@ -6,6 +6,10 @@ namespace Hellevator.Behavior.Animations
         public byte Green { get; private set; }
         public byte Blue { get; private set; }
 
+        private double ScRed { get { return (double) Red / 255; } }
+        private double ScGreen { get { return (double) Green / 255; } }
+        private double ScBlue { get { return (double) Blue / 255; } }
+
         public Color(double red, double green, double blue)
         {
             Red = (byte) (red * 255);
@@ -79,6 +83,22 @@ namespace Hellevator.Behavior.Animations
                   }
             }
             return new Color(r, g, b);
+        }
+
+        public static Color operator+(Color left, Color right)
+        {
+            var red   = left.ScRed   + right.ScRed;
+            var green = left.ScGreen + right.ScGreen;
+            var blue  = left.ScBlue  + right.ScBlue;
+            return new Color(red, green, blue);
+        }
+
+        public static Color operator*(Color left, Color right)
+        {
+            var red   = left.ScRed   * right.ScRed;
+            var green = left.ScGreen * right.ScGreen;
+            var blue = left.ScBlue * right.ScBlue;
+            return new Color(red, green, blue);
         }
     }
 

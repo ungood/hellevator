@@ -19,16 +19,27 @@ using System;
 
 namespace Hellevator.Behavior.Animations
 {
-    public class RainbowEffect : Effect
+    public class ElevatorEffect : Effect
     {
+        private EasingFunction intensityEase = new ExponentialEase(5) {Mode = EasingMode.In};
+
         public override Color GetColor(int index, int numLights, double floor, long ticks)
         {
-            var floorProgress = floor;
-            var progress = (double) index / 30;
-            var hue = (floorProgress / 4);
-            hue -= Math.Floor(hue);
+            // |-A-----B-|
+            // 012345678910
+            // 10-2+8 = 14 % 10
+            // 10-8+2 = 4  % 10
 
-            return Color.FromHSL(hue, 0.5, 0.5);
+            var x = floor - (int) floor;
+            var y = (double) index / numLights;
+            var distance = x > y ? x - y : y - x; // make it always positive.
+            
+            distance = distance > 0.5 ? 1-distance : distance;
+
+            var intensity = 1 - (distance * 2);
+            intensity = intensityEase.Ease(intensity);
+            
+            return new Color(intensity, intensity, intensity);
         }
     }
 }
