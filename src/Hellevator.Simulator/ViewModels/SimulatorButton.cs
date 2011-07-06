@@ -1,4 +1,5 @@
 ﻿#region License
+
 // Copyright 2011 Jason Walker
 // ungood@onetrue.name
 // 
@@ -13,9 +14,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and 
 // limitations under the License.
+
 #endregion
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -23,11 +24,12 @@ using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Simulator.ViewModels
 {
-    
-
     public class SimulatorButton : IButton
     {
+        public event PressedEventHandler Pressed;
         public ICommand Click { get; private set; }
+
+        private readonly AutoResetEvent pressedEvent = new AutoResetEvent(false);
 
         public SimulatorButton()
         {
@@ -36,22 +38,19 @@ namespace Hellevator.Simulator.ViewModels
 
         private void Execute(object obj)
         {
-            var handler = Clicked;
+            var handler = Pressed;
             if(handler != null)
             {
                 Task.Factory.StartNew(() => handler());
             }
 
-            pressed.Set();
+            pressedEvent.Set();
         }
 
-        private readonly AutoResetEvent pressed = new AutoResetEvent(false);
-        
-        public event ClickedEventHandler Clicked;
-
-        public WaitHandle Pressed
+        public bool Wait()
         {
-            get { return pressed; }
+            pressedEvent.Reset();
+            return pressedEvent.WaitOne();
         }
     }
 }

@@ -8,60 +8,15 @@ namespace Hellevator.Behavior
 {
     public static class Hellevator
     {
-        #region Script
-
         public static IHellevator Hardware { get; private set; }
-        private static readonly ScenarioLoop Loop = new ScenarioLoop {
-            RandomScenario.Instance,
-            HeavenHellScenario.Instance,
-            HeavenScenario.Instance,
-            PurgatoryScenario.Instance,
-            HellScenario.Instance
-        };
 
-        public static void Run(IHellevator hardware)
+        internal static void Initialize(IHellevator hardware)
         {
             Hardware = hardware;
             PanelPlayer = new EffectPlayer(hardware.PanelLights);
-            EffectPlayer = new EffectPlayer(hardware.Effects);
-
-            var buttons = new[] {ModeButton.Pressed, CallButton.Pressed};
-
-            Reset();
-            while(true)
-            {
-                Debug.Print(1, Loop.Current.Name);
-                var buttonPressed = WaitHandle.WaitAny(buttons);
-                switch(buttonPressed)
-                {
-                    case 0:
-                        Loop.Next();
-                        break;
-                    case 1:
-                        Loop.Current.Run();
-                        Thread.Sleep(10 * 1000);
-                        Reset();
-                        break;
-                }
-            }
+            VerticalChasePlayer = new EffectPlayer(hardware.VerticalChase);
         }
-
-        private static void Reset()
-        {
-            CarriageDoor.Close();
-            Chandelier.TurnOff();
-            CarriageZone.Stop();
-            InsideZone.Stop();
-            Fan.TurnOff();
-            HellLights.TurnOff();
-            EffectPlayer.Stop();
-            PanelPlayer.Stop();
-            CurrentFloor = Location.Entrance.GetFloor();
-            Turntable.Reset();
-        }
-
-        #endregion
-
+        
         #region Current Floor
 
         public static double CurrentFloor { get; set; }
@@ -75,7 +30,7 @@ namespace Hellevator.Behavior
         {
             Turntable.Goto(destination);
             PanelPlayer.Play(PanelGotoEffect);
-            EffectPlayer.Play(elevatorMoveEffect);
+            VerticalChasePlayer.Play(elevatorMoveEffect);
 
             var destFloor = destination.GetFloor();
 
@@ -92,8 +47,6 @@ namespace Hellevator.Behavior
                 Set = SetCurrentFloor
             };
             animator.Animate();
-
-            Turntable.FinishedGoing.WaitOne(); // Make sure the turntable has done its thing.
         }
 
         private static void SetCurrentFloor(double value)
@@ -136,7 +89,7 @@ namespace Hellevator.Behavior
 
         public static EffectPlayer PanelPlayer { get; private set; }
 
-        public static EffectPlayer EffectPlayer { get; private set; }
+        public static EffectPlayer VerticalChasePlayer { get; private set; }
 
         #endregion
 
@@ -149,7 +102,7 @@ namespace Hellevator.Behavior
 
         public static IAudioZone InsideZone
         {
-            get { return Hardware.InsideZone; }
+            get { return Hardware.LobbyZone; }
         }
 
         #endregion

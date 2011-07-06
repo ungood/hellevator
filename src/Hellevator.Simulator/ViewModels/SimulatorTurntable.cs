@@ -27,7 +27,6 @@ namespace Hellevator.Simulator.ViewModels
 {
     public class SimulatorTurntable : ViewModelBase, ITurntable
     {
-        private readonly AutoResetEvent finishedGoing = new AutoResetEvent(false);
         private float angle;
 
         private Location location;
@@ -60,24 +59,21 @@ namespace Hellevator.Simulator.ViewModels
             }
         }
 
-        public WaitHandle FinishedGoing
-        {
-            get { return finishedGoing; }
-        }
-
         public void Reset()
         {
             Location = Location.Entrance;
             Angle = 0;
         }
 
-        public void Goto(Location destination)
+        public WaitHandle Goto(Location destination)
         {
             if(Location == Location.Unknown)
                 Reset();
 
             var destAngle = GetDestinationAngle(destination);
             var delta = destAngle > Angle ? .5F : -0.5F;
+
+            var resetEvent = new AutoResetEvent(false);
             Task.Factory.StartNew(() => {
                 while(Math.Abs(Angle - destAngle) > 0.1F)
                 {
@@ -85,8 +81,10 @@ namespace Hellevator.Simulator.ViewModels
                     Thread.Sleep(10);
                 }
                 Location = destination;
-                finishedGoing.Set();
+                resetEvent.Set();
             });
+
+            return resetEvent;
         }
 
         private static int GetDestinationAngle(Location destination)
@@ -102,13 +100,6 @@ namespace Hellevator.Simulator.ViewModels
                 default:
                     return 0;
             }
-        }
-
-        public void Rotate(int degrees)
-        {
-            Angle += degrees;
-
-            finishedGoing.Set();
         }
 
         #endregion

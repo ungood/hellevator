@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Hellevator.Behavior.Interface;
 using Microsoft.SPOT;
 
@@ -11,9 +12,9 @@ namespace Hellevator.Physical.Components
             
         }
 
-        public void Close()
+        public WaitHandle Close()
         {
-            
+            return null;
         }
     }
 }

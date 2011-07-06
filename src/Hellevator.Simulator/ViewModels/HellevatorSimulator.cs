@@ -29,10 +29,11 @@ namespace Hellevator.Simulator.ViewModels
         public IButton ModeButton { get; private set; }
         public IRelay HellLights { get; private set; }
         public IRelay Chandelier { get; private set; }
-        public ILightStrip Effects { get; private set; }
+        public ILightStrip VerticalChase { get; private set; }
         public ILightStrip PanelLights { get; private set; }
-        public IAudioZone InsideZone { get; private set; }
+        public IAudioZone LobbyZone { get; private set; }
         public IAudioZone CarriageZone { get; private set; }
+        public IAudioZone EffectsZone { get; private set; }
         public IDoor CarriageDoor { get; private set; }
         public ITurntable Turntable { get; private set; }
         public IRelay Fan { get; private set; }
@@ -52,11 +53,12 @@ namespace Hellevator.Simulator.ViewModels
             HellLights = new SimulatorRelay();
             Chandelier = new SimulatorRelay();
 
-            Effects = new SimulatorLightStrip(50);
+            VerticalChase = new SimulatorLightStrip(50);
             PanelLights = new SimulatorLightStrip(24);
 
-            InsideZone = new SimulatorAudioZone("Inside Zone", -1);
+            LobbyZone = new SimulatorAudioZone("Inside Zone", -1);
             CarriageZone = new SimulatorAudioZone("Carriage Zone", 1);
+            EffectsZone = new SimulatorAudioZone("Effects Zone", 0);
 
             CarriageDoor = new SimulatorDoor();
             Turntable = new SimulatorTurntable();

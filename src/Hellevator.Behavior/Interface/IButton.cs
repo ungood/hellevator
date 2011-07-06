@@ -3,11 +3,11 @@ using System.Threading;
 
 namespace Hellevator.Behavior.Interface
 {
-    public delegate void ClickedEventHandler();
+    public delegate void PressedEventHandler();
 
     public interface IButton
     {
-        //event ClickedEventHandler Clicked;
-        WaitHandle Pressed { get; }
+        event PressedEventHandler Pressed;
+        bool Wait();
     }
 }

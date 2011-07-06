@@ -28,11 +28,11 @@
     </Style>
     
     <Style x:Key="DoorStyle" TargetType="Line">
-      <Setter Property="StrokeDashArray" Value="" />
+      <Setter Property="StrokeDashArray" Value="13,26" />
       
       <Style.Triggers>
-        <DataTrigger Binding="{Binding CarriageDoor.IsOpen}" Value="true">
-          <Setter Property="StrokeDashArray" Value="13,26" />
+        <DataTrigger Binding="{Binding CarriageDoor.IsClosed}" Value="true">
+          <Setter Property="StrokeDashArray" Value="" />
         </DataTrigger>
       </Style.Triggers>
     </Style>

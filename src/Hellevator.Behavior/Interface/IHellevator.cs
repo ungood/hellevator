@@ -11,12 +11,13 @@ namespace Hellevator.Behavior.Interface
         // Lights
         IRelay HellLights { get; }
         IRelay Chandelier { get; }
-        ILightStrip Effects { get; }
+        ILightStrip VerticalChase { get; }
         ILightStrip PanelLights { get; }
 
         // Music
-        IAudioZone InsideZone { get; }
+        IAudioZone LobbyZone { get; }
         IAudioZone CarriageZone { get; }
+        IAudioZone EffectsZone { get; }
 
         // Action
         IDoor CarriageDoor { get; }
@@ -25,7 +26,6 @@ namespace Hellevator.Behavior.Interface
 
         // Utility
         ITextDisplay Debug { get; }
-        
         Thread CreateThread(ThreadStart start);
     }
 }

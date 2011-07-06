@@ -33,7 +33,7 @@ namespace Hellevator.Behavior.Scenarios
         {
             WaitForGuest();
             GoToHeaven();
-            Hellevator.PanelButton.Pressed.WaitOne();
+            Hellevator.PanelButton.Wait();
             GoToPurgatory();
             Thread.Sleep(5000);
             GoToExit();

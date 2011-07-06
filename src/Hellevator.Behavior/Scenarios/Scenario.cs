@@ -45,7 +45,7 @@ namespace Hellevator.Behavior.Scenarios
             Hellevator.Debug.Print(2, "OPEN DOORS");
             
             // Outside door are open
-            Hellevator.PanelButton.Pressed.WaitOne();
+            Hellevator.PanelButton.Wait();
             // effects - plays "Ding"
             Hellevator.Debug.Print(2, "CLOSE CARRIAGE");
             

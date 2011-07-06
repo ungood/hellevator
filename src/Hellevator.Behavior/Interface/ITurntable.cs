@@ -23,9 +23,7 @@ namespace Hellevator.Behavior.Interface
     {
         Location Location { get; }
 
-        WaitHandle FinishedGoing { get; }
-        
         void Reset();
-        void Goto(Location destination);
+        WaitHandle Goto(Location destination);
     }
 }
