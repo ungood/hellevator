@@ -16,21 +16,18 @@
 #endregion
 
 using System.Threading;
-using Hellevator.Behavior;
 using Hellevator.Behavior.Interface;
 
-namespace Hellevator.Physical.Components
+namespace Hellevator.Physical.Interface
 {
-    public class PhysicalTurntable : ITurntable
+    public class PhysicalDoor : IDoor
     {
-        public Location Location
+        public void Open()
         {
-            get { return Location.BlackRockCity; }
+            
         }
 
-        public void Reset() {}
-
-        public WaitHandle Goto(Location destination)
+        public WaitHandle Close()
         {
             return null;
         }

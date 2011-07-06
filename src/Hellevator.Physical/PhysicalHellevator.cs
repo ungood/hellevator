@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using GHIElectronics.NETMF.FEZ;
 using Hellevator.Behavior.Interface;
-using Hellevator.Physical.Components;
+using Hellevator.Physical.Interface;
 using Microsoft.SPOT;
 
 namespace Hellevator.Physical

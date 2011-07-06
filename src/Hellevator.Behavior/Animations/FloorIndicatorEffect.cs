@@ -4,11 +4,11 @@ namespace Hellevator.Behavior.Animations
 {
     public class FloorIndicatorEffect : Effect
     {
-        private readonly EasingFunction easeIn = new ExponentialEase(-5) {
+        private readonly EasingFunction easeIn = new ExponentialEase() {
             Mode = EasingMode.In
         };
 
-        private readonly EasingFunction easeOut = new ExponentialEase(-5) {
+        private readonly EasingFunction easeOut = new ExponentialEase() {
             Mode = EasingMode.Out
         };
             

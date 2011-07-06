@@ -15,38 +15,41 @@
 // limitations under the License.
 #endregion
 
-using System;
-using System.Threading;
+using System.IO;
 using GHIElectronics.NETMF.FEZ;
+using GHIElectronics.NETMF.FEZ.Shields;
+using GHIElectronics.NETMF.IO;
 using Hellevator.Behavior.Interface;
 using Microsoft.SPOT.Hardware;
 
-namespace Hellevator.Physical.Components
+namespace Hellevator.Physical.Interface
 {
-    public class PhysicalButton : IButton
+    public class PhysicalAudioZone : IAudioZone
     {
-        private readonly InterruptPort interrupt;
-        private readonly AutoResetEvent interruptEvent = new AutoResetEvent(false);
-        
-        public PhysicalButton(FEZ_Pin.Interrupt pin)
+        private readonly MusicShield audio = new MusicShield(
+                SPI.SPI_module.SPI1,
+                FEZ_Pin.Digital.An4,
+                FEZ_Pin.Digital.An5,
+                FEZ_Pin.Digital.Di4);
+        private readonly PersistentStorage sd = new PersistentStorage("SD");
+
+        public PhysicalAudioZone()
         {
-            interrupt = new InterruptPort((Cpu.Pin)pin, false, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeLow);
-            interrupt.OnInterrupt += OnInterrupt;
-            interrupt.EnableInterrupt();
+            audio.SetVolume(255, 255);
+            sd.MountFileSystem();
         }
 
-        private void OnInterrupt(uint data1, uint data2, DateTime time)
+        public void Play(string filename)
         {
-            interruptEvent.Set();
+            using(var stream = new FileStream(@"\SD\sample.ogg", FileMode.Open))
+            {
+                audio.Play(stream);
+            }
         }
 
-        public event PressedEventHandler Pressed;
-        
-        
-        public bool Wait()
+        public void Stop()
         {
-            interruptEvent.Reset();
-            return interruptEvent.WaitOne();
+            audio.StopPlaying();
         }
     }
 }

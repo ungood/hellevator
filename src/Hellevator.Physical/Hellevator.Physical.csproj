@@ -30,14 +30,17 @@
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
+    <Compile Include="BitExtensions.cs" />
     <Compile Include="Components\AudioShield.cs" />
-    <Compile Include="Components\PhysicalDoor.cs" />
-    <Compile Include="Components\PhysicalTurntable.cs" />
+    <Compile Include="Components\ShiftRegister.cs" />
+    <Compile Include="Interface\PhysicalDoor.cs" />
+    <Compile Include="Interface\PhysicalTurntable.cs" />
     <Compile Include="Components\MusicShield.cs" />
-    <Compile Include="Components\PhysicalAudioZone.cs" />
-    <Compile Include="Components\PhysicalButton.cs" />
-    <Compile Include="Components\PhysicalLightStrip.cs" />
-    <Compile Include="Components\PhysicalRelay.cs" />
+    <Compile Include="Interface\PhysicalAudioZone.cs" />
+    <Compile Include="Interface\PhysicalButton.cs" />
+    <Compile Include="Interface\PhysicalLightStrip.cs" />
+    <Compile Include="Interface\PhysicalRelay.cs" />
+    <Compile Include="Interface\ShiftRegisterLightStrip.cs" />
     <Compile Include="PhysicalHellevator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

@@ -15,41 +15,29 @@
 // limitations under the License.
 #endregion
 
-using System.IO;
 using GHIElectronics.NETMF.FEZ;
-using GHIElectronics.NETMF.FEZ.Shields;
-using GHIElectronics.NETMF.IO;
 using Hellevator.Behavior.Interface;
 using Microsoft.SPOT.Hardware;
 
-namespace Hellevator.Physical.Components
+namespace Hellevator.Physical.Interface
 {
-    public class PhysicalAudioZone : IAudioZone
+    public class PhysicalRelay : IRelay
     {
-        private readonly MusicShield audio = new MusicShield(
-                SPI.SPI_module.SPI1,
-                FEZ_Pin.Digital.An4,
-                FEZ_Pin.Digital.An5,
-                FEZ_Pin.Digital.Di4);
-        private readonly PersistentStorage sd = new PersistentStorage("SD");
+        private readonly OutputPort port;
 
-        public PhysicalAudioZone()
+        public PhysicalRelay(FEZ_Pin.Digital pin)
         {
-            audio.SetVolume(255, 255);
-            sd.MountFileSystem();
+            port = new OutputPort((Cpu.Pin) pin, false);
         }
 
-        public void Play(string filename)
+        public void TurnOn()
         {
-            using(var stream = new FileStream(@"\SD\sample.ogg", FileMode.Open))
-            {
-                audio.Play(stream);
-            }
+            port.Write(true);
         }
 
-        public void Stop()
+        public void TurnOff()
         {
-            audio.StopPlaying();
+            port.Write(false);
         }
     }
 }
