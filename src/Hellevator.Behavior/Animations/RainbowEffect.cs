@@ -25,7 +25,7 @@ namespace Hellevator.Behavior.Animations
         {
             var floorProgress = floor;
             var progress = (double) index / 30;
-            var hue = (floorProgress / 4);
+            var hue = (progress / 4);
             hue -= Math.Floor(hue);
 
             return Color.FromHSL(hue, 0.5, 0.5);

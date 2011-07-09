@@ -22,7 +22,7 @@ namespace Hellevator.Behavior.Animations
                 Stop();
 
             prevTicks = DateTime.Now.Ticks;
-            timer = new Timer(TimerElapsed, effect, 0, 10);
+            timer = new Timer(TimerElapsed, effect, 0, 100);
             //thread = new Thread(() => RunAnimation(Effect));
             //thread.Priority = ThreadPriority.Lowest;
             //thread.Start();

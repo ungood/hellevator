@@ -32,7 +32,10 @@
   <ItemGroup>
     <Compile Include="BitExtensions.cs" />
     <Compile Include="Components\AudioShield.cs" />
+    <Compile Include="Components\blah.cs" />
+    <Compile Include="Components\LPD6803.cs" />
     <Compile Include="Components\ShiftRegister.cs" />
+    <Compile Include="Interface\LedRope.cs" />
     <Compile Include="Interface\PhysicalDoor.cs" />
     <Compile Include="Interface\PhysicalTurntable.cs" />
     <Compile Include="Components\MusicShield.cs" />

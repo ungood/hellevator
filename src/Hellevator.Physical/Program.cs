@@ -23,6 +23,7 @@ using Hellevator.Physical.Components;
 using Hellevator.Physical.Interface;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
+using shiftRegister;
 
 namespace Hellevator.Physical
 {
@@ -32,62 +33,51 @@ namespace Hellevator.Physical
         {
             Debug.Print("Starting");
 
-            //var input = new InputPort((Cpu.Pin) FEZ_Pin.Digital.LDR, false, Port.ResistorMode.PullUp);
-            //var output = new OutputPort((Cpu.Pin) FEZ_Pin.Digital.LED, false);
-            ////HellevatorScript.Run(new PhysicalHellevator());
-            //while(true)
-            //{
-            //    output.Write(input.Read());
-            //}
+            //var effect = new RainbowEffect();
+            var rope = new LedRope(SPI.SPI_module.SPI2, 68);
+           
+            while(true)
+            {
+                rope.Update();
+                Thread.Sleep(100);
+            }
+            
+            //player.Play(effect);
 
-            //var shift = new ShiftRegister(
-            //    (Cpu.Pin) FEZ_Pin.Digital.Di8,
-            //    (Cpu.Pin) FEZ_Pin.Digital.Di9,
-            //    (Cpu.Pin) FEZ_Pin.Digital.Di10);
-
-            //while(true)
-            //{
-            //    for(byte intensity = 0; intensity <= 255; intensity++)
-            //    {
-            //        if(intensity > 125)
-            //            shift.ShiftOut(0, 0, 0);
-            //        else
-            //            shift.ShiftOut(0, 0, 1);
-            //    }
-            //}
-
-            var lightStrip = new ShiftRegisterLightStrip(FEZ_Pin.Digital.Di8, FEZ_Pin.Digital.Di9, FEZ_Pin.Digital.Di10, 24);
-            var player = new EffectPlayer(lightStrip);
-            var effect = new FloorIndicatorEffect();
-            player.Play(effect);
-
-            //while(true)
-                //{
-                //    Hellevator.Behavior.Hellevator.CurrentFloor = 7.0;
-                //    Thread.Sleep(1000);
-                //    Hellevator.Behavior.Hellevator.CurrentFloor = 6.5;
-                //    Thread.Sleep(1000);
-                //    Hellevator.Behavior.Hellevator.CurrentFloor = 23;
-                //    Thread.Sleep(1000);
-                //}
-
-                while(true)
-                {
-                    var animator = new Animator {
-                        InitialValue = 1.0,
-                        FinalValue = 24.0,
-                        EasingFunction = new LinearEase(),
-                        Length = new TimeSpan(0, 0, 0, 30),
-                        Set = SetCurrentFloor
-                    };
-                    animator.Animate();
-                }
-                Hellevator.Behavior.Hellevator.CurrentFloor = 6.5;
+            Thread.Sleep(Timeout.Infinite);
         }
 
-        private static void SetCurrentFloor(double value)
+        private static void ShiftRegisterTest(double value)
         {
-            Hellevator.Behavior.Hellevator.CurrentFloor = value;
+            var module = SPI.SPI_module.SPI2;
+            var latchPin = (Cpu.Pin) FEZ_Pin.Digital.Di52;
+            var spiConfig = new SPI.Configuration(latchPin, true, 0, 0, false, true, 20000, module);
+            var spi = new SPI(spiConfig);
+
+            
+            
+            //shift.ShiftOut(0, 0, 0);
+            //Thread.Sleep(1000);
+            //shift.ShiftOut(16, 0, 0);
+
+            //var led = new OutputPort((Cpu.Pin) FEZ_Pin.Digital.LED, true);
+
+            var on = new byte[] {0, 1, 0};
+            var off = new byte[] {0, 0, 0};
+            var start = Utility.GetMachineTime();
+            for(int i = 0; i < 10000; i++)
+            {
+                for(byte intensity = 0; intensity < 255; intensity++)
+                {
+                    if(intensity < 25)
+                        spi.Write(on);
+                    else
+                        spi.Write(off);
+                }
+            }
+            var end = Utility.GetMachineTime();
+
+            Debug.Print((end - start).Milliseconds.ToString());
         }
 
     }
