@@ -1,6 +1,8 @@
+using System;
+
 namespace Hellevator.Behavior.Animations
 {
-    public class Color
+    public struct Color
     {
         public byte Red { get; private set; }
         public byte Green { get; private set; }
@@ -11,78 +13,46 @@ namespace Hellevator.Behavior.Animations
         private double ScBlue { get { return (double) Blue / 255; } }
 
         public Color(double red, double green, double blue)
+            : this()
         {
-            Red = (byte) (red * 255);
-            Green = (byte) (green * 255);
-            Blue = (byte) (blue * 255);
+            Red = (byte) (Clamp(red) * 255);
+            Green = (byte) (Clamp(green) * 255);
+            Blue = (byte) (Clamp(blue) * 255);
         }
 
         public Color(byte red, byte green, byte blue)
+            : this()
         {
             Red = red;
             Green = green;
             Blue = blue;
         }
 
-        public static Color FromHSL(double h, double s, double l)
+        public static Color FromHSV(double h, double s, double v)
         {
-            double v;
-            double r,g,b;
- 
-            r = l;   // default to gray
-            g = l;
-            b = l;
-            v = (l <= 0.5) ? (l * (1.0 + s)) : (l + s - l * s);
-            if (v > 0)
+            var hue60 = h / 60;
+            var sector = (int)Math.Floor(hue60) % 6;
+            var f = h / 60 - Math.Floor(h / 60);
+
+            var p = v * (1 - s);
+            var q = v * (1 - f * s);
+            var t = v * (1 - (1 - f) * s);
+
+            switch(sector)
             {
-                  double m;
-                  double sv;
-                  int sextant;
-                  double fract, vsf, mid1, mid2;
- 
-                  m = l + l - v;
-                  sv = (v - m ) / v;
-                  h *= 6.0;
-                  sextant = (int)h;
-                  fract = h - sextant;
-                  vsf = v * sv * fract;
-                  mid1 = m + vsf;
-                  mid2 = v - vsf;
-                  switch (sextant)
-                  {
-                        case 0:
-                              r = v;
-                              g = mid1;
-                              b = m;
-                              break;
-                        case 1:
-                              r = mid2;
-                              g = v;
-                              b = m;
-                              break;
-                        case 2:
-                              r = m;
-                              g = v;
-                              b = mid1;
-                              break;
-                        case 3:
-                              r = m;
-                              g = mid2;
-                              b = v;
-                              break;
-                        case 4:
-                              r = mid1;
-                              g = m;
-                              b = v;
-                              break;
-                        case 5:
-                              r = v;
-                              g = m;
-                              b = mid2;
-                              break;
-                  }
+                case 0:
+                    return new Color(v, t, p);
+                case 1:
+                    return new Color(q, v, p);
+                case 2:
+                    return new Color(p, v, t);
+                case 3:
+                    return new Color(p, q, v);
+                case 4:
+                    return new Color(t, p, v);
+                default:
+                    return new Color(v, p, q);
             }
-            return new Color(r, g, b);
         }
 
         public static Color operator+(Color left, Color right)
@@ -99,6 +69,11 @@ namespace Hellevator.Behavior.Animations
             var green = left.ScGreen * right.ScGreen;
             var blue = left.ScBlue * right.ScBlue;
             return new Color(red, green, blue);
+        }
+
+        private static double Clamp(double input)
+        {
+            return input < 0 ? 0 : (input > 1 ? 1 : input);
         }
     }
 

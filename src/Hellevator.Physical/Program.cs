@@ -18,12 +18,8 @@
 using System;
 using System.Threading;
 using GHIElectronics.NETMF.FEZ;
-using Hellevator.Behavior.Animations;
-using Hellevator.Physical.Components;
-using Hellevator.Physical.Interface;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
-using shiftRegister;
 
 namespace Hellevator.Physical
 {
@@ -33,18 +29,17 @@ namespace Hellevator.Physical
         {
             Debug.Print("Starting");
 
-            //var effect = new RainbowEffect();
-            var rope = new LedRope(SPI.SPI_module.SPI2, 68);
-           
             while(true)
             {
-                rope.Update();
-                Thread.Sleep(100);
+                Testing(new Widget {Name = "Jason", Value = 3});
+                Thread.Sleep(50);
             }
-            
-            //player.Play(effect);
+        }
 
-            Thread.Sleep(Timeout.Infinite);
+        private static void Testing(Widget w)
+        {
+            Debug.Print(w.Name);
+            Debug.GC(true);
         }
 
         private static void ShiftRegisterTest(double value)
@@ -65,7 +60,7 @@ namespace Hellevator.Physical
             var on = new byte[] {0, 1, 0};
             var off = new byte[] {0, 0, 0};
             var start = Utility.GetMachineTime();
-            for(int i = 0; i < 10000; i++)
+            for(var i = 0; i < 10000; i++)
             {
                 for(byte intensity = 0; intensity < 255; intensity++)
                 {
@@ -80,5 +75,12 @@ namespace Hellevator.Physical
             Debug.Print((end - start).Milliseconds.ToString());
         }
 
+
+    }
+
+    struct Widget
+    {
+        public string Name { get; set; }
+        public int Value { get; set; }
     }
 }

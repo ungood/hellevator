@@ -28,7 +28,7 @@ namespace Hellevator.Behavior.Animations
             var hue = (progress / 4);
             hue -= Math.Floor(hue);
 
-            return Color.FromHSL(hue, 0.5, 0.5);
+            return Color.FromHSV(hue, 0.5, 1.0);
         }
     }
 }
