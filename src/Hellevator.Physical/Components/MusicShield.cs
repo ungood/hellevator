@@ -162,8 +162,8 @@ namespace GHIElectronics.NETMF.FEZ.Shields
 
         public MusicShield(SPI.SPI_module spi, FEZ_Pin.Digital dataCS, FEZ_Pin.Digital cmdCS, FEZ_Pin.Digital DREQ)
         {
-            _dataConfig = new SPI.Configuration((Cpu.Pin)dataCS, false, 0, 0, false, true, 2000, spi, (Cpu.Pin)DREQ, false);
-            _cmdConfig = new SPI.Configuration((Cpu.Pin)cmdCS, false, 0, 0, false, true, 2000, spi, (Cpu.Pin)DREQ, false);
+            _dataConfig = new SPI.Configuration((Cpu.Pin)dataCS, false, 100, 100, false, true, 5000, spi, (Cpu.Pin)DREQ, false);
+            _cmdConfig = new SPI.Configuration((Cpu.Pin)cmdCS, false, 100, 100, false, true, 100, spi, (Cpu.Pin)DREQ, false);
             _dreq = new InputPort((Cpu.Pin)DREQ, false, Port.ResistorMode.PullUp);
 
             _spi = new SPI(_dataConfig);

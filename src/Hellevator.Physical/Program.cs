@@ -16,8 +16,12 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Threading;
 using GHIElectronics.NETMF.FEZ;
+using GHIElectronics.NETMF.FEZ.Shields;
+using GHIElectronics.NETMF.IO;
+using Hellevator.Physical.Components;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 
@@ -25,15 +29,38 @@ namespace Hellevator.Physical
 {
     public class Program
     {
+        private static readonly PersistentStorage sd = new PersistentStorage("SD");
+        private static readonly SpiCoordinator coord = new SpiCoordinator(SPI.SPI_module.SPI1);
+
+        private static readonly AudioShieldPlayer player = new AudioShieldPlayer(coord,
+            (Cpu.Pin) FEZ_Pin.Digital.An4,
+            (Cpu.Pin) FEZ_Pin.Digital.An5,
+            (Cpu.Pin) FEZ_Pin.Digital.Di4);
+
         public static void Main()
         {
             Debug.Print("Starting");
 
-            while(true)
+            sd.MountFileSystem();
+
+            player.Initialize();
+            Debug.Print("Initialized");
+            using(var stream = new FileStream(@"\SD\sample.ogg", FileMode.Open, FileAccess.Read, FileShare.Read, 32))
             {
-                Testing(new Widget {Name = "Jason", Value = 3});
-                Thread.Sleep(50);
+                //    music.Play(stream);
+                //    while(music.IsBusy)
+                //        Thread.Sleep(10);
+                player.Play(stream);
+                while(player.IsPlaying)
+                    Thread.Sleep(10);
             }
+
+            Debug.Print("Done");
+        }
+
+        private static void PlaybackTest()
+        {
+            
         }
 
         private static void Testing(Widget w)

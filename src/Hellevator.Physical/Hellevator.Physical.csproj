@@ -32,6 +32,9 @@
   <ItemGroup>
     <Compile Include="BitExtensions.cs" />
     <Compile Include="Components\AudioShield.cs" />
+    <Compile Include="Components\AudioShieldPlayback.cs" />
+    <Compile Include="Components\AudioShieldRecorder.cs" />
+    <Compile Include="Components\SpiCoordinator.cs" />
     <Compile Include="Components\blah.cs" />
     <Compile Include="Components\LPD6803.cs" />
     <Compile Include="Components\ShiftRegister.cs" />
