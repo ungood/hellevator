@@ -4,6 +4,7 @@ namespace Hellevator.Behavior.Interface
 {
     public interface IHellevator
     {
+        // Buttons
         IButton CallButton { get; }
         IButton PanelButton { get; }
         IButton ModeButton { get; }
@@ -21,8 +22,10 @@ namespace Hellevator.Behavior.Interface
 
         // Action
         IDoor CarriageDoor { get; }
+        IDoor MainDoor { get; }
         ITurntable Turntable { get; }
         IRelay Fan { get; }
+        IRelay DriveWheel { get; }
 
         // Utility
         ITextDisplay Debug { get; }

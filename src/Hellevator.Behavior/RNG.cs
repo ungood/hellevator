@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // Copyright 2011 Jason Walker
 // ungood@onetrue.name
 // 
@@ -15,28 +15,17 @@
 // limitations under the License.
 #endregion
 
-using System.Collections;
-using System.Threading;
+using System;
 
-namespace Hellevator.Behavior.Scenarios
+namespace Hellevator.Behavior
 {
-    public class PurgatoryScenario : Scenario
+    public static class RNG
     {
-        public static readonly PurgatoryScenario Instance = new PurgatoryScenario();
+        private static readonly Random Random = new Random();
 
-        public override string Name
+        public static int Next(int maxValue = int.MaxValue)
         {
-            get { return "PURGATORY"; }
-        }
-
-        public override void Run()
-        {
-            WaitForGuest();
-            GoToHeaven();
-            Script.PanelButton.WaitOne();
-            GoToPurgatory();
-            Thread.Sleep(5000);
-            GoToExit();
+            return Random.Next(maxValue);
         }
     }
 }

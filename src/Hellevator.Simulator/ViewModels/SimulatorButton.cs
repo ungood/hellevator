@@ -47,7 +47,7 @@ namespace Hellevator.Simulator.ViewModels
             pressedEvent.Set();
         }
 
-        public bool Wait()
+        public bool WaitOne()
         {
             pressedEvent.Reset();
             return pressedEvent.WaitOne();

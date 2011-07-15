@@ -16,6 +16,7 @@
 #endregion
 
 using System.Collections;
+using System.Threading;
 using Hellevator.Behavior.Animations;
 
 namespace Hellevator.Behavior.Scenarios
@@ -25,92 +26,6 @@ namespace Hellevator.Behavior.Scenarios
         public abstract string Name { get; }
         public abstract void Run();
 
-        /// <summary>
-        /// Guest has pressed the call button, wait for them to get in the damned carriage.
-        /// </summary>
-        protected void WaitForGuest()
-        {
-            Hellevator.Debug.Print(2, "OPEN CARRIAGE");
-            
-            // Call button has been pressed
-            
-            Hellevator.CurrentFloor = Location.Entrance.GetFloor();
-            Hellevator.Chandelier.TurnOn();
-            Hellevator.CarriageDoor.Open();
-            
-            // Loop "elevator music" - carriage
-            // Play "warm up sounds" - inside
-            // Timed
-            // Loop "idle sounds" - inside
-            Hellevator.Debug.Print(2, "OPEN DOORS");
-            
-            // Outside door are open
-            Hellevator.PanelButton.Wait();
-            // effects - plays "Ding"
-            Hellevator.Debug.Print(2, "CLOSE CARRIAGE");
-            
-            // wait for doors to close
-            // carriage - ramp volume down
-            // effects  - "WELCOME TO THE HELLEVATOR~~~~~!"
-        }
-
-        /// <summary>
-        /// Take the guest on the stairway to heaven.
-        /// </summary>
-        protected void GoToHeaven()
-        {
-            Hellevator.Debug.Print(2, "TO: HEAVEN");
-
-            Hellevator.CarriageDoor.Close();
-            Hellevator.CarriageZone.Play("TheGirl");
-            Hellevator.Goto(Location.Heaven, 1500);
-            Hellevator.CarriageZone.Stop();
-            Hellevator.CarriageDoor.Open();
-        }
-
-        /// <summary>
-        /// Send the guest to land of the half-damned.
-        /// </summary>
-        protected void GoToPurgatory()
-        {
-            Hellevator.Debug.Print(2, "TO: PURGATORY");
-
-            Hellevator.CarriageDoor.Close();
-            Hellevator.CarriageZone.Play("Kalimba");
-            Hellevator.InsideZone.Play("Sleep Away");
-            Hellevator.Goto(Location.Purgatory, 1000);
-            Hellevator.CarriageDoor.Open();
-        }
-
-        /// <summary>
-        /// TONIGHT WE DINE IN HELL!
-        /// </summary>
-        protected void GoToHell()
-        {
-            Hellevator.Debug.Print(2, "TO: HELL");
-
-            Hellevator.CarriageZone.Stop();
-            Hellevator.InsideZone.Stop();
-
-            Hellevator.CarriageDoor.Close();
-            Hellevator.Fan.TurnOn();
-            Hellevator.Goto(Location.Hell, 300, new ExponentialEase(5) { Mode = EasingMode.In });
-            Hellevator.Fan.TurnOff();
-            Hellevator.HellLights.TurnOn();
-            Hellevator.CarriageDoor.Open();
-            Hellevator.Chandelier.TurnOff();
-        }
-
-        /// <summary>
-        /// Do not pass GO, do not collect $200.
-        /// </summary>
-        protected void GoToExit()
-        {
-            Hellevator.Debug.Print(2, "TO: EXIT");
-
-            Hellevator.CarriageDoor.Close();
-            Hellevator.Goto(Location.BlackRockCity, 1500);
-            Hellevator.CarriageDoor.Open();
-        }
+        
     }
 }

@@ -23,28 +23,21 @@ namespace Hellevator.Behavior.Scenarios
     {
         public static readonly RandomScenario Instance = new RandomScenario();
         
-        private readonly Random rand;
-
         public override string Name
         {
             get { return "RANDOM"; }
         }
 
-        public RandomScenario()
-        {
-            rand = new Random();
-        }
-
         public override void Run()
         {
             var random = GetRandom();
-            Hellevator.Debug.Print(1, "RND: " + random.Name);
+            Script.Debug.Print(1, "RND: " + random.Name);
             random.Run();
         }
 
         private Scenario GetRandom()
         {
-            switch(rand.Next(6))
+            switch(RNG.Next(6))
             {
                 case 0:
                     return HeavenScenario.Instance;

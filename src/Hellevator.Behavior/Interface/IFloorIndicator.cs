@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // Copyright 2011 Jason Walker
 // ungood@onetrue.name
 // 
@@ -15,28 +15,13 @@
 // limitations under the License.
 #endregion
 
-using System.Collections;
-using System.Threading;
-
-namespace Hellevator.Behavior.Scenarios
+namespace Hellevator.Behavior.Interface
 {
-    public class PurgatoryScenario : Scenario
+    public delegate void FloorChangedEventHandler();
+
+    public interface IFloorIndicator
     {
-        public static readonly PurgatoryScenario Instance = new PurgatoryScenario();
-
-        public override string Name
-        {
-            get { return "PURGATORY"; }
-        }
-
-        public override void Run()
-        {
-            WaitForGuest();
-            GoToHeaven();
-            Script.PanelButton.WaitOne();
-            GoToPurgatory();
-            Thread.Sleep(5000);
-            GoToExit();
-        }
+        int CurrentFloor { get; }
+        event FloorChangedEventHandler FloorChanged;
     }
 }

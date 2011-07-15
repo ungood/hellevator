@@ -8,6 +8,6 @@ namespace Hellevator.Behavior.Interface
     public interface IButton
     {
         event PressedEventHandler Pressed;
-        bool Wait();
+        WaitHandle WaitHandle { get; }
     }
 }
