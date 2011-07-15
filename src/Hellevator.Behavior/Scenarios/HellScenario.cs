@@ -28,10 +28,9 @@ namespace Hellevator.Behavior.Scenarios
 
         public override void Run()
         {
-            WaitForGuest();
-            GoToHell();
-            Script.PanelButton.WaitOne();
-            GoToExit();
+            Hellevator.AcceptGuest();
+            Hellevator.GotoHell();
+            Hellevator.GotoExit();
         }
     }
 }

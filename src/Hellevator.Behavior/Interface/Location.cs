@@ -15,7 +15,7 @@
 // limitations under the License.
 #endregion
 
-namespace Hellevator.Behavior
+namespace Hellevator.Behavior.Interface
 {
     public enum Location
     {

@@ -14,18 +14,11 @@
 // See the License for the specific language governing permissions and 
 // limitations under the License.
 #endregion
-
-using System.Collections;
-using System.Threading;
-using Hellevator.Behavior.Animations;
-
 namespace Hellevator.Behavior.Scenarios
 {
     public abstract class Scenario
     {
         public abstract string Name { get; }
-        public abstract void Run();
-
-        
+        public abstract void Run();       
     }
 }
