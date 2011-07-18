@@ -12,13 +12,10 @@
       <Button DockPanel.Dock="Bottom" Content="_HELL" Width="50" Command="{Binding PanelButton.Click}">
       </Button>
 
-      <ItemsControl ItemsSource="{Binding PanelLights.Lights}">
+      <ItemsControl ItemsSource="{Binding FloorIndicator.Lights}">
         <ItemsControl.ItemTemplate>
           <DataTemplate>
-            <Ellipse Margin="20, 7" Width="15" Height="15" Fill="{Binding Path=Color, Converter={StaticResource BrushConverter}}">
-              <Ellipse.Effect>
-                <DropShadowEffect ShadowDepth="0" Opacity="2" BlurRadius="{Binding Intensity}" Color="{Binding Path=Color, Converter={StaticResource ColorConverter}}" />
-              </Ellipse.Effect>
+            <Ellipse Margin="20, 7" Width="15" Height="15" Stroke="Black" StrokeThickness="1" Fill="{Binding Path=IsOn, Converter={StaticResource BoolToColorConverter}}">
             </Ellipse>
           </DataTemplate>
         

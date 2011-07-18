@@ -15,6 +15,8 @@
 // limitations under the License.
 #endregion
 
+using System;
+using System.Threading;
 using Hellevator.Behavior.Animations;
 using Hellevator.Behavior.Interface;
 
@@ -22,16 +24,18 @@ namespace Hellevator.Behavior
 {
     internal static class Hellevator
     {
-        private static IHellevator Hardware;
-
-        private static EffectPlayer VerticalChasePlayer;
-        private static EffectPlayer PanelPlayer;
-
+        private static IHellevator hw;
+        private static EffectPlayer elevatorEffectsPlayer;
+        
         public static void Initialize(IHellevator hardware)
         {
-            Hardware = hardware;
-            PanelPlayer = new EffectPlayer(hardware.PanelLights);
-            VerticalChasePlayer = new EffectPlayer(hardware.VerticalChase);
+            hw = hardware;
+            elevatorEffectsPlayer = new EffectPlayer(hardware.ElevatorEffects);
+        }
+
+        public static void Display(int line, string message)
+        {
+            hw.Debug.Print(line, message);
         }
 
         /// <summary>
@@ -47,18 +51,17 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void Reset(bool firstTime)
         {
-            Hardware.CarriageDoor.Close();
-            Hardware.Chandelier.TurnOff();
-            Hardware.CarriageZone.Stop();
-            Hardware.LobbyZone.Stop();
-            Hardware.Fan.TurnOff();
-            Hardware.HellLights.TurnOff();
+            hw.CarriageDoor.Close();
+            hw.Chandelier.TurnOff();
+            hw.CarriageZone.Stop();
+            hw.LobbyZone.Stop();
+            hw.Fan.TurnOff();
+            hw.HellLights.TurnOff();
             
-            VerticalChasePlayer.Stop();
-            PanelPlayer.Stop();
+            elevatorEffectsPlayer.Stop();
             CurrentFloor = Location.Entrance.GetFloor();
             
-            Hardware.Turntable.Reset();
+            hw.Turntable.Reset();
         }
 
         /// <summary>
@@ -67,30 +70,29 @@ namespace Hellevator.Behavior
         public static void AcceptGuest()
         {
             CurrentFloor = Location.Entrance.GetFloor();
-            Hardware.Chandelier.TurnOn();
-            Hardware.CarriageZone.Loop(Playlist.ElevatorMusic);
+            hw.Chandelier.TurnOn();
+            hw.CarriageZone.Loop(Playlist.ElevatorMusic);
             WaitAll(
-                Hardware.CarriageDoor.Open(),
-                Hardware.LobbyZone.Play(Playlist.WarmupSounds));
+                hw.CarriageDoor.Open(),
+                hw.LobbyZone.Play(Playlist.WarmupSounds));
                 
             // Open main doors to accept guest
-            Hardware.LobbyZone.Loop(Playlist.IdleSounds);
-            Hardware.MainDoor.Open()
+            hw.LobbyZone.Loop(Playlist.IdleSounds);
+            hw.MainDoor.Open()
                 .WaitOne();
             
             // Wait for guest to press the panel button.
-            Hardware.PanelButton.WaitHandle
-                .WaitOne();
-            Hardware.EffectsZone.Play(Playlist.Ding);
+            hw.PanelButton.Wait();
+            hw.EffectsZone.Play(Playlist.Ding);
             
             // Wait for the doors to close before getting underway.
-            Hardware.CarriageDoor.Close()
+            hw.CarriageDoor.Close()
                 .WaitOne();
-            Hardware.MainDoor.Close()
+            hw.MainDoor.Close()
                 .WaitOne();
 
-            Hardware.CarriageZone.Stop();
-            Hardware.EffectsZone.Play(Playlist.WelcomeToHellevator)
+            hw.CarriageZone.Stop();
+            hw.EffectsZone.Play(Playlist.WelcomeToHellevator)
                 .WaitOne();
         }
 
@@ -99,13 +101,14 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoHeaven()
         {
-            Hardware.Debug.Print(2, "TO: HEAVEN");
+            hw.Debug.Print(2, "TO: HEAVEN");
 
-            Hardware.CarriageDoor.Close();
-            Hardware.CarriageZone.Play("TheGirl");
-            Hardware.Goto(Location.Heaven, 1500);
-            Hardware.CarriageZone.Stop();
-            Hardware.CarriageDoor.Open();
+            hw.CarriageDoor.Close();
+            Goto(Location.Heaven, 1500);
+            hw.CarriageZone.Stop();
+            hw.CarriageDoor.Open();
+
+            hw.PanelButton.Wait();
         }
 
         /// <summary>
@@ -113,13 +116,13 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoPurgatory()
         {
-            Hardware.Debug.Print(2, "TO: PURGATORY");
+            hw.Debug.Print(2, "TO: PURGATORY");
 
-            Hardware.CarriageDoor.Close();
-            Hardware.CarriageZone.Play("Kalimba");
-            Hardware.LobbyZone.Play("Sleep Away");
-            Hardware.Goto(Location.Purgatory, 1000);
-            Hardware.CarriageDoor.Open();
+            hw.CarriageDoor.Close();
+            Goto(Location.Purgatory, 1000);
+            hw.CarriageDoor.Open();
+
+            Thread.Sleep(5000);
         }
 
         /// <summary>
@@ -127,18 +130,20 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoHell()
         {
-            Hardware.Debug.Print(2, "TO: HELL");
+            hw.Debug.Print(2, "TO: HELL");
 
-            Hardware.CarriageZone.Stop();
-            Hardware.LobbyZone.Stop();
+            hw.CarriageZone.Stop();
+            hw.LobbyZone.Stop();
 
-            Hardware.CarriageDoor.Close();
-            Hardware.Fan.TurnOn();
-            Hardware.Goto(Location.Hell, 300, new ExponentialEase(5) { Mode = EasingMode.In });
-            Hardware.Fan.TurnOff();
-            Hardware.HellLights.TurnOn();
-            Hardware.CarriageDoor.Open();
-            Hardware.Chandelier.TurnOff();
+            hw.CarriageDoor.Close();
+            hw.Fan.TurnOn();
+            Goto(Location.Hell, 300, new ExponentialEase(5) { Mode = EasingMode.In });
+            hw.Fan.TurnOff();
+            hw.HellLights.TurnOn();
+            hw.CarriageDoor.Open();
+            hw.Chandelier.TurnOff();
+
+            hw.PanelButton.Wait();
         }
 
         /// <summary>
@@ -146,30 +151,24 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoExit()
         {
-            Hardware.Debug.Print(2, "TO: EXIT");
+            hw.Debug.Print(2, "TO: EXIT");
 
-            Hardware.CarriageDoor.Close();
-            Hardware.Goto(Location.BlackRockCity, 1500);
-            Hardware.CarriageDoor.Open();
+            hw.CarriageDoor.Close();
+            Goto(Location.BlackRockCity, 1500);
+            hw.CarriageDoor.Open();
         }
 
         private static void WaitAll(params WaitHandle[] handles)
         {
             WaitHandle.WaitAll(handles);
         }
+        
+        private static readonly Effect elevatorMoveEffect = new ElevatorEffect();
 
-         public static double CurrentFloor { get; set; }
-
-        private static readonly Effect PanelGotoEffect = new FloorIndicatorEffect();
-
-        private static readonly Effect elevatorMoveEffect = new MultiplierEffect(
-            new RainbowEffect(), new ElevatorEffect());
-
-        public static void Goto(Location destination, int msPerFloor, EasingFunction easing = null)
+        private static void Goto(Location destination, int msPerFloor, EasingFunction easing = null)
         {
-            Turntable.Goto(destination);
-            PanelPlayer.Play(PanelGotoEffect);
-            VerticalChasePlayer.Play(elevatorMoveEffect);
+            hw.Turntable.Goto(destination);
+            elevatorEffectsPlayer.Play(elevatorMoveEffect);
 
             var destFloor = destination.GetFloor();
 
@@ -183,14 +182,21 @@ namespace Hellevator.Behavior
                 FinalValue = destFloor,
                 EasingFunction = easing,
                 Length = length,
-                Set = SetCurrentFloor
+                Set = v => CurrentFloor = v
             };
             animator.Animate();
         }
 
-        private static void SetCurrentFloor(double value)
+        private static double currentFloor;
+
+        public static double CurrentFloor
         {
-            CurrentFloor = value;
+            get { return currentFloor; }
+            set
+            {
+                currentFloor = value;
+                hw.FloorIndicator.CurrentFloor = (int) Math.Round(value);
+            }
         }
     }
 }

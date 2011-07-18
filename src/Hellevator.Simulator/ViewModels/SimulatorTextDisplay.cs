@@ -56,10 +56,8 @@ namespace Hellevator.Simulator.ViewModels
             TopText = BottomText = "";
         }
 
-        public void Print(int line, string format, params object[] args)
+        public void Print(int line, string text)
         {
-            var text = string.Format(format, args);
-
             switch(line)
             {
                 case 1:

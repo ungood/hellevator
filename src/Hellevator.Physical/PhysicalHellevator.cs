@@ -14,7 +14,7 @@ namespace Hellevator.Physical
         public IButton ModeButton { get; private set; }
         public IRelay HellLights { get; private set; }
         public IRelay Chandelier { get; private set; }
-        public ILightStrip VerticalChase { get; private set; }
+        public ILightStrip ElevatorEffects { get; private set; }
         public ILightStrip PanelLights { get; private set; }
         public IAudioZone LobbyZone { get; private set; }
         public IAudioZone CarriageZone { get; private set; }
@@ -36,7 +36,7 @@ namespace Hellevator.Physical
             HellLights = new PhysicalRelay(FEZ_Pin.Digital.LED);
             Chandelier = new PhysicalRelay(FEZ_Pin.Digital.Di3);
 
-            VerticalChase = new PhysicalLightStrip();
+            ElevatorEffects = new PhysicalLightStrip();
             PanelLights = new PhysicalLightStrip();
 
             CarriageZone = LobbyZone = new PhysicalAudioZone();

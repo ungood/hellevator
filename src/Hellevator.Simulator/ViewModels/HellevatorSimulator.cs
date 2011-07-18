@@ -27,16 +27,22 @@ namespace Hellevator.Simulator.ViewModels
         public IButton CallButton { get; private set; }
         public IButton PanelButton { get; private set; }
         public IButton ModeButton { get; private set; }
+        
         public IRelay HellLights { get; private set; }
         public IRelay Chandelier { get; private set; }
-        public ILightStrip VerticalChase { get; private set; }
-        public ILightStrip PanelLights { get; private set; }
+        public ILightStrip ElevatorEffects { get; private set; }
+        public IFloorIndicator FloorIndicator { get; private set; }
+        
         public IAudioZone LobbyZone { get; private set; }
         public IAudioZone CarriageZone { get; private set; }
         public IAudioZone EffectsZone { get; private set; }
+        
         public IDoor CarriageDoor { get; private set; }
+        public IDoor MainDoor { get; private set; }
         public ITurntable Turntable { get; private set; }
         public IRelay Fan { get; private set; }
+        public IRelay DriveWheel { get; private set; }
+        
         public ITextDisplay Debug { get; private set; }
         
         public Thread CreateThread(ThreadStart start)
@@ -53,14 +59,16 @@ namespace Hellevator.Simulator.ViewModels
             HellLights = new SimulatorRelay();
             Chandelier = new SimulatorRelay();
 
-            VerticalChase = new SimulatorLightStrip(50);
-            PanelLights = new SimulatorLightStrip(24);
+            ElevatorEffects = new SimulatorLightStrip(50);
+            FloorIndicator = new SimulatorFloorIndicator(24);
 
             LobbyZone = new SimulatorAudioZone("Inside Zone", -1);
             CarriageZone = new SimulatorAudioZone("Carriage Zone", 1);
             EffectsZone = new SimulatorAudioZone("Effects Zone", 0);
 
             CarriageDoor = new SimulatorDoor();
+            MainDoor = new SimulatorDoor();
+            DriveWheel = new SimulatorRelay();
             Turntable = new SimulatorTurntable();
             Fan = new SimulatorRelay();
 

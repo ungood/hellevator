@@ -61,6 +61,7 @@
     <Compile Include="Carriage.xaml.cs">
       <DependentUpon>Carriage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Data\BoolToColorConverter.cs" />
     <Compile Include="Data\ColorConverter.cs" />
     <Compile Include="Data\ColorToBrushConverter.cs" />
     <Compile Include="Fan.xaml.cs">
@@ -76,6 +77,7 @@
     <Compile Include="ViewModels\SimulatorAudioZone.cs" />
     <Compile Include="ViewModels\SimulatorButton.cs" />
     <Compile Include="ViewModels\SimulatorDoor.cs" />
+    <Compile Include="ViewModels\SimulatorFloorIndicator.cs" />
     <Compile Include="ViewModels\SimulatorLightStrip.cs" />
     <Compile Include="ViewModels\HellevatorSimulator.cs" />
     <Compile Include="ViewModels\SimulatorRelay.cs" />

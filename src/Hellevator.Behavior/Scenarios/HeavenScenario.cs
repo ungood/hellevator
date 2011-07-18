@@ -28,9 +28,9 @@ namespace Hellevator.Behavior.Scenarios
 
         public override void Run()
         {
-            Script.AcceptGuest();
-            Script.GotoHeaven();
-            Script.GotoExit();
+            Hellevator.AcceptGuest();
+            Hellevator.GotoHeaven();
+            Hellevator.GotoExit();
         }
     }
 }

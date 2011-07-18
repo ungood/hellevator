@@ -20,6 +20,6 @@ namespace Hellevator.Behavior.Interface
     public interface ITextDisplay
     {
         void Clear();
-        void Print(int line, string format, params object[] args);
+        void Print(int line, string message);
     }
 }

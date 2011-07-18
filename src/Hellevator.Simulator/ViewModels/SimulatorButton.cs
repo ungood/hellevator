@@ -27,6 +27,7 @@ namespace Hellevator.Simulator.ViewModels
     public class SimulatorButton : IButton
     {
         public event PressedEventHandler Pressed;
+
         public ICommand Click { get; private set; }
 
         private readonly AutoResetEvent pressedEvent = new AutoResetEvent(false);
@@ -47,10 +48,10 @@ namespace Hellevator.Simulator.ViewModels
             pressedEvent.Set();
         }
 
-        public bool WaitOne()
+        public void Wait()
         {
             pressedEvent.Reset();
-            return pressedEvent.WaitOne();
+            pressedEvent.WaitOne();
         }
     }
 }

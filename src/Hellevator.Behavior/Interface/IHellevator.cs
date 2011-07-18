@@ -12,8 +12,8 @@ namespace Hellevator.Behavior.Interface
         // Lights
         IRelay HellLights { get; }
         IRelay Chandelier { get; }
-        ILightStrip VerticalChase { get; }
-        ILightStrip PanelLights { get; }
+        ILightStrip ElevatorEffects { get; }
+        IFloorIndicator FloorIndicator { get; }
 
         // Music
         IAudioZone LobbyZone { get; }

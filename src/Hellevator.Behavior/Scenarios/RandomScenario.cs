@@ -31,7 +31,7 @@ namespace Hellevator.Behavior.Scenarios
         public override void Run()
         {
             var random = GetRandom();
-            Script.Debug.Print(1, "RND: " + random.Name);
+            Hellevator.Display(1, random.Name);
             random.Run();
         }
 

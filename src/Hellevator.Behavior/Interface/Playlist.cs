@@ -59,9 +59,11 @@ namespace Hellevator.Behavior.Interface
             }
         }
 
-        public static readonly Playlist Ding = new Playlist(true, false, false, "ding0.mp3", "ding1.mp3");
-        public static readonly Playlist ElevatorMusic = new Playlist(true, false, false, "blah.mp3");
-        public static readonly Playlist WarmupSounds = new Playlist(true, false, false, "blah.mp3");
-        public static readonly Playlist IdleSounds = new Playlist(true, false, false, "blah.mp3");
+        public static readonly Playlist Ding = new Playlist(true, false, false, "ding0", "ding1");
+        public static readonly Playlist ElevatorMusic = new Playlist(true, false, false, "blah");
+        public static readonly Playlist WarmupSounds = new Playlist(true, false, false, "blah");
+        public static readonly Playlist IdleSounds = new Playlist(true, false, false, "blah");
+
+        public static readonly Playlist WelcomeToHellevator = new Playlist(false, false, false, "welcome");
     }
 }

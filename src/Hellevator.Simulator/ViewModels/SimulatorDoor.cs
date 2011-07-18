@@ -37,9 +37,10 @@ namespace Hellevator.Simulator.ViewModels
             }
         }
 
-        public void Open()
+        public WaitHandle Open()
         {
             IsClosed = false;
+            return new AutoResetEvent(true);
         }
 
         public WaitHandle Close()

@@ -18,6 +18,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using Hellevator.Behavior.Interface;
@@ -52,7 +53,7 @@ namespace Hellevator.Simulator.ViewModels
         {
             if(!File.Exists(filename))
             {
-                MessageBox.Show("Missing audio file: " + filename);
+                Debug.WriteLine("Missing audio file: " + filename);
                 return;
             }
 
@@ -154,14 +155,21 @@ namespace Hellevator.Simulator.ViewModels
             Pan = pan;
         }
 
-        public void Play(string filename)
+        public WaitHandle Play(Playlist playlist)
         {
-            AudioMixer.Instance.Play(Name, "Audio/" + filename + ".mp3", Pan);
+            AudioMixer.Instance.Play(Name, "Audio/" + playlist.GetNext() + ".mp3", Pan);
+            return new AutoResetEvent(true);
         }
 
-        public void Stop()
+        public void Loop(Playlist playlist)
+        {
+            AudioMixer.Instance.Play(Name, "Audio/" + playlist.GetNext() + ".mp3", Pan);
+        }
+
+        WaitHandle IAudioZone.Stop()
         {
             AudioMixer.Instance.Stop(Name);
+            return new AutoResetEvent(true);
         }
     }
 }

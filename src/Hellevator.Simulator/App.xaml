@@ -7,6 +7,6 @@
     
       <Data:ColorToBrushConverter x:Key="BrushConverter" />
       <Data:ColorConverter x:Key="ColorConverter" />
-    
+    <Data:BoolToColorConverter x:Key="BoolToColorConverter" />
   </Application.Resources>
 </Application>

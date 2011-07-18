@@ -21,7 +21,6 @@ namespace Hellevator.Behavior.Interface
 
     public interface IFloorIndicator
     {
-        int CurrentFloor { get; }
-        event FloorChangedEventHandler FloorChanged;
+        int CurrentFloor { set; }
     }
 }

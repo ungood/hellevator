@@ -36,7 +36,7 @@ namespace Hellevator.Behavior.Animations
             
             distance = distance > 0.5 ? 1-distance : distance;
 
-            var intensity = 1 - (distance * 2);
+            var intensity = (distance * 2);
             intensity = intensityEase.Ease(intensity);
             
             return new Color(intensity, intensity, intensity);
