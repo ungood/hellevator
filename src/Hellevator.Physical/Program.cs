@@ -15,13 +15,10 @@
 // limitations under the License.
 #endregion
 
-using System;
-using System.IO;
 using System.Threading;
 using GHIElectronics.NETMF.FEZ;
-using GHIElectronics.NETMF.FEZ.Shields;
-using GHIElectronics.NETMF.IO;
-using Hellevator.Physical.Components;
+using Hellevator.Behavior.Interface;
+using Hellevator.Physical.Interface;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 
@@ -29,85 +26,35 @@ namespace Hellevator.Physical
 {
     public class Program
     {
-        private static readonly PersistentStorage sd = new PersistentStorage("SD");
-        private static readonly SpiCoordinator coord = new SpiCoordinator(SPI.SPI_module.SPI1);
-
-        private static readonly AudioShieldPlayer player = new AudioShieldPlayer(coord,
-            (Cpu.Pin) FEZ_Pin.Digital.An4,
-            (Cpu.Pin) FEZ_Pin.Digital.An5,
-            (Cpu.Pin) FEZ_Pin.Digital.Di4);
+        private static readonly IAudioZone zone1 = new PhysicalAudioZone(FEZ_Pin.Digital.Di37, FEZ_Pin.Digital.Di39, FEZ_Pin.Digital.Di41);
+        private static readonly IAudioZone zone2 = new PhysicalAudioZone(FEZ_Pin.Digital.Di47, FEZ_Pin.Digital.Di49, FEZ_Pin.Digital.Di51);
+        private static readonly IAudioZone zone3 = new PhysicalAudioZone(FEZ_Pin.Digital.Di21, FEZ_Pin.Digital.Di23, FEZ_Pin.Digital.Di25);
+        
+        private static Playlist playlist3 = new Playlist(true, "ding1", "ding2");
+        private static Playlist playlist2 = new Playlist(true, "sample");
+        private static Playlist playlist1 = new Playlist(true, "backinblack");
 
         public static void Main()
         {
+            var button = new InputPort((Cpu.Pin) FEZ_Pin.Digital.LDR, false, Port.ResistorMode.PullUp);
             Debug.Print("Starting");
 
-            sd.MountFileSystem();
+            zone1.Play(playlist1);
+            Thread.Sleep(2000);
+            zone2.Play(playlist2);
+            Thread.Sleep(3000);
+            zone3.Play(playlist3);
 
-            player.Initialize();
-            Debug.Print("Initialized");
-            using(var stream = new FileStream(@"\SD\sample.ogg", FileMode.Open, FileAccess.Read, FileShare.Read, 32))
-            {
-                //    music.Play(stream);
-                //    while(music.IsBusy)
-                //        Thread.Sleep(10);
-                player.Play(stream);
-                while(player.IsPlaying)
-                    Thread.Sleep(10);
-            }
+            //while(true)
+            //{
+            //    zone3.Play(playlist3);
+            //    Thread.Sleep(3000);
+            //}
 
+            Thread.Sleep(Timeout.Infinite);
             Debug.Print("Done");
         }
 
-        private static void PlaybackTest()
-        {
-            
-        }
-
-        private static void Testing(Widget w)
-        {
-            Debug.Print(w.Name);
-            Debug.GC(true);
-        }
-
-        private static void ShiftRegisterTest(double value)
-        {
-            var module = SPI.SPI_module.SPI2;
-            var latchPin = (Cpu.Pin) FEZ_Pin.Digital.Di52;
-            var spiConfig = new SPI.Configuration(latchPin, true, 0, 0, false, true, 20000, module);
-            var spi = new SPI(spiConfig);
-
-            
-            
-            //shift.ShiftOut(0, 0, 0);
-            //Thread.Sleep(1000);
-            //shift.ShiftOut(16, 0, 0);
-
-            //var led = new OutputPort((Cpu.Pin) FEZ_Pin.Digital.LED, true);
-
-            var on = new byte[] {0, 1, 0};
-            var off = new byte[] {0, 0, 0};
-            var start = Utility.GetMachineTime();
-            for(var i = 0; i < 10000; i++)
-            {
-                for(byte intensity = 0; intensity < 255; intensity++)
-                {
-                    if(intensity < 25)
-                        spi.Write(on);
-                    else
-                        spi.Write(off);
-                }
-            }
-            var end = Utility.GetMachineTime();
-
-            Debug.Print((end - start).Milliseconds.ToString());
-        }
-
-
-    }
-
-    struct Widget
-    {
-        public string Name { get; set; }
-        public int Value { get; set; }
+        
     }
 }

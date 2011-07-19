@@ -16,40 +16,58 @@
 #endregion
 
 using System.IO;
+using System.Threading;
 using GHIElectronics.NETMF.FEZ;
-using GHIElectronics.NETMF.FEZ.Shields;
 using GHIElectronics.NETMF.IO;
 using Hellevator.Behavior.Interface;
+using Hellevator.Physical.Components;
 using Microsoft.SPOT.Hardware;
 
 namespace Hellevator.Physical.Interface
 {
     public class PhysicalAudioZone : IAudioZone
     {
-        private readonly MusicShield audio = new MusicShield(
-                SPI.SPI_module.SPI1,
-                FEZ_Pin.Digital.An4,
-                FEZ_Pin.Digital.An5,
-                FEZ_Pin.Digital.Di4);
-        private readonly PersistentStorage sd = new PersistentStorage("SD");
+        private static readonly PersistentStorage Storage
+            = new PersistentStorage("SD");
 
-        public PhysicalAudioZone()
+        private static readonly SpiCoordinator Coordinator
+            = new SpiCoordinator(SPI.SPI_module.SPI1);
+
+        private readonly AudioShieldPlayer player;
+        
+        static PhysicalAudioZone()
         {
-            audio.SetVolume(255, 255);
-            sd.MountFileSystem();
+            Storage.MountFileSystem();
         }
 
-        public void Play(string filename)
+        public PhysicalAudioZone(FEZ_Pin.Digital dataPin, FEZ_Pin.Digital cmdPin, FEZ_Pin.Digital dreqPin)
         {
-            using(var stream = new FileStream(@"\SD\sample.ogg", FileMode.Open))
-            {
-                audio.Play(stream);
-            }
+            player = new AudioShieldPlayer(
+                Coordinator,
+                (Cpu.Pin) dataPin,
+                (Cpu.Pin) cmdPin,
+                (Cpu.Pin) dreqPin);
+
+            player.SetVolume(255, 255);
         }
 
-        public void Stop()
+        public WaitHandle Play(Playlist playlist)
         {
-            audio.StopPlaying();
+            var stream = new FileStream(@"\SD\" + playlist.GetNext() + ".ogg", FileMode.Open);
+            player.Play(stream);
+
+            return new ManualResetEvent(true);
         }
+
+        public void Loop(Playlist playlist)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        WaitHandle IAudioZone.Stop()
+        {
+            throw new System.NotImplementedException();
+        }
+
     }
 }

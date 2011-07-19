@@ -32,21 +32,19 @@
   <ItemGroup>
     <Compile Include="BitExtensions.cs" />
     <Compile Include="Components\AudioShield.cs" />
-    <Compile Include="Components\AudioShieldPlayback.cs" />
+    <Compile Include="Components\AudioShieldPlayer.cs" />
     <Compile Include="Components\AudioShieldRecorder.cs" />
     <Compile Include="Components\SpiCoordinator.cs" />
-    <Compile Include="Components\blah.cs" />
     <Compile Include="Components\LPD6803.cs" />
     <Compile Include="Components\ShiftRegister.cs" />
     <Compile Include="Interface\LedRope.cs" />
     <Compile Include="Interface\PhysicalDoor.cs" />
     <Compile Include="Interface\PhysicalTurntable.cs" />
-    <Compile Include="Components\MusicShield.cs" />
     <Compile Include="Interface\PhysicalAudioZone.cs" />
     <Compile Include="Interface\PhysicalButton.cs" />
     <Compile Include="Interface\PhysicalLightStrip.cs" />
     <Compile Include="Interface\PhysicalRelay.cs" />
-    <Compile Include="Interface\ShiftRegisterLightStrip.cs" />
+    <Compile Include="Interface\PhysicalFloorIndicator.cs" />
     <Compile Include="PhysicalHellevator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

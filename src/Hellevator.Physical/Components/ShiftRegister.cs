@@ -22,8 +22,6 @@ namespace Hellevator.Physical.Components
 {
     public class ShiftRegister
     {
-       
-
         private readonly OutputPort data;
         private readonly OutputPort clock;
         private readonly OutputPort latch;

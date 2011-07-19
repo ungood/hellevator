@@ -42,11 +42,10 @@ namespace Hellevator.Physical.Interface
 
         public event PressedEventHandler Pressed;
         
-        
-        public bool WaitOne()
+        public void Wait()
         {
             interruptEvent.Reset();
-            return interruptEvent.WaitOne();
+            interruptEvent.WaitOne();
         }
     }
 }

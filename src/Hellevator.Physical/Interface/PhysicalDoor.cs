@@ -22,9 +22,9 @@ namespace Hellevator.Physical.Interface
 {
     public class PhysicalDoor : IDoor
     {
-        public void Open()
+        public WaitHandle Open()
         {
-            
+            return null;
         }
 
         public WaitHandle Close()

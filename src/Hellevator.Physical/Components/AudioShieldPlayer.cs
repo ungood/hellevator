@@ -39,7 +39,9 @@ namespace Hellevator.Physical.Components
             stopRequested = false;
             IsPlaying = true;
             playStream = stream;
-            thread = new Thread(PlayStreamTask);
+            thread = new Thread(PlayStreamTask) {
+                Priority = ThreadPriority.Highest
+            };
             thread.Start();
         }
 
@@ -59,6 +61,7 @@ namespace Hellevator.Physical.Components
                 Coordinator.Execute(DataConfig, spi => spi.Write(block));
             }
 
+            playStream.Close();
             Reset();
         }
 

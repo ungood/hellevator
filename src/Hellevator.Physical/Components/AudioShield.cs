@@ -87,11 +87,9 @@ namespace Hellevator.Physical.Components
             Coordinator = coordinator;
             DataConfig = new SPI.Configuration(dataSelectPin, false, 0, 0, false, true, 2000, coordinator.Module, dreqPin, false);
             CmdConfig = new SPI.Configuration(cmdSelectPin, false, 0, 0, false, true, 2000, coordinator.Module, dreqPin, false);
-            
-            //dreq = new InterruptPort(dreqPin, false, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeBoth);
-            //dreq.OnInterrupt += OnDreqInterrupt;
-            //dreq.EnableInterrupt();
             dreq = new InputPort(dreqPin, false, Port.ResistorMode.PullUp);
+
+            Initialize();
         }
 
         protected void WaitForDreq()
@@ -113,14 +111,6 @@ namespace Hellevator.Physical.Components
             {
                 // TODO: throw new Exception("Failed to initialize MP3 Decoder.");
             }
-        }
-
-        private void OnDreqInterrupt(uint data1, uint data2, DateTime time)
-        {
-            if(data2 == 0)
-                DreqWait.Set();
-            else
-                DreqWait.Reset();
         }
 
         private readonly byte[] cmdBuffer = new byte[4];
@@ -180,6 +170,21 @@ namespace Hellevator.Physical.Components
         public void SetVolume(byte leftChannelVolume, byte rightChannelVolume)
         {
             WriteRegister(Register.Volume, (ushort) ((255 - leftChannelVolume) << 8 | (255 - rightChannelVolume)));
+        }
+
+        public void SineTest()
+        {
+            WriteMode(Mode.SdiNew | Mode.Tests | Mode.Reset);
+
+            var start = new byte[] {0x53, 0xEF, 0x6E, 0x7E};
+            var zero = new byte[] {0x00, 0x00, 0x00, 0x00};
+            var end = new byte[] {0x45, 0x78, 0x69, 0x74};
+        
+            Coordinator.Execute(DataConfig, spi => spi.Write(start));
+            Coordinator.Execute(DataConfig, spi => spi.Write(zero));
+            Thread.Sleep(2000);
+            Coordinator.Execute(DataConfig, spi => spi.Write(end));
+            Coordinator.Execute(DataConfig, spi => spi.Write(zero));
         }
     }
 }

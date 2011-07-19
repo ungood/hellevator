@@ -20,17 +20,13 @@ namespace Hellevator.Behavior.Interface
     public class Playlist
     {
         public bool Shuffle { get; private set; }
-        public bool FadeIn { get; private set; }
-        public bool FadeOut { get; private set; }
-
+        
         private readonly string[] filenames;
         private int current;
         
-        public Playlist(bool shuffle, bool fadeIn, bool fadeOut, params string[] filenames)
+        public Playlist(bool shuffle, params string[] filenames)
         {
             Shuffle = shuffle;
-            FadeIn = fadeIn;
-            FadeOut = fadeOut;
             this.filenames = filenames;
             
             Reset();
@@ -59,11 +55,11 @@ namespace Hellevator.Behavior.Interface
             }
         }
 
-        public static readonly Playlist Ding = new Playlist(true, false, false, "ding0", "ding1");
-        public static readonly Playlist ElevatorMusic = new Playlist(true, false, false, "blah");
-        public static readonly Playlist WarmupSounds = new Playlist(true, false, false, "blah");
-        public static readonly Playlist IdleSounds = new Playlist(true, false, false, "blah");
+        public static readonly Playlist Ding = new Playlist(true, "ding0", "ding1");
+        public static readonly Playlist ElevatorMusic = new Playlist(true, "blah");
+        public static readonly Playlist WarmupSounds = new Playlist(true, "blah");
+        public static readonly Playlist IdleSounds = new Playlist(true, "blah");
 
-        public static readonly Playlist WelcomeToHellevator = new Playlist(false, false, false, "welcome");
+        public static readonly Playlist WelcomeToHellevator = new Playlist(false, "welcome");
     }
 }

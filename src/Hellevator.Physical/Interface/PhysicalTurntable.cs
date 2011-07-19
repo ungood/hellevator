@@ -16,7 +16,6 @@
 #endregion
 
 using System.Threading;
-using Hellevator.Behavior;
 using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Physical.Interface

@@ -21,8 +21,19 @@ namespace Hellevator.Behavior
 {
     public static class RNG
     {
-        private static readonly Random Random = new Random();
+        private static Random random;
 
+        private static Random Random
+        {
+            get
+            {
+                if(random == null)
+                    random = new Random();
+                return random;
+            }
+        }
+
+        
         public static int Next(int maxValue = int.MaxValue)
         {
             return Random.Next(maxValue);
