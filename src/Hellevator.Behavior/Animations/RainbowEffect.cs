@@ -21,11 +21,9 @@ namespace Hellevator.Behavior.Animations
 {
     public class RainbowEffect : Effect
     {
-        public override Color GetColor(int index, int numLights, double floor, long ticks)
+        public override Color GetColor(double light, double floor, long ticks)
         {
-            var floorProgress = floor;
-            var progress = (double) index / 30;
-            var hue = (progress / 4);
+            var hue = (light / 4);
             hue -= Math.Floor(hue);
 
             return Color.FromHSV(hue, 0.5, 1.0);

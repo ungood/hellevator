@@ -19,6 +19,7 @@ using System;
 using System.Threading;
 using Hellevator.Behavior.Animations;
 using Hellevator.Behavior.Interface;
+using Hellevator.Behavior.Scenarios;
 
 namespace Hellevator.Behavior
 {
@@ -31,11 +32,18 @@ namespace Hellevator.Behavior
         {
             hw = hardware;
             elevatorEffectsPlayer = new EffectPlayer(hardware.ElevatorEffects);
+
+            hw.PanelButton.Pressed += PanelButtonPressed;
+        }
+
+        private static void PanelButtonPressed()
+        {
+            hw.EffectsZone.Play(Playlist.Beep);
         }
 
         public static void Display(int line, string message)
         {
-            hw.Debug.Print(line, message);
+            // TODO
         }
 
         /// <summary>
@@ -43,7 +51,7 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void EmergencyStop()
         {
-            
+            // TODO
         }
 
         /// <summary>
@@ -51,6 +59,7 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void Reset(bool firstTime)
         {
+            // TODO
             hw.CarriageDoor.Close();
             hw.Chandelier.TurnOff();
             hw.CarriageZone.Stop();
@@ -69,7 +78,6 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void AcceptGuest()
         {
-            CurrentFloor = Location.Entrance.GetFloor();
             hw.Chandelier.TurnOn();
             hw.CarriageZone.Loop(Playlist.ElevatorMusic);
             WaitAll(
@@ -82,8 +90,8 @@ namespace Hellevator.Behavior
                 .WaitOne();
             
             // Wait for guest to press the panel button.
-            hw.PanelButton.Wait();
-            hw.EffectsZone.Play(Playlist.Ding);
+            hw.PanelButton
+                .Wait();
             
             // Wait for the doors to close before getting underway.
             hw.CarriageDoor.Close()
@@ -101,14 +109,13 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoHeaven()
         {
-            hw.Debug.Print(2, "TO: HEAVEN");
+            Goto(Location.Heaven, 15);
+            
+            hw.CarriageDoor.Open()
+                .WaitOne();
 
-            hw.CarriageDoor.Close();
-            Goto(Location.Heaven, 1500);
-            hw.CarriageZone.Stop();
-            hw.CarriageDoor.Open();
-
-            hw.PanelButton.Wait();
+            hw.CarriageDoor.Close()
+                .WaitOne();
         }
 
         /// <summary>
@@ -116,13 +123,17 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoPurgatory()
         {
-            hw.Debug.Print(2, "TO: PURGATORY");
+            Goto(Location.Purgatory, 25);
 
-            hw.CarriageDoor.Close();
-            Goto(Location.Purgatory, 1000);
-            hw.CarriageDoor.Open();
-
+            hw.CarriageDoor.Open()
+                .WaitOne(); // TODO: How do we open this??
+            
             Thread.Sleep(5000);
+
+            hw.PanelButton
+                .Wait();
+            hw.CarriageDoor.Close()
+                .WaitOne();
         }
 
         /// <summary>
@@ -130,20 +141,18 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoHell()
         {
-            hw.Debug.Print(2, "TO: HELL");
-
-            hw.CarriageZone.Stop();
-            hw.LobbyZone.Stop();
-
-            hw.CarriageDoor.Close();
+            Goto(Location.Hell, 30, new ExponentialEase(5) { Mode = EasingMode.In });
             hw.Fan.TurnOn();
-            Goto(Location.Hell, 300, new ExponentialEase(5) { Mode = EasingMode.In });
+            //hw.FloorIndicator.StartFlicker();
+            //elevatorEffectsPlayer.Play();
+
             hw.Fan.TurnOff();
             hw.HellLights.TurnOn();
             hw.CarriageDoor.Open();
             hw.Chandelier.TurnOff();
 
-            hw.PanelButton.Wait();
+            hw.CarriageDoor.Close()
+                .WaitOne();
         }
 
         /// <summary>
@@ -151,10 +160,8 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoExit()
         {
-            hw.Debug.Print(2, "TO: EXIT");
-
             hw.CarriageDoor.Close();
-            Goto(Location.BlackRockCity, 1500);
+            Goto(Location.BlackRockCity, 20);
             hw.CarriageDoor.Open();
         }
 
@@ -163,19 +170,17 @@ namespace Hellevator.Behavior
             WaitHandle.WaitAll(handles);
         }
         
-        private static readonly Effect elevatorMoveEffect = new ElevatorEffect();
-
-        private static void Goto(Location destination, int msPerFloor, EasingFunction easing = null)
+        private static void Goto(Location destination, int duration, EasingFunction easing = null)
         {
+            hw.BeginDestination(destination);
             hw.Turntable.Goto(destination);
-            elevatorEffectsPlayer.Play(elevatorMoveEffect);
+            elevatorEffectsPlayer.Play(ElevatorEffect.Instance);
 
             var destFloor = destination.GetFloor();
 
             if(easing == null)
                 easing = LinearEase.Identity;
-            var deltaFloors = Math.Abs((int) (destFloor - CurrentFloor));
-            var length = new TimeSpan(0, 0, 0, 0, msPerFloor * deltaFloors);
+            var length = new TimeSpan(0, 0, 0, duration);
 
             var animator = new Animator {
                 InitialValue = CurrentFloor,
@@ -188,7 +193,7 @@ namespace Hellevator.Behavior
         }
 
         private static double currentFloor;
-
+        
         public static double CurrentFloor
         {
             get { return currentFloor; }
@@ -197,6 +202,12 @@ namespace Hellevator.Behavior
                 currentFloor = value;
                 hw.FloorIndicator.CurrentFloor = (int) Math.Round(value);
             }
+        }
+
+        public static void BeginScenario(Scenario scenario)
+        {
+            hw.BeginScenario(scenario.Name);
+            scenario.Run();
         }
     }
 }

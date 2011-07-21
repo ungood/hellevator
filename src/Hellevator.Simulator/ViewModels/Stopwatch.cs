@@ -22,19 +22,25 @@ namespace Hellevator.Simulator.ViewModels
 {
     public static class Stopwatch
     {
-        private static DateTime lastReset = DateTime.Now;
+        private static DateTime scenario = DateTime.Now;
+        private static DateTime destination = DateTime.Now;
 
-        public static void Reset()
+        public static void ResetScenario()
         {
-            lastReset = DateTime.Now;
-            Debug.Print("00:00.0000: Begin Stopwatch");
+            scenario = DateTime.Now;
+        }
+
+        public static void ResetDestination()
+        {
+            destination = DateTime.Now;
         }
 
         public static void Print(string format, params object[] args)
         {
-            var current = DateTime.Now - lastReset;
-            var interval = current.ToString("mm:ss.ffff");
-            Debug.Print(interval + ": " + format, args);
+            var now = DateTime.Now;
+            var currentScenario = now - scenario;
+            var currentDest = now - destination;
+            Debug.Print(currentScenario.ToString("c") + " | " + currentDest.ToString("c") + " | " + format, args);
         }
     }
 }

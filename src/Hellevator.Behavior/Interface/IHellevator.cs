@@ -28,7 +28,8 @@ namespace Hellevator.Behavior.Interface
         IRelay DriveWheel { get; }
 
         // Utility
-        ITextDisplay Debug { get; }
         Thread CreateThread(ThreadStart start);
+        void BeginScenario(string name);
+        void BeginDestination(Location location);
     }
 }

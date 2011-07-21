@@ -16,14 +16,10 @@
 #endregion
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
 using Hellevator.Behavior.Interface;
 using NAudio.CoreAudioApi;
-using NAudio.FileFormats.Mp3;
 using NAudio.Wave;
 
 namespace Hellevator.Simulator.ViewModels
@@ -32,8 +28,8 @@ namespace Hellevator.Simulator.ViewModels
     {
         public static AudioMixer Instance = new AudioMixer();
 
-        private IWavePlayer player;
-        private WaveMixerStream32 mixer;
+        private readonly IWavePlayer player;
+        private readonly WaveMixerStream32 mixer;
         private readonly IDictionary<string, WaveStream> streams
             = new Dictionary<string,WaveStream>();
 

@@ -88,15 +88,17 @@ namespace Hellevator.Behavior.Animations
             return new Color(red, green, blue);
         }
 
+        public static Color operator*(Color left, double scalar)
+        {
+            var red = left.ScRed * scalar;
+            var green = left.ScGreen * scalar;
+            var blue = left.ScBlue * scalar;
+            return new Color(red, green, blue);
+        }
+
         private static double Clamp(double input)
         {
             return input < 0 ? 0 : (input > 1 ? 1 : input);
         }
-    }
-
-    public static class Colors
-    {
-        public static readonly Color Black = new Color(0, 0, 0);
-        public static readonly Color Red   = new Color(255, 0, 0);
     }
 }

@@ -8,9 +8,14 @@ namespace Hellevator.Behavior.Animations
     {
         public ILightStrip Strip { get; private set; }
 
+        private double[] indexToRatio;
+
         public EffectPlayer(ILightStrip strip)
         {
             Strip = strip;
+            indexToRatio = new double[strip.NumLights];
+            for(int i = 0; i < strip.NumLights; i++)
+                indexToRatio[i] = (double) i / strip.NumLights;
         }
 
         private Timer timer;
@@ -23,9 +28,6 @@ namespace Hellevator.Behavior.Animations
 
             prevTicks = DateTime.Now.Ticks;
             timer = new Timer(TimerElapsed, effect, 0, 100);
-            //thread = new Thread(() => RunAnimation(Effect));
-            //thread.Priority = ThreadPriority.Lowest;
-            //thread.Start();
         }
 
         public void Stop()
@@ -47,7 +49,7 @@ namespace Hellevator.Behavior.Animations
             
             for(var light = 0; light < Strip.NumLights; light++)
             {
-                var color = animation.GetColor(light, Strip.NumLights, Hellevator.CurrentFloor, ticks);
+                var color = animation.GetColor(indexToRatio[light], Hellevator.CurrentFloor, ticks);
                 Strip.SetColor(light, color);
             }
             Strip.Update();

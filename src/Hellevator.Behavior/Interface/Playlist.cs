@@ -55,6 +55,7 @@ namespace Hellevator.Behavior.Interface
             }
         }
 
+        public static readonly Playlist Beep = new Playlist(true, "beep0", "beep1");
         public static readonly Playlist Ding = new Playlist(true, "ding0", "ding1");
         public static readonly Playlist ElevatorMusic = new Playlist(true, "blah");
         public static readonly Playlist WarmupSounds = new Playlist(true, "blah");

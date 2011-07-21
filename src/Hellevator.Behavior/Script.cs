@@ -25,15 +25,16 @@ namespace Hellevator.Behavior
 {
     public static class Script
     {
-        private static readonly ScenarioLoop loop = new ScenarioLoop {
+        public static bool IsScenarioRunning;
+
+        private static readonly ScenarioLoop Loop = new ScenarioLoop {
             RandomScenario.Instance,
             HeavenHellScenario.Instance,
             HeavenScenario.Instance,
             PurgatoryScenario.Instance,
             HellScenario.Instance
         };
-        public static bool IsScenarioRunning;
-        
+
         public static void Run(IHellevator hardware)
         {
             Hellevator.Initialize(hardware);
@@ -43,21 +44,29 @@ namespace Hellevator.Behavior
             while(true)
             {
                 hardware.CallButton.Wait();
-                loop.Current.Run();
-                Hellevator.Reset(false);
+                RunScenario();
             }
+        }
+        
+        private static void RunScenario()
+        {
+            IsScenarioRunning = true;
+            Hellevator.BeginScenario(Loop.Current);
+            IsScenarioRunning = false;
+            Hellevator.Reset(false);
         }
 
         private static void ModeButtonPressed()
         {
             if(IsScenarioRunning)
             {
+                IsScenarioRunning = false;
                 Hellevator.EmergencyStop();
             }
             else
             {
-                loop.Next();
-                Hellevator.Display(1, loop.Current.Name);
+                Loop.Next();
+                Hellevator.Display(1, Loop.Current.Name);
             }
         }
     }

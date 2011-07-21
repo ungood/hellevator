@@ -30,6 +30,7 @@
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
+    <Compile Include="Animations\Colors.cs" />
     <Compile Include="Animations\Effect.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -42,10 +43,8 @@
     </Compile>
     <Compile Include="Animations\EasingFunction.cs" />
     <Compile Include="Animations\ElevatorEffect.cs" />
-    <Compile Include="Animations\FloorIndicatorEffect.cs" />
     <Compile Include="Animations\ExponentialEase.cs" />
     <Compile Include="Animations\LinearEase.cs" />
-    <Compile Include="Animations\MultiplierEffect.cs" />
     <Compile Include="Animations\RainbowEffect.cs" />
     <Compile Include="ExtensionAttribute.cs" />
     <Compile Include="Hellevator.cs" />

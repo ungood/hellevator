@@ -32,20 +32,20 @@
       <Setter Property="X2" Value="280" />
       
       <Style.Triggers>
-        <DataTrigger Binding="{Binding CarriageDoor.IsClosed}" Value="false">
+        <DataTrigger Binding="{Binding CarriageDoor.IsClosed}" Value="true">
           <DataTrigger.EnterActions>
             <BeginStoryboard>
               <Storyboard>
-                <DoubleAnimation Storyboard.TargetProperty="X1" To="10"  Duration="0:0:0.5"/>
-                <DoubleAnimation Storyboard.TargetProperty="X2" To="510" Duration="0:0:0.5"/>
+                <DoubleAnimation Storyboard.TargetProperty="X1" To="249" Duration="0:0:0.5" />
+                <DoubleAnimation Storyboard.TargetProperty="X2" To="251" Duration="0:0:0.5" />
               </Storyboard>
             </BeginStoryboard>
           </DataTrigger.EnterActions>
           <DataTrigger.ExitActions>
             <BeginStoryboard>
               <Storyboard>
-                <DoubleAnimation Storyboard.TargetProperty="X1" To="249" Duration="0:0:0.5" />
-                <DoubleAnimation Storyboard.TargetProperty="X2" To="251" Duration="0:0:0.5" />
+                <DoubleAnimation Storyboard.TargetProperty="X1" To="10"  Duration="0:0:0.5"/>
+                <DoubleAnimation Storyboard.TargetProperty="X2" To="510" Duration="0:0:0.5"/>
               </Storyboard>
             </BeginStoryboard>
           </DataTrigger.ExitActions>

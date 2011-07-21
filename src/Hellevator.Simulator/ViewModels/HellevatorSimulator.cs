@@ -50,6 +50,18 @@ namespace Hellevator.Simulator.ViewModels
             return new Thread(start);
         }
 
+        public void BeginScenario(string name)
+        {
+            Stopwatch.ResetScenario();
+            Stopwatch.Print("Begin Scenario {0}", name);
+        }
+
+        public void BeginDestination(Location destination)
+        {
+            Stopwatch.ResetDestination();
+            Stopwatch.Print("Begin Destination {0}", destination);
+        }
+
         public HellevatorSimulator()
         {
             CallButton = new SimulatorButton();
@@ -66,8 +78,8 @@ namespace Hellevator.Simulator.ViewModels
             CarriageZone = new SimulatorAudioZone("Carriage Zone", 1);
             EffectsZone = new SimulatorAudioZone("Effects Zone", 0);
 
-            CarriageDoor = new SimulatorDoor(true);
-            MainDoor = new SimulatorDoor(false);
+            CarriageDoor = new SimulatorDoor("Carriage Door");
+            MainDoor = new SimulatorDoor("Main Door");
             DriveWheel = new SimulatorRelay();
             Turntable = new SimulatorTurntable();
             Fan = new SimulatorRelay();

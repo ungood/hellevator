@@ -19,27 +19,50 @@ using System;
 
 namespace Hellevator.Behavior.Animations
 {
+    /// <summary>
+    /// An effect that mimics the lights you might see between the doors while riding an elevator.
+    /// </summary>
     public class ElevatorEffect : Effect
     {
-        private EasingFunction intensityEase = new ExponentialEase(5) {Mode = EasingMode.In};
+        public static readonly ElevatorEffect Instance = new ElevatorEffect();
 
-        public override Color GetColor(int index, int numLights, double floor, long ticks)
+        /// <summary>
+        /// The height of a door, as a ratio to the make believe distance between floors.
+        /// </summary>
+        private const double DoorHeight = 0.5;
+
+        private const double HalfDoorHeight = DoorHeight / 2;
+
+        private const double BlurDistance = 0.2;
+
+        public override Color GetColor(double light, double floor, long ticks)
         {
-            // |-A-----B-|
-            // 012345678910
-            // 10-2+8 = 14 % 10
-            // 10-8+2 = 4  % 10
+            var position = floor + light + 0.5;
+            var x = position - (int) position;
 
-            var x = floor - (int) floor;
-            var y = (double) index / numLights;
-            var distance = x > y ? x - y : y - x; // make it always positive.
-            
-            distance = distance > 0.5 ? 1-distance : distance;
+            var floorIndex = (int)Math.Round(position);
+            var floorColor = floorIndex < 0 || floorIndex > 23 ? Colors.Red : FloorColors[floorIndex];
 
-            var intensity = (distance * 2);
-            intensity = intensityEase.Ease(intensity);
-            
-            return new Color(intensity, intensity, intensity);
+            if(HalfDoorHeight > x || x > 1 - HalfDoorHeight)
+                return floorColor;
+
+            var distance = x > 0.5 ? 1 - HalfDoorHeight - x : x - HalfDoorHeight;
+            if(distance > BlurDistance)
+                return Colors.Black;
+
+            var intensity = 1 - (distance / BlurDistance);
+            return floorColor * intensity;
         }
+
+        static ElevatorEffect()
+        {
+            FloorColors = new Color[24];
+            for(int i = 0; i < 24; i++)
+            {
+                FloorColors[i] = Color.FromHSV(10 * (23-i), 1.0, 1.0);
+            }
+        }
+
+        private static readonly Color[] FloorColors;
     }
 }

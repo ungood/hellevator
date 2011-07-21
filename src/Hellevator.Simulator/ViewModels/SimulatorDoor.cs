@@ -23,7 +23,7 @@ namespace Hellevator.Simulator.ViewModels
 {
     public class SimulatorDoor : ViewModelBase, IDoor
     {
-        private readonly bool resetOnClose;
+        public string Name { get; set; }
         private const int OpenCloseDelay = 500;
         private bool isClosed;
 
@@ -40,9 +40,9 @@ namespace Hellevator.Simulator.ViewModels
             }
         }
 
-        public SimulatorDoor(bool resetOnClose)
+        public SimulatorDoor(string name)
         {
-            this.resetOnClose = resetOnClose;
+            Name = name;
         }
 
         private WaitHandle OpenClose(bool isClosed)
@@ -52,20 +52,19 @@ namespace Hellevator.Simulator.ViewModels
                 IsClosed = isClosed;
                 Thread.Sleep(OpenCloseDelay);
                 evt.Set();
-
-                if(resetOnClose && isClosed)
-                    Stopwatch.Reset();
             });
             return evt;
         }
 
         public WaitHandle Open()
         {
+            Stopwatch.Print("Open {0}", Name);
             return OpenClose(false);
         }
 
         public WaitHandle Close()
         {
+            Stopwatch.Print("Close {0}", Name);
             return OpenClose(true);
         }
     }

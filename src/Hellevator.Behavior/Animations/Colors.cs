@@ -17,20 +17,10 @@
 
 namespace Hellevator.Behavior.Animations
 {
-    public class MultiplierEffect : Effect
+    public static class Colors
     {
-        private readonly Effect left;
-        private readonly Effect right;
-
-        public MultiplierEffect(Effect left, Effect right)
-        {
-            this.left = left;
-            this.right = right;
-        }
-
-        public override Color GetColor(int index, int numLights, double floor, long ticks)
-        {
-            return left.GetColor(index, numLights, floor, ticks) * right.GetColor(index, numLights, floor, ticks);
-        }
+        public static Color White                 = new Color(255, 255, 255);
+        public static Color Black                 = new Color(  0,   0,   0);
+        public static Color Red                   = new Color(229,   0,   0);
     }
 }
