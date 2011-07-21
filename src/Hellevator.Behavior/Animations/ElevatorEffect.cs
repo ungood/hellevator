@@ -29,11 +29,11 @@ namespace Hellevator.Behavior.Animations
         /// <summary>
         /// The height of a door, as a ratio to the make believe distance between floors.
         /// </summary>
-        private const double DoorHeight = 0.5;
+        private const double DoorHeight = 0.6;
 
         private const double HalfDoorHeight = DoorHeight / 2;
 
-        private const double BlurDistance = 0.2;
+        private const double BlurDistance = 0.1;
 
         public override Color GetColor(double light, double floor, long ticks)
         {

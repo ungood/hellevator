@@ -179,7 +179,7 @@ namespace Hellevator.Behavior
             var destFloor = destination.GetFloor();
 
             if(easing == null)
-                easing = LinearEase.Identity;
+                easing = EasingFunction.ToDesitination;
             var length = new TimeSpan(0, 0, 0, duration);
 
             var animator = new Animator {
