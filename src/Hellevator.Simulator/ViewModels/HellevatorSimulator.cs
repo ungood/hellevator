@@ -66,8 +66,8 @@ namespace Hellevator.Simulator.ViewModels
             CarriageZone = new SimulatorAudioZone("Carriage Zone", 1);
             EffectsZone = new SimulatorAudioZone("Effects Zone", 0);
 
-            CarriageDoor = new SimulatorDoor();
-            MainDoor = new SimulatorDoor();
+            CarriageDoor = new SimulatorDoor(true);
+            MainDoor = new SimulatorDoor(false);
             DriveWheel = new SimulatorRelay();
             Turntable = new SimulatorTurntable();
             Fan = new SimulatorRelay();

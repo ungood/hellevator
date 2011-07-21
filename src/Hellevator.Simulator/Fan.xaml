@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Hellevator.Simulator"
     mc:Ignorable="d"
-    d:DesignHeight="100" d:DesignWidth="100">
+    d:DesignHeight="200" d:DesignWidth="200">
   <UserControl.Resources>
     <Storyboard x:Key="Rotate">
       <DoubleAnimation Storyboard.TargetName="fanRotate" Storyboard.TargetProperty="Angle"
@@ -13,21 +13,22 @@
     </Storyboard>
     
     <ControlTemplate x:Key="FanTemplate" TargetType="UserControl">
-      <Canvas Width="100" Height="100">
-        <Ellipse Canvas.Top="35" Canvas.Left="35" Width="30" Height="30" Stroke="Black" Fill="Black" />
-        <Line X1="20" Y1="20" X2="80" Y2="80" Stroke="Black" StrokeThickness="5"
+      <Canvas Width="200" Height="200">
+        <Ellipse Canvas.Top="70" Canvas.Left="70" Width="60" Height="60" Stroke="Black" Fill="Black" />
+        <Line X1="40" Y1="40" X2="160" Y2="160" Stroke="Black" StrokeThickness="5"
                 StrokeEndLineCap="Triangle" StrokeStartLineCap="Triangle" />
-        <Line X1="20" Y1="80" X2="80" Y2="20" Stroke="Black" StrokeThickness="5"
+        <Line X1="40" Y1="160" X2="160" Y2="40" Stroke="Black" StrokeThickness="5"
                 StrokeEndLineCap="Triangle" StrokeStartLineCap="Triangle" />
 
         <Canvas.RenderTransform>
-          <RotateTransform x:Name="fanRotate" CenterX="50" CenterY="50" Angle="0"/>
+          <RotateTransform x:Name="fanRotate" CenterX="100" CenterY="100" Angle="0"/>
         </Canvas.RenderTransform>
       </Canvas>
       
       <ControlTemplate.Triggers>
         <DataTrigger Binding="{Binding Fan.IsOn}" Value="true">
           <DataTrigger.EnterActions>
+            
             <BeginStoryboard Storyboard="{StaticResource Rotate}" Name="RotateBegin" />
           </DataTrigger.EnterActions>
           <DataTrigger.ExitActions>

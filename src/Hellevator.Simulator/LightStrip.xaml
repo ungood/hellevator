@@ -3,11 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    mc:Ignorable="d" Width="4" Height="400">
-  <ItemsControl ItemsSource="{Binding ElevatorEffects.Lights}" Width="4" Height="400">
+    mc:Ignorable="d" Width="4" Height="800">
+  <ItemsControl ItemsSource="{Binding ElevatorEffects.Lights}" Width="8" Height="800">
     <ItemsControl.ItemTemplate>
       <DataTemplate>
-        <Rectangle Width="4" Height="8" Fill="{Binding Path=Color, Converter={StaticResource BrushConverter}}">
+        <Rectangle Width="8" Height="16" Fill="{Binding Path=Color, Converter={StaticResource BrushConverter}}">
           <Rectangle.Effect>
             <BlurEffect Radius="1" RenderingBias="Performance" />
           </Rectangle.Effect>

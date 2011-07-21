@@ -16,12 +16,15 @@
 #endregion
 
 using System.Threading;
+using System.Threading.Tasks;
 using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Simulator.ViewModels
 {
     public class SimulatorDoor : ViewModelBase, IDoor
     {
+        private readonly bool resetOnClose;
+        private const int OpenCloseDelay = 500;
         private bool isClosed;
 
         public bool IsClosed
@@ -37,16 +40,33 @@ namespace Hellevator.Simulator.ViewModels
             }
         }
 
+        public SimulatorDoor(bool resetOnClose)
+        {
+            this.resetOnClose = resetOnClose;
+        }
+
+        private WaitHandle OpenClose(bool isClosed)
+        {
+            var evt = new ManualResetEvent(false);
+            Task.Factory.StartNew(() => {
+                IsClosed = isClosed;
+                Thread.Sleep(OpenCloseDelay);
+                evt.Set();
+
+                if(resetOnClose && isClosed)
+                    Stopwatch.Reset();
+            });
+            return evt;
+        }
+
         public WaitHandle Open()
         {
-            IsClosed = false;
-            return new AutoResetEvent(true);
+            return OpenClose(false);
         }
 
         public WaitHandle Close()
         {
-            IsClosed = true;
-            return new AutoResetEvent(true);
+            return OpenClose(true);
         }
     }
 }

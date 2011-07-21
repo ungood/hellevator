@@ -28,10 +28,27 @@
     </Style>
     
     <Style x:Key="DoorStyle" TargetType="Line">
-      <Setter Property="StrokeDashArray" Value="13,26" />
+      <Setter Property="X1" Value="240" />
+      <Setter Property="X2" Value="280" />
       
       <Style.Triggers>
-        <DataTrigger Binding="{Binding CarriageDoor.IsClosed}" Value="true">
+        <DataTrigger Binding="{Binding CarriageDoor.IsClosed}" Value="false">
+          <DataTrigger.EnterActions>
+            <BeginStoryboard>
+              <Storyboard>
+                <DoubleAnimation Storyboard.TargetProperty="X1" To="10"  Duration="0:0:0.5"/>
+                <DoubleAnimation Storyboard.TargetProperty="X2" To="510" Duration="0:0:0.5"/>
+              </Storyboard>
+            </BeginStoryboard>
+          </DataTrigger.EnterActions>
+          <DataTrigger.ExitActions>
+            <BeginStoryboard>
+              <Storyboard>
+                <DoubleAnimation Storyboard.TargetProperty="X1" To="249" Duration="0:0:0.5" />
+                <DoubleAnimation Storyboard.TargetProperty="X2" To="251" Duration="0:0:0.5" />
+              </Storyboard>
+            </BeginStoryboard>
+          </DataTrigger.ExitActions>
           <Setter Property="StrokeDashArray" Value="" />
         </DataTrigger>
       </Style.Triggers>
@@ -40,32 +57,32 @@
   </UserControl.Resources>
 
   <!-- The inside of the box. -->
-  <Canvas Width="400" Height="400" Style="{DynamicResource InsideStyle}">
+  <Canvas Width="800" Height="800" Style="{DynamicResource InsideStyle}">
         
-    <Grid Width="400" Height="400">
+    <Grid Width="800" Height="800">
       <Border BorderBrush="Black" BorderThickness="5" />
       
       <!-- Axle STOP -->
-      <Line X1="400" Y1="0" X2="340" Y2="60" Stroke="Red" StrokeThickness="5"  />
+      <Line X1="800" Y1="0" X2="680" Y2="120" Stroke="Red" StrokeThickness="5"  />
       
       <!-- The Carriage -->
-      <Canvas Width="260" Height="260" Style="{DynamicResource CarriageStyle}">
+      <Canvas Width="520" Height="520" Style="{DynamicResource CarriageStyle}">
         <Canvas.RenderTransform>
-          <RotateTransform Angle="{Binding Turntable.Angle}" CenterX="130" CenterY="130" />
+          <RotateTransform Angle="{Binding Turntable.Angle}" CenterX="260" CenterY="260" />
         </Canvas.RenderTransform>
       
         <!-- Walls and Door -->
-        <Polyline Points="0,260 0,0 260,0 260,260" Stroke="Black" StrokeThickness="5"/>
-        <Line Style="{DynamicResource DoorStyle}" X1="0" X2="260" Y1="260" Y2="260" Stroke="Black" StrokeThickness="5" />
+        <Rectangle Width="520" Height="520" Stroke="Black" StrokeThickness="10" />
+        <Line x:Name="door" Style="{DynamicResource DoorStyle}" X1="249" X2="251" Y1="515" Y2="515" Stroke="White" StrokeThickness="10" />
         
         <!-- Axle -->
-        <Line X1="240" Y1="20" X2="260" Y2="0" Stroke="Red" StrokeThickness="5" StrokeEndLineCap="Triangle" />
+        <Line X1="480" Y1="40" X2="520" Y2="0" Stroke="Red" StrokeThickness="5" StrokeEndLineCap="Triangle" />
         
-        <Simulator:Fan Canvas.Top="75" Canvas.Left="75" />
+        <Simulator:Fan Canvas.Top="150" Canvas.Left="150" />
       </Canvas>
     </Grid>
 
-    <StackPanel Orientation="Horizontal" Canvas.Top="370" Canvas.Left="5">
+    <StackPanel Orientation="Horizontal" Canvas.Top="760" Canvas.Left="15">
       <Button DockPanel.Dock="Bottom" Content="_CALL" Width="50" Height="25" Command="{Binding CallButton.Click}" Margin="0, 0, 5, 0" />
       <Button DockPanel.Dock="Bottom" Content="_MODE" Width="50" Height="25" Command="{Binding ModeButton.Click}" />
 

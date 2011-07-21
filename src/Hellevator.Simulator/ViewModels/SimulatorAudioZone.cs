@@ -51,9 +51,10 @@ namespace Hellevator.Simulator.ViewModels
 
         public void Play(string zone, string filename, float pan)
         {
+            Stopwatch.Print("{0} - {1}", zone, filename);
+
             if(!File.Exists(filename))
             {
-                Debug.WriteLine("Missing audio file: " + filename);
                 return;
             }
 

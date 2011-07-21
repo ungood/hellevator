@@ -3,19 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:Data="clr-namespace:Hellevator.Simulator.Data"
-		mc:Ignorable="d" Width="200" Height="400">
+		mc:Ignorable="d" Width="400" Height="800">
   <UserControl.Resources>
     
   </UserControl.Resources>
   <Border BorderBrush="Black" BorderThickness="5">
     <DockPanel LastChildFill="True">
-      <Button DockPanel.Dock="Bottom" Content="_HELL" Width="50" Command="{Binding PanelButton.Click}">
+      <Button DockPanel.Dock="Bottom" Content="_HELL" Width="100" Command="{Binding PanelButton.Click}" Margin="10">
       </Button>
 
       <ItemsControl ItemsSource="{Binding FloorIndicator.Lights}">
         <ItemsControl.ItemTemplate>
           <DataTemplate>
-            <Ellipse Margin="20, 7" Width="15" Height="15" Stroke="Black" StrokeThickness="1" Fill="{Binding Path=IsOn, Converter={StaticResource BoolToColorConverter}}">
+            <Ellipse Margin="40, 15" Width="30" Height="30" Stroke="Black" StrokeThickness="1" Fill="{Binding Path=IsOn, Converter={StaticResource BoolToColorConverter}}">
             </Ellipse>
           </DataTemplate>
         

@@ -11,6 +11,7 @@ namespace Hellevator.Simulator.ViewModels
     {
         public ObservableCollection<Light> Lights { get; private set; }
         public int NumLights { get; private set; }
+        private int currentFloor = 0;
 
         public SimulatorFloorIndicator(int numLights)
         {
@@ -25,6 +26,12 @@ namespace Hellevator.Simulator.ViewModels
         {
             set
             {
+                if(value == currentFloor)
+                    return;
+
+                currentFloor = value;
+                Stopwatch.Print("Floor {0}", value);
+
                 foreach(var light in Lights)
                     light.IsOn = false;
 

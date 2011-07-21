@@ -83,6 +83,7 @@
     <Compile Include="ViewModels\SimulatorRelay.cs" />
     <Compile Include="ViewModels\SimulatorTextDisplay.cs" />
     <Compile Include="ViewModels\SimulatorTurntable.cs" />
+    <Compile Include="ViewModels\Stopwatch.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Page Include="Carriage.xaml">
       <SubType>Designer</SubType>
