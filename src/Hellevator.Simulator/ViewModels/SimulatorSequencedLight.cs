@@ -14,14 +14,34 @@
 // See the License for the specific language governing permissions and 
 // limitations under the License.
 #endregion
-namespace Hellevator.Behavior.Animations
+
+using Hellevator.Behavior.Animations;
+using Hellevator.Behavior.Interface;
+
+namespace Hellevator.Simulator.ViewModels
 {
-    public static class Colors
+    public class SimulatorSequencedLight : ViewModelBase, ISequencedLight
     {
-        public static Color White                 = new Color(255, 255, 255);
-        public static Color Black                 = new Color(  0,   0,   0);
-        public static Color Red                   = new Color(255,   0,   0);
-        public static Color Green = new Color(0, 128, 0);
-        public static Color Blue                  = new Color(  0,   0, 255);
+        private Color color = Colors.Black;
+
+        public Color Color
+        {
+            get { return color; }
+            set
+            {
+                color = value;
+                OnPropertyChanged("Color");
+            }
+        }
+
+        public void TurnOff()
+        {
+            Color = Colors.Black;
+        }
+
+        public void Send(ushort data)
+        {
+            Color = (Color) data;
+        }
     }
 }

@@ -100,5 +100,24 @@ namespace Hellevator.Behavior.Animations
         {
             return input < 0 ? 0 : (input > 1 ? 1 : input);
         }
+
+        public static implicit operator ushort(Color color)
+        {
+            var r = color.Red >> 3;
+            var g = color.Green >> 3;
+            var b = color.Blue >> 3;
+
+            // Bit pattern for color data: 1rrrrrgggggbbbbb
+            return (ushort) (0x8000 | r << 10 | g << 5 | b);
+        }
+
+        public static explicit operator Color(ushort u)
+        {
+            var r = u >> 10 & 0x001f;
+            var g = u >> 5 & 0x001f;
+            var b = u & 0x001f;
+
+            return new Color((byte) (r * 4), (byte) (g * 4), (byte) (b * 4));
+        }
     }
 }

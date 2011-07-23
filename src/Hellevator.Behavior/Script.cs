@@ -41,6 +41,7 @@ namespace Hellevator.Behavior
             hardware.ModeButton.Pressed += ModeButtonPressed;
 
             Hellevator.Reset(true);
+            Hellevator.Display(Loop.Current.Name);
             while(true)
             {
                 hardware.CallButton.Wait();
@@ -50,10 +51,13 @@ namespace Hellevator.Behavior
         
         private static void RunScenario()
         {
+            Hellevator.AcceptGuest();
+
             IsScenarioRunning = true;
             Hellevator.BeginScenario(Loop.Current);
-            IsScenarioRunning = false;
+            Thread.Sleep(10 * 1000);
             Hellevator.Reset(false);
+            IsScenarioRunning = false;
         }
 
         private static void ModeButtonPressed()
@@ -66,7 +70,7 @@ namespace Hellevator.Behavior
             else
             {
                 Loop.Next();
-                Hellevator.Display(1, Loop.Current.Name);
+                Hellevator.Display(Loop.Current.Name);
             }
         }
     }

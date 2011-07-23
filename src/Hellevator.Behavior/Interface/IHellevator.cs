@@ -14,6 +14,7 @@ namespace Hellevator.Behavior.Interface
         IRelay Chandelier { get; }
         ILightStrip ElevatorEffects { get; }
         IFloorIndicator FloorIndicator { get; }
+        ISequencedLight MoodLight { get; }
 
         // Music
         IAudioZone LobbyZone { get; }
@@ -29,6 +30,7 @@ namespace Hellevator.Behavior.Interface
 
         // Utility
         Thread CreateThread(ThreadStart start);
+        void Display(string message);
         void BeginScenario(string name);
         void BeginDestination(Location location);
     }

@@ -14,14 +14,12 @@
 // See the License for the specific language governing permissions and 
 // limitations under the License.
 #endregion
-namespace Hellevator.Behavior.Animations
+
+namespace Hellevator.Behavior.Interface
 {
-    public static class Colors
+    public interface ISequencedLight
     {
-        public static Color White                 = new Color(255, 255, 255);
-        public static Color Black                 = new Color(  0,   0,   0);
-        public static Color Red                   = new Color(255,   0,   0);
-        public static Color Green = new Color(0, 128, 0);
-        public static Color Blue                  = new Color(  0,   0, 255);
+        void TurnOff();
+        void Send(ushort data);
     }
 }

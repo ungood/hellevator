@@ -32,7 +32,8 @@ namespace Hellevator.Simulator.ViewModels
         public IRelay Chandelier { get; private set; }
         public ILightStrip ElevatorEffects { get; private set; }
         public IFloorIndicator FloorIndicator { get; private set; }
-        
+        public ISequencedLight MoodLight { get; private set; }
+
         public IAudioZone LobbyZone { get; private set; }
         public IAudioZone CarriageZone { get; private set; }
         public IAudioZone EffectsZone { get; private set; }
@@ -43,7 +44,7 @@ namespace Hellevator.Simulator.ViewModels
         public IRelay Fan { get; private set; }
         public IRelay DriveWheel { get; private set; }
         
-        public ITextDisplay Debug { get; private set; }
+        public ITextDisplay TextDisplay { get; private set; }
         
         public Thread CreateThread(ThreadStart start)
         {
@@ -62,6 +63,11 @@ namespace Hellevator.Simulator.ViewModels
             Stopwatch.Print("Begin Destination {0}", destination);
         }
 
+        public void Display(string message)
+        {
+            TextDisplay.Print(1, message);
+        }
+
         public HellevatorSimulator()
         {
             CallButton = new SimulatorButton();
@@ -70,6 +76,7 @@ namespace Hellevator.Simulator.ViewModels
 
             HellLights = new SimulatorRelay();
             Chandelier = new SimulatorRelay();
+            MoodLight = new SimulatorSequencedLight();
 
             ElevatorEffects = new SimulatorLightStrip(50);
             FloorIndicator = new SimulatorFloorIndicator(24);
@@ -84,7 +91,7 @@ namespace Hellevator.Simulator.ViewModels
             Turntable = new SimulatorTurntable();
             Fan = new SimulatorRelay();
 
-            Debug = new SimulatorTextDisplay();
+            TextDisplay = new SimulatorTextDisplay();
         }
     }
 }

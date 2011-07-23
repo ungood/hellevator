@@ -48,6 +48,7 @@
     <Compile Include="Animations\RainbowEffect.cs" />
     <Compile Include="ExtensionAttribute.cs" />
     <Compile Include="Hellevator.cs" />
+    <Compile Include="Interface\ISequencedLight.cs" />
     <Compile Include="Script.cs" />
     <Compile Include="Interface\IAudioZone.cs" />
     <Compile Include="Interface\IButton.cs" />

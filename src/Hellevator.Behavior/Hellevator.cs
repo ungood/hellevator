@@ -41,11 +41,6 @@ namespace Hellevator.Behavior
             hw.EffectsZone.Play(Playlist.Beep);
         }
 
-        public static void Display(int line, string message)
-        {
-            // TODO
-        }
-
         /// <summary>
         /// Oh SHIT.
         /// </summary>
@@ -59,6 +54,7 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void Reset(bool firstTime)
         {
+            Display("RESET");
             // TODO
             hw.CarriageDoor.Close();
             hw.Chandelier.TurnOff();
@@ -79,6 +75,7 @@ namespace Hellevator.Behavior
         public static void AcceptGuest()
         {
             hw.Chandelier.TurnOn();
+            hw.MoodLight.Send(Colors.White);
             hw.CarriageZone.Loop(Playlist.ElevatorMusic);
             WaitAll(
                 hw.CarriageDoor.Open(),
@@ -110,7 +107,7 @@ namespace Hellevator.Behavior
         public static void GotoHeaven()
         {
             Goto(Location.Heaven, 15);
-            
+            hw.MoodLight.Send(Colors.Blue);
             hw.CarriageDoor.Open()
                 .WaitOne();
 
@@ -208,6 +205,11 @@ namespace Hellevator.Behavior
         {
             hw.BeginScenario(scenario.Name);
             scenario.Run();
+        }
+
+        public static void Display(string message)
+        {
+            hw.Display(message);
         }
     }
 }

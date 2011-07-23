@@ -28,7 +28,6 @@ namespace Hellevator.Behavior.Scenarios
 
         public override void Run()
         {
-            Hellevator.AcceptGuest();
             Hellevator.GotoHell();
             Hellevator.GotoExit();
         }

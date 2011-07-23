@@ -74,6 +74,11 @@
         <!-- Walls and Door -->
         <Rectangle Width="520" Height="520" Stroke="Black" StrokeThickness="10" />
         <Line x:Name="door" Style="{DynamicResource DoorStyle}" X1="249" X2="251" Y1="515" Y2="515" Stroke="White" StrokeThickness="10" />
+        <Line X1="10" X2="510" Y1="525" Y2="525" Stroke="{Binding MoodLight.Color, Converter={StaticResource BrushConverter}}" StrokeThickness="10">
+          <Line.Effect>
+            <DropShadowEffect BlurRadius="30" Direction="270" Color="{Binding MoodLight.Color, Converter={StaticResource BrushConverter}}" />
+          </Line.Effect>
+        </Line>
         
         <!-- Axle -->
         <Line X1="480" Y1="40" X2="520" Y2="0" Stroke="Red" StrokeThickness="5" StrokeEndLineCap="Triangle" />
@@ -87,8 +92,8 @@
       <Button DockPanel.Dock="Bottom" Content="_MODE" Width="50" Height="25" Command="{Binding ModeButton.Click}" />
 
       <StackPanel Orientation="Vertical" Margin="10, 0" Background="DarkBlue" TextElement.FontSize="10" TextElement.Foreground="LightBlue">
-        <TextBlock Text="{Binding Debug.TopText, FallbackValue=Hello}" Margin="5, 0" />
-        <TextBlock Text="{Binding Debug.BottomText, FallbackValue=World}" Margin="5, 0"/>
+        <TextBlock Text="{Binding TextDisplay.TopText, FallbackValue=Hello}" Margin="5, 0" />
+        <TextBlock Text="{Binding TextDisplay.BottomText, FallbackValue=World}" Margin="5, 0"/>
       </StackPanel>
     </StackPanel>
   </Canvas>
