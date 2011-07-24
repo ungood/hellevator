@@ -106,11 +106,12 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoHeaven()
         {
-            Goto(Location.Heaven, 15);
+            Goto(Location.Heaven, 35);
             hw.MoodLight.Send(Colors.Blue);
             hw.CarriageDoor.Open()
                 .WaitOne();
 
+            hw.PanelButton.Wait();
             hw.CarriageDoor.Close()
                 .WaitOne();
         }
@@ -120,12 +121,13 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoPurgatory()
         {
-            Goto(Location.Purgatory, 25);
+            Goto(Location.Purgatory, 35);
+            CurrentFloor = 24; // Return to sender;
 
             hw.CarriageDoor.Open()
-                .WaitOne(); // TODO: How do we open this??
-            
-            Thread.Sleep(5000);
+                .WaitOne();
+
+            hw.MoodLight.Send(Colors.White);
 
             hw.PanelButton
                 .Wait();

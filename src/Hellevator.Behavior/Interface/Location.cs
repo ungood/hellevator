@@ -36,11 +36,11 @@ namespace Hellevator.Behavior.Interface
                 case Location.Heaven:
                     return 1;
                 case Location.Purgatory:
-                    return 19;
+                    return 1;
                 case Location.Hell:
                     return 24;
                 default:
-                    return 7;
+                    return 24;
             }
         }
     }

@@ -46,6 +46,7 @@ namespace Hellevator.Behavior
             {
                 hardware.CallButton.Wait();
                 RunScenario();
+                Loop.Next();
             }
         }
         
