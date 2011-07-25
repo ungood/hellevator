@@ -43,3 +43,7 @@ _ReSharper*/
 
 # Office Temp Files
 ~$*
+
+#Project Specific Files
+demos
+download
