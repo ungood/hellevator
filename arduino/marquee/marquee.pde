@@ -3,7 +3,7 @@
 #include "palette.h"
 
 const int numLights = 70;
-const int numRows = 6;
+const int numRows = 4;
 int fire[numLights][numRows];
 
 LPD6803 strip = LPD6803(70, 9, 10);
@@ -26,7 +26,7 @@ LPD6803 strip = LPD6803(70, 9, 10);
 //  strip.show();
 //}
 void setup() {
-  strip.setCPUmax(70);
+  strip.setCPUmax(60);
   strip.begin();
   strip.show();
   randomSeed(analogRead(0));
@@ -41,7 +41,7 @@ void setup() {
 
 void loop() {
   for(int x = 0; x < numLights; x++)
-    fire[x][0] = random(0, 230);
+    fire[x][0] = random(0, 256);
   
   for(int y = 1; y < numRows; y++)
   for(int x = 0; x < numLights; x++) {
@@ -57,5 +57,5 @@ void loop() {
     strip.setPixelColor(i, palette[val]);
   }
   strip.show();
-  //delay(10);
+  delay(50);
 }
