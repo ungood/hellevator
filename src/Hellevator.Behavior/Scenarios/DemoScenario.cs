@@ -15,18 +15,23 @@
 // limitations under the License.
 #endregion
 
-using System;
-
-namespace Hellevator.Behavior.Animations
+namespace Hellevator.Behavior.Scenarios
 {
-    public class RainbowEffect : Effect
+    public class DemoScenario : Scenario
     {
-        public override Color GetColor(double light, double floor, long ticks)
-        {
-            var hue = (light / 4);
-            hue -= Math.Floor(hue);
+        public static readonly Scenario Instance = new DemoScenario();
 
-            return Color.FromHSV(hue, 0.5, 1.0);
+        public override string Name
+        {
+            get { return "DEMO"; }
+        }
+
+        public override void Run()
+        {
+            Hellevator.GotoHeaven();
+            Hellevator.GotoPurgatory();
+            Hellevator.GotoHell();
+            Hellevator.GotoExit();
         }
     }
 }

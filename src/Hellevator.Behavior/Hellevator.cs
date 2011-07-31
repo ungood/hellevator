@@ -18,6 +18,7 @@
 using System;
 using System.Threading;
 using Hellevator.Behavior.Animations;
+using Hellevator.Behavior.Effects;
 using Hellevator.Behavior.Interface;
 using Hellevator.Behavior.Scenarios;
 
@@ -39,14 +40,6 @@ namespace Hellevator.Behavior
         private static void PanelButtonPressed()
         {
             hw.EffectsZone.Play(Playlist.Beep);
-        }
-
-        /// <summary>
-        /// Oh SHIT.
-        /// </summary>
-        public static void EmergencyStop()
-        {
-            // TODO
         }
 
         /// <summary>

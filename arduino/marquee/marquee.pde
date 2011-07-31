@@ -3,29 +3,13 @@
 #include "palette.h"
 
 const int numLights = 70;
-const int numRows = 4;
+const int numRows = 6;
 int fire[numLights][numRows];
 
 LPD6803 strip = LPD6803(70, 9, 10);
 
-//void setup() {
-//  
-//  // The Arduino needs to clock out the data to the pixels
-//  // this happens in interrupt timer 1, we can change how often
-//  // to call the interrupt. setting CPUmax to 100 will take nearly all all the
-//  // time to do the pixel updates and a nicer/faster display, 
-//  // especially with strands of over 100 dots.
-//  // (Note that the max is 'pessimistic', its probably 10% or 20% less in reality)
-//  
-//  strip.setCPUmax(70);  // start with 50% CPU usage. up this if the strand flickers or is slow
-//  
-//  // Start up the LED counter
-//  strip.begin();
-//
-//  // Update the strip, to start they are all 'off'
-//  strip.show();
-//}
 void setup() {
+  Serial.begin(9600);
   strip.setCPUmax(60);
   strip.begin();
   strip.show();
@@ -39,8 +23,11 @@ void setup() {
 }
 
 
+float deg = 0;
 void loop() {
-  for(int x = 0; x < numLights; x++)
+  fire[0][0] = random(0, 256);
+  for(int x = 1; x < numLights; x++)
+    //fire[x][0] = (fire[x-1][0] + random(0, 10)) % 256;
     fire[x][0] = random(0, 256);
   
   for(int y = 1; y < numRows; y++)
@@ -52,8 +39,11 @@ void loop() {
     fire[x][y] = sum / 5;
   }
   
+  int burn = sin(deg) * 100;
+  deg += 0.025;
+  
   for(int i = 0; i < 70; i++) {
-    int val = constrain(fire[i][numRows-1], 0, 255);
+    int val = constrain(fire[i][numRows-1] + burn, 0, 255);
     strip.setPixelColor(i, palette[val]);
   }
   strip.show();

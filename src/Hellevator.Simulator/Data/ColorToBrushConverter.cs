@@ -19,7 +19,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
-using Color = Hellevator.Behavior.Animations.Color;
+using Color = Hellevator.Behavior.Effects.Color;
 
 namespace Hellevator.Simulator.Data
 {

@@ -17,7 +17,7 @@
 
 using System;
 
-namespace Hellevator.Behavior.Animations
+namespace Hellevator.Behavior.Effects
 {
     public struct Color
     {

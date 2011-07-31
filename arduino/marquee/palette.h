@@ -10,9 +10,11 @@ unsigned int color(byte r, byte g, byte b) {
 
 void initPalette() {
   for(int i=0; i<128; i++) {
-    palette[i]     = color(i<<1, 0, 0);
-    palette[i+128]  = color(255, i<<1, 0);
+    palette[i]     = color(i * 2, 0, 0);
+    palette[i+128] = color(255, constrain(i*2 - 64, 0, 255), 0);
+//    palette[i]     = color(i<<2, 0, 0);
+//    palette[i+64]  = color(255, i<<2, 0);
 //    palette[i+128] = color(255, 255, i << 2);
- //   palette[i+192] = color(255, 255, 255);
+//    palette[i+192] = color(255, 255, 255);
   }
 }

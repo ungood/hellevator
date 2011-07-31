@@ -17,30 +17,32 @@
 
 using System;
 
-namespace Hellevator.Behavior.Animations
+namespace Hellevator.Behavior.Effects
 {
-    /// <summary>
-    /// An effect that mimics the lights you might see between the doors while riding an elevator.
-    /// </summary>
-    public class ElevatorEffect : Effect
+    public class FloorEffect : Effect
     {
-        public static readonly ElevatorEffect Instance = new ElevatorEffect();
-
         /// <summary>
         /// The height of a door, as a ratio to the make believe distance between floors.
         /// </summary>
-        private const double DoorHeight = 0.6;
+        public double DoorHeight { get; private set; }
 
-        private const double HalfDoorHeight = DoorHeight / 2;
+        public double HalfDoorHeight { get; private set; }
+        
+        public double BlurDistance { get; private set; }
 
-        private const double BlurDistance = 0.1;
+        public FloorEffect(double doorHeight = 0.6, double blurDistance = 0.1)
+        {
+            DoorHeight = doorHeight;
+            HalfDoorHeight = doorHeight / 2;
+            BlurDistance = blurDistance;
+        }
 
         public override Color GetColor(double light, double floor, long ticks)
         {
-            var position = floor + light + 0.5;
+            var position = floor + 0.5 + (light / 2);
             var x = position - (int) position;
 
-            var floorIndex = (int)Math.Round(position);
+            var floorIndex = (int) Math.Round(position) - 1;
             var floorColor = floorIndex < 0 || floorIndex > 23 ? Colors.Red : FloorColors[floorIndex];
 
             if(HalfDoorHeight > x || x > 1 - HalfDoorHeight)
@@ -54,15 +56,15 @@ namespace Hellevator.Behavior.Animations
             return floorColor * intensity;
         }
 
-        static ElevatorEffect()
+        static FloorEffect()
         {
             FloorColors = new Color[24];
             for(int i = 0; i < 24; i++)
             {
-                FloorColors[i] = Color.FromHSV(10 * (23-i), 1.0, 1.0);
+                FloorColors[i] = Color.FromHSV(i * 10, 1.0, 1.0);
             }
         }
 
-        private static readonly Color[] FloorColors;
+        private static readonly Color[] FloorColors; 
     }
 }

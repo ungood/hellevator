@@ -19,6 +19,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 using Hellevator.Behavior.Animations;
+using Hellevator.Behavior.Effects;
 
 namespace Hellevator.Simulator.Data
 {

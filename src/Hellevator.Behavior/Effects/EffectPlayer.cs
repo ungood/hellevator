@@ -1,14 +1,13 @@
-using System;
 using System.Threading;
 using Hellevator.Behavior.Interface;
 
-namespace Hellevator.Behavior.Animations
+namespace Hellevator.Behavior.Effects
 {
     public class EffectPlayer
     {
         public ILightStrip Strip { get; private set; }
 
-        private double[] indexToRatio;
+        private readonly double[] indexToRatio;
 
         public EffectPlayer(ILightStrip strip)
         {
@@ -18,16 +17,18 @@ namespace Hellevator.Behavior.Animations
                 indexToRatio[i] = (double) i / strip.NumLights;
         }
 
+        public const int TicksPerSecond = 10;
+        public const int MilliPerTick = 1000 / TicksPerSecond;
+
         private Timer timer;
-        private long prevTicks;
+        private long ticks;
         
         public void Play(Effect effect)
         {
             if(timer != null)
                 Stop();
 
-            prevTicks = DateTime.Now.Ticks;
-            timer = new Timer(TimerElapsed, effect, 0, 100);
+            timer = new Timer(TimerElapsed, effect, 0, MilliPerTick);
         }
 
         public void Stop()
@@ -41,15 +42,13 @@ namespace Hellevator.Behavior.Animations
 
         private void TimerElapsed(object state)
         {
-            var currentTicks = DateTime.Now.Ticks;
-            var ticks = currentTicks - prevTicks;
-            prevTicks = currentTicks;
-
+            ticks++;
+            
             var animation = (Effect) state;
             
             for(var light = 0; light < Strip.NumLights; light++)
             {
-                var color = animation.GetColor(indexToRatio[light], Hellevator.CurrentFloor, ticks);
+                var color = animation.GetColor(indexToRatio[light], Hellevator.CurrentFloor, ticks * MilliPerTick);
                 Strip.SetColor(light, color);
             }
             Strip.Update();

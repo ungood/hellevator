@@ -16,6 +16,7 @@
 #endregion
 
 using Hellevator.Behavior.Animations;
+using Hellevator.Behavior.Effects;
 using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Physical.Interface

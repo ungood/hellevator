@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using Hellevator.Behavior.Animations;
+using Hellevator.Behavior.Effects;
 using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Simulator.ViewModels

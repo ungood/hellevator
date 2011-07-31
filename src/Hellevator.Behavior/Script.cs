@@ -28,11 +28,11 @@ namespace Hellevator.Behavior
         public static bool IsScenarioRunning;
 
         private static readonly ScenarioLoop Loop = new ScenarioLoop {
-            RandomScenario.Instance,
-            HeavenHellScenario.Instance,
+            SequenceScenario.Instance,
             HeavenScenario.Instance,
             PurgatoryScenario.Instance,
-            HellScenario.Instance
+            HellScenario.Instance,
+            DemoScenario.Instance
         };
 
         public static void Run(IHellevator hardware)
@@ -63,16 +63,8 @@ namespace Hellevator.Behavior
 
         private static void ModeButtonPressed()
         {
-            if(IsScenarioRunning)
-            {
-                IsScenarioRunning = false;
-                Hellevator.EmergencyStop();
-            }
-            else
-            {
-                Loop.Next();
-                Hellevator.Display(Loop.Current.Name);
-            }
+            Loop.Next();
+            Hellevator.Display(Loop.Current.Name);
         }
     }
 }

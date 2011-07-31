@@ -34,13 +34,13 @@ namespace Hellevator.Behavior.Interface
             switch(location)
             {
                 case Location.Heaven:
-                    return 1;
+                    return 72;
                 case Location.Purgatory:
-                    return 1;
+                    return 13;
                 case Location.Hell:
-                    return 24;
+                    return -666;
                 default:
-                    return 24;
+                    return 1;
             }
         }
     }

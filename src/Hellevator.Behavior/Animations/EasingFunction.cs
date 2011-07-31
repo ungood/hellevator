@@ -53,7 +53,7 @@ namespace Hellevator.Behavior.Animations
             }
         }
 
-        public static readonly EasingFunction ToDesitination = new ExponentialEase(5);
+        public static readonly EasingFunction ToDesitination = new ExponentialEase();
         public static readonly EasingFunction ToHell = new ExponentialEase { Mode = EasingMode.Out };
         public static readonly EasingFunction FromHell = new ExponentialEase { Mode = EasingMode.In };
     }

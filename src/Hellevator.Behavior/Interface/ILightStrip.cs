@@ -1,4 +1,5 @@
 using Hellevator.Behavior.Animations;
+using Hellevator.Behavior.Effects;
 
 namespace Hellevator.Behavior.Interface
 {

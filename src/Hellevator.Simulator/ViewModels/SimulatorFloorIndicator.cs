@@ -48,10 +48,16 @@ namespace Hellevator.Simulator.ViewModels
                 foreach(var light in Lights)
                     light.IsOn = false;
 
-                if(value < 1 || value > NumLights)
+                if(value > NumLights)
+                {
+                    Lights[0].IsOn = value % 2 == 0;
+                    return;
+                }
+
+                if(value < 1)
                     return;
 
-                Lights[value - 1].IsOn = true;
+                Lights[24 - value].IsOn = true;
             }
         }
 
