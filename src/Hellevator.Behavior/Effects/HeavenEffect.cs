@@ -19,41 +19,34 @@ namespace Hellevator.Behavior.Effects
 {
     public class HeavenEffect : Effect
     {
+        
         private static readonly RainbowEffect Rainbow = new RainbowEffect(1, 10);
 
-        public override Color GetColor(double light, double floor, long ms)
+        public Color GetColorFromPosition(double position, double light, long ms)
         {
-            var position = floor + 0.5 + light;
-
-            if(position <= 24)
+            if(position < 24)
                 return Colors.Black;
 
-            if(position >= 72)
-                return Rainbow.GetColor(light, 0, ms);
-
             // white -> blue -> black;
-            if(24 < position && position <= 36)
+            if(24 <= position && position < 48)
             {
-                var s = (position - 24) / 12;
+                var s = (position - 24) / 24;
                 var v = 1 - s;
                 return Color.FromHSV(240, s, v);
             }
 
-            // Black with white "stars"
-            if(36 < position && position <= 60)
+            if(48 <= position && position < 72)
             {
-                var f = (int) (position * 15);
-                if(f % 7 == 0 && f % 2 != 0)
-                {
-                    return Colors.White;
-                }
-                
-                return Colors.Black;
+                var intensity = (position - 48) / 24;
+                return Rainbow.GetColor(light, 0, ms) * intensity;
             }
-            
-            // else 60 < position && position < 72
-            var intensity = (position - 60) / 12;
-            return Rainbow.GetColor(light, 0, ms) * intensity;
+
+            return Rainbow.GetColor(light, 0, ms);
+        }
+
+        public override Color GetColor(double light, double floor, long ms)
+        {
+            return GetColorFromPosition(CalcPosition(light, floor), floor, ms);
         }
     }
 }

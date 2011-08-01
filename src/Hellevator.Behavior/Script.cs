@@ -28,9 +28,10 @@ namespace Hellevator.Behavior
         public static bool IsScenarioRunning;
 
         private static readonly ScenarioLoop Loop = new ScenarioLoop {
+            PurgatoryScenario.Instance,
             SequenceScenario.Instance,
             HeavenScenario.Instance,
-            PurgatoryScenario.Instance,
+            
             HellScenario.Instance,
             DemoScenario.Instance
         };

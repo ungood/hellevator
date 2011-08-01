@@ -14,7 +14,7 @@ namespace Hellevator.Behavior.Effects
             Strip = strip;
             indexToRatio = new double[strip.NumLights];
             for(int i = 0; i < strip.NumLights; i++)
-                indexToRatio[i] = (double) i / strip.NumLights;
+                indexToRatio[i] = 1 - ((double) i / strip.NumLights);
         }
 
         public const int TicksPerSecond = 10;

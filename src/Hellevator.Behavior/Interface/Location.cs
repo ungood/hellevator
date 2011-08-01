@@ -22,21 +22,29 @@ namespace Hellevator.Behavior.Interface
         Unknown         = 0,
         Hell,
         Heaven,
+        Space,
         Entrance,
+        MidPurgatory,
         Purgatory,
         BlackRockCity
     }
 
     public static class LocationExtension
     {
+
+
         public static int GetFloor(this Location location)
         {
             switch(location)
             {
                 case Location.Heaven:
+                    return 24;
+                case Location.Space:
                     return 72;
-                case Location.Purgatory:
+                case Location.MidPurgatory:
                     return 13;
+                case Location.Purgatory:
+                    return 1;
                 case Location.Hell:
                     return -666;
                 default:

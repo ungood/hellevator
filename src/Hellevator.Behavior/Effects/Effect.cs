@@ -6,7 +6,7 @@ namespace Hellevator.Behavior.Effects
 
         protected static double CalcPosition(double light, double floor)
         {
-            return floor + light + 0.5;
+            return floor - 0.25 + (light / 2);
         }
     }
 }

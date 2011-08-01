@@ -30,6 +30,7 @@
   </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
+    <Compile Include="Animations\BounceEase.cs" />
     <Compile Include="Effects\Colors.cs" />
     <Compile Include="Effects\Effect.cs">
       <SubType>Code</SubType>

@@ -99,7 +99,10 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoHeaven()
         {
-            Goto(Location.Heaven, 35);
+            Goto(Location.Heaven, 15);
+            Goto(Location.Space, 20);
+
+
             hw.MoodLight.Send(Colors.Blue);
             hw.CarriageDoor.Open()
                 .WaitOne();
@@ -114,9 +117,9 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoPurgatory()
         {
-            Goto(Location.Purgatory, 35);
-            CurrentFloor = 24; // Return to sender;
-
+            Goto(Location.MidPurgatory, 20, EasingFunction.ToMidPurgatory);
+            Goto(Location.Purgatory, 20, EasingFunction.ToPurgatory);
+            
             hw.CarriageDoor.Open()
                 .WaitOne();
 
@@ -153,7 +156,7 @@ namespace Hellevator.Behavior
         public static void GotoExit()
         {
             hw.CarriageDoor.Close();
-            Goto(Location.BlackRockCity, 20);
+            Goto(Location.BlackRockCity, 35);
             hw.CarriageDoor.Open();
         }
 

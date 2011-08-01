@@ -15,21 +15,21 @@
 // limitations under the License.
 #endregion
 
-namespace Hellevator.Behavior.Scenarios
+namespace Hellevator.Behavior.Animations
 {
-    public class HeavenScenario : Scenario
+    public class BounceEase : EasingFunction
     {
-        public static readonly HeavenScenario Instance = new HeavenScenario();
+        private const double P1 = 0.2;
+        private const double P2 = 1.8;
+        private const double P3 = 28.795;
+        private const double P4 = -65.89;
+        private const double P5 = 36.095;
 
-        public override string Name
+        protected override double EaseIn(double time)
         {
-            get { return "HEAVEN"; }
-        }
-
-        public override void Run()
-        {
-            Hellevator.GotoHeaven();
-            Hellevator.GotoExit();
+            var t2 = time * time;
+            var t3 = time * time * time;
+            return (P5 * t2 * t3) + (P4 * t2 * t2) + (P3 * t3) + (P2 * t2) + (P1 * time);
         }
     }
 }

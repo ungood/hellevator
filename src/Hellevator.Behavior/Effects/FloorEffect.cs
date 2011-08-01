@@ -30,7 +30,7 @@ namespace Hellevator.Behavior.Effects
         
         public double BlurDistance { get; private set; }
 
-        public FloorEffect(double doorHeight = 0.6, double blurDistance = 0.1)
+        public FloorEffect(double doorHeight = 0.4, double blurDistance = 0.2)
         {
             DoorHeight = doorHeight;
             HalfDoorHeight = doorHeight / 2;
@@ -39,11 +39,17 @@ namespace Hellevator.Behavior.Effects
 
         public override Color GetColor(double light, double floor, long ticks)
         {
-            var position = floor + 0.5 + (light / 2);
+            return GetColorFromPosition(CalcPosition(light, floor));
+        }
+
+        public Color GetColorFromPosition(double position)
+        {
             var x = position - (int) position;
 
             var floorIndex = (int) Math.Round(position) - 1;
-            var floorColor = floorIndex < 0 || floorIndex > 23 ? Colors.Red : FloorColors[floorIndex];
+            if(floorIndex < 0 || floorIndex > 23)
+                return Colors.Black;
+            var floorColor = FloorColors[floorIndex];
 
             if(HalfDoorHeight > x || x > 1 - HalfDoorHeight)
                 return floorColor;
@@ -61,7 +67,7 @@ namespace Hellevator.Behavior.Effects
             FloorColors = new Color[24];
             for(int i = 0; i < 24; i++)
             {
-                FloorColors[i] = Color.FromHSV(i * 10, 1.0, 1.0);
+                FloorColors[i] = Color.FromHSV(60 + i * 8, 1.0, 1.0);
             }
         }
 

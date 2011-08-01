@@ -29,9 +29,11 @@ namespace Hellevator.Behavior.Effects
 
         public override Color GetColor(double light, double floor, long ms)
         {
-            if(floor > 24)
-                return Heaven.GetColor(light, floor, ms);
-            if(floor < 1)
+            var position = CalcPosition(light, floor);
+
+            if(position > 25)
+                return Heaven.GetColorFromPosition(position, light, ms);
+            if(position < 0)
                 return Colors.Red;
 
             return Floors.GetColor(light, floor, ms);
