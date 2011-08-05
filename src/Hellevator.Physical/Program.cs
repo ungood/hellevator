@@ -17,6 +17,8 @@
 
 using System.Threading;
 using GHIElectronics.NETMF.FEZ;
+using Hellevator.Behavior;
+using Hellevator.Behavior.Effects;
 using Hellevator.Behavior.Interface;
 using Hellevator.Physical.Interface;
 using Microsoft.SPOT;
@@ -26,35 +28,43 @@ namespace Hellevator.Physical
 {
     public class Program
     {
-        private static readonly IAudioZone zone1 = new PhysicalAudioZone(FEZ_Pin.Digital.Di37, FEZ_Pin.Digital.Di39, FEZ_Pin.Digital.Di41);
-        private static readonly IAudioZone zone2 = new PhysicalAudioZone(FEZ_Pin.Digital.Di47, FEZ_Pin.Digital.Di49, FEZ_Pin.Digital.Di51);
-        private static readonly IAudioZone zone3 = new PhysicalAudioZone(FEZ_Pin.Digital.Di21, FEZ_Pin.Digital.Di23, FEZ_Pin.Digital.Di25);
+        //private static readonly IAudioZone zone1 = new PhysicalAudioZone(FEZ_Pin.Digital.Di37, FEZ_Pin.Digital.Di39, FEZ_Pin.Digital.Di41);
+        //private static readonly IAudioZone zone2 = new PhysicalAudioZone(FEZ_Pin.Digital.Di47, FEZ_Pin.Digital.Di49, FEZ_Pin.Digital.Di51);
+        //private static readonly IAudioZone zone3 = new PhysicalAudioZone(FEZ_Pin.Digital.Di21, FEZ_Pin.Digital.Di23, FEZ_Pin.Digital.Di25);
         
-        private static Playlist playlist3 = new Playlist(true, "ding1", "ding2");
-        private static Playlist playlist2 = new Playlist(true, "sample");
-        private static Playlist playlist1 = new Playlist(true, "backinblack");
+        //private static Playlist playlist3 = new Playlist(true, "ding1", "ding2");
+        //private static Playlist playlist2 = new Playlist(true, "sample");
+        //private static Playlist playlist1 = new Playlist(true, "backinblack");
+
+        private static PhysicalHellevator hellevator;
 
         public static void Main()
         {
-            var button = new InputPort((Cpu.Pin) FEZ_Pin.Digital.LDR, false, Port.ResistorMode.PullUp);
-            Debug.Print("Starting");
+            //hellevator = new PhysicalHellevator();
 
-            zone1.Play(playlist1);
-            Thread.Sleep(2000);
-            zone2.Play(playlist2);
-            Thread.Sleep(3000);
-            zone3.Play(playlist3);
+            var rope = new LedRope(SPI.SPI_module.SPI1, 70);
 
-            //while(true)
-            //{
-            //    zone3.Play(playlist3);
-            //    Thread.Sleep(3000);
-            //}
+            for(int i = 0; i < 70; i++)
+            {
+                rope.SetColor(i, new Color(0, 10, 10));
+                
+            }
 
-            Thread.Sleep(Timeout.Infinite);
-            Debug.Print("Done");
+            while(true)
+            {
+                rope.Update();
+
+                Thread.Sleep(10);
+            }
+            //Debug.EnableGCMessages(false);
+            Thread.Sleep(10000);
+            //var thread = new Thread(Run);
+            //thread.Start();
         }
 
-        
+        private static void Run()
+        {
+            Script.Run(hellevator);
+        }
     }
 }

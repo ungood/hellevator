@@ -24,12 +24,12 @@ namespace Hellevator.Physical.Interface
     {
         public WaitHandle Open()
         {
-            return null;
+            return new ManualResetEvent(true);
         }
 
         public WaitHandle Close()
         {
-            return null;
+            return new ManualResetEvent(true);
         }
     }
 }

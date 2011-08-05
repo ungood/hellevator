@@ -31,7 +31,7 @@ namespace Hellevator.Physical.Interface
             = new PersistentStorage("SD");
 
         private static readonly SpiCoordinator Coordinator
-            = new SpiCoordinator(SPI.SPI_module.SPI1);
+            = new SpiCoordinator(SPI.SPI_module.SPI2);
 
         private readonly AudioShieldPlayer player;
         
@@ -61,12 +61,13 @@ namespace Hellevator.Physical.Interface
 
         public void Loop(Playlist playlist)
         {
-            throw new System.NotImplementedException();
+            //throw new System.NotImplementedException();
         }
 
         WaitHandle IAudioZone.Stop()
         {
-            throw new System.NotImplementedException();
+            return new ManualResetEvent(true);
+            // TODO
         }
 
     }

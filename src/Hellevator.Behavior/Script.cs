@@ -28,10 +28,9 @@ namespace Hellevator.Behavior
         public static bool IsScenarioRunning;
 
         private static readonly ScenarioLoop Loop = new ScenarioLoop {
+            HeavenScenario.Instance,
             PurgatoryScenario.Instance,
             SequenceScenario.Instance,
-            HeavenScenario.Instance,
-            
             HellScenario.Instance,
             DemoScenario.Instance
         };
@@ -42,6 +41,7 @@ namespace Hellevator.Behavior
             hardware.ModeButton.Pressed += ModeButtonPressed;
 
             Hellevator.Reset(true);
+            //Hellevator.GotoHeaven();
             Hellevator.Display(Loop.Current.Name);
             while(true)
             {

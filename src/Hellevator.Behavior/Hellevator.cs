@@ -102,8 +102,8 @@ namespace Hellevator.Behavior
             Goto(Location.Heaven, 15);
             Goto(Location.Space, 20);
 
-
-            hw.MoodLight.Send(Colors.Blue);
+            // TODO
+            //hw.MoodLight.Send(Colors.Blue);
             hw.CarriageDoor.Open()
                 .WaitOne();
 

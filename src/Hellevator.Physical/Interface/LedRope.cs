@@ -32,19 +32,19 @@ namespace Hellevator.Physical.Interface
 
         public LedRope(SPI.SPI_module spi, int numLights)
         {
-            shift = new LPD6803(spi, 68);
+            shift = new LPD6803(spi, numLights);
             NumLights = numLights;
             backBuffer = new Color[numLights];
         }
 
         public void SetColor(int light, Color color)
         {
-            backBuffer[light] = color;
+            shift.Set(light, color.Red, color.Green, color.Blue);
         }
 
         public void Update()
         {
-            //shift.WriteColors(backBuffer);
+            shift.Update();
         }
     }
 }
