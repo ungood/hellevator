@@ -6,7 +6,7 @@ const int numLights = 70;
 const int numRows = 6;
 int fire[numLights][numRows];
 
-LPD6803 strip = LPD6803(70, 9, 10);
+LPD6803 strip = LPD6803(numLights, 2, 3);
 
 void setup() {
   Serial.begin(9600);

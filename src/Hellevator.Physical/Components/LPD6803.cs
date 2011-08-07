@@ -1,5 +1,7 @@
 using System;
 using System.Threading;
+using GHIElectronics.NETMF.FEZ;
+using GHIElectronics.NETMF.Hardware;
 using Hellevator.Behavior.Animations;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
@@ -11,15 +13,14 @@ namespace Hellevator.Physical.Components
         public int NumPixels { get; private set; }
 
         private readonly SPI spi;
-        private readonly ushort[][] buffers;
-        private int frontBuffer;
-        private int backBuffer = 1;
+        private readonly ushort[] buffer;
+        private readonly OutputCompare oc;
         
         public LPD6803(SPI.SPI_module spiModule, int numPixels)
         {
             var spiConfig = new SPI.Configuration(Cpu.Pin.GPIO_NONE, true, 0, 0, false, true, 500, spiModule);
             spi = new SPI(spiConfig);
-
+            
             NumPixels = numPixels;
             
             // On a LPD6803, the PWM counter is shared with the data pin.
@@ -30,23 +31,20 @@ namespace Hellevator.Physical.Components
             bufferLength += alignment;
             Debug.Assert(bufferLength % 32 == 0);
 
-            buffers = new [] {
-                new ushort[bufferLength],
-                new ushort[bufferLength]
-            };
-            
-            new Thread(WriteLoop).Start();
+            buffer = new ushort[bufferLength];
+
+            oc = new OutputCompare((Cpu.Pin) FEZ_Pin.Digital.Di10, false, 2);
+            oc.Set(false, new uint[] {1, 1}, 0, 2, true);
         }
 
-        private void WriteLoop()
+
+
+        private void WriteLoop(object state)
         {
-            while(true)
-            {
-                spi.Write(buffers[frontBuffer]);
-            }
+            spi.Write(buffer);
         }
 
-        public void Set(int pixel, byte red, byte green, byte blue)
+        public void SetColor(int pixel, byte red, byte green, byte blue)
         {
             Debug.Assert(pixel < NumPixels);
 
@@ -55,15 +53,14 @@ namespace Hellevator.Physical.Components
             var b = blue >> 3;
 
             // Bit pattern for color data: 1rrrrrgggggbbbbb
-            buffers[backBuffer][pixel] = (ushort) (0x8000 | r << 10 | g << 5 | b);
+            buffer[pixel+2] = (ushort) (0x8000 | r << 10 | g << 5 | b);
         }
-        
-        /// <summary>
-        /// Update the led pixels by swapping the front and back buffers.
-        /// </summary>
+
         public void Update()
         {
-            backBuffer = Interlocked.Exchange(ref frontBuffer, backBuffer);
+            oc.Set(false);
+            spi.Write(buffer);
+            oc.Set(false, new uint[] {100, 100}, 0, 2, true);
         }
     }
 }

@@ -7,7 +7,7 @@ const int numLights = 70;
 int src[numLights];
 int dest[numLights];
 
-LPD6803 strip = LPD6803(70, 9, 10);
+LPD6803 strip = LPD6803(numLights, 2, 3);
 
 void setup() {
   strip.setCPUmax(60);

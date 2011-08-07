@@ -39,12 +39,11 @@ namespace Hellevator.Physical.Interface
 
         public void SetColor(int light, Color color)
         {
-            shift.Set(light, color.Red, color.Green, color.Blue);
+            shift.SetColor(light, color.Red, color.Green, color.Blue);
         }
 
         public void Update()
         {
-            shift.Update();
         }
     }
 }

@@ -15,8 +15,10 @@
 // limitations under the License.
 #endregion
 
+using System;
 using System.Threading;
 using GHIElectronics.NETMF.FEZ;
+using GHIElectronics.NETMF.Hardware;
 using Hellevator.Behavior;
 using Hellevator.Behavior.Effects;
 using Hellevator.Behavior.Interface;
@@ -38,28 +40,40 @@ namespace Hellevator.Physical
 
         private static PhysicalHellevator hellevator;
 
+        private static LedRope rope = new LedRope(SPI.SPI_module.SPI1, 70);
+
         public static void Main()
         {
-            //hellevator = new PhysicalHellevator();
-
-            var rope = new LedRope(SPI.SPI_module.SPI1, 70);
-
-            for(int i = 0; i < 70; i++)
-            {
-                rope.SetColor(i, new Color(0, 10, 10));
-                
-            }
+            Debug.EnableGCMessages(true);
+            //var player = new EffectPlayer(rope);
+            var effect = new RainbowEffect(1, 5);
+            //player.Play(effect);
 
             while(true)
             {
+                for(int i = 0; i < 70; i++)
+                {
+                    var c = effect.GetColor((double) i / 70, 0, 0);
+                    rope.SetColor(i, c);
+                    
+                }
                 rope.Update();
-
-                Thread.Sleep(10);
+                Thread.Sleep(5000);
             }
-            //Debug.EnableGCMessages(false);
-            Thread.Sleep(10000);
-            //var thread = new Thread(Run);
-            //thread.Start();
+
+            Thread.Sleep(Timeout.Infinite);
+        }
+
+        private Color c = new Color(0, 0, 0);
+        private static void ColorChase(byte red, byte green, byte blue)
+        {
+            for(int i = 0; i < 70; i++)
+            {
+                rope.SetColor(i, new Color(red, green, blue));
+                Thread.Sleep(50);
+            }
+
+            //rope.Update();
         }
 
         private static void Run()
