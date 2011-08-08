@@ -31,7 +31,7 @@ namespace Hellevator.Physical.Interface
             = new PersistentStorage("SD");
 
         private static readonly SpiCoordinator Coordinator
-            = new SpiCoordinator(SPI.SPI_module.SPI2);
+            = new SpiCoordinator(SPI.SPI_module.SPI1);
 
         private readonly AudioShieldPlayer player;
         

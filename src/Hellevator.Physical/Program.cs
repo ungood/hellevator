@@ -30,55 +30,22 @@ namespace Hellevator.Physical
 {
     public class Program
     {
-        //private static readonly IAudioZone zone1 = new PhysicalAudioZone(FEZ_Pin.Digital.Di37, FEZ_Pin.Digital.Di39, FEZ_Pin.Digital.Di41);
-        //private static readonly IAudioZone zone2 = new PhysicalAudioZone(FEZ_Pin.Digital.Di47, FEZ_Pin.Digital.Di49, FEZ_Pin.Digital.Di51);
-        //private static readonly IAudioZone zone3 = new PhysicalAudioZone(FEZ_Pin.Digital.Di21, FEZ_Pin.Digital.Di23, FEZ_Pin.Digital.Di25);
+        private static readonly IAudioZone zone1 = new PhysicalAudioZone(FEZ_Pin.Digital.Di10, FEZ_Pin.Digital.Di9, FEZ_Pin.Digital.Di8);
+        private static readonly IAudioZone zone2 = new PhysicalAudioZone(FEZ_Pin.Digital.Di7, FEZ_Pin.Digital.Di6, FEZ_Pin.Digital.Di5);
+        private static readonly IAudioZone zone3 = new PhysicalAudioZone(FEZ_Pin.Digital.Di4, FEZ_Pin.Digital.Di3, FEZ_Pin.Digital.Di2);
         
-        //private static Playlist playlist3 = new Playlist(true, "ding1", "ding2");
-        //private static Playlist playlist2 = new Playlist(true, "sample");
-        //private static Playlist playlist1 = new Playlist(true, "backinblack");
+        private static Playlist playlist3 = new Playlist(true, "ding1", "ding2");
+        private static Playlist playlist2 = new Playlist(true, "sample");
+        private static Playlist playlist1 = new Playlist(true, "backinblack");
 
-        private static PhysicalHellevator hellevator;
+        //private static PhysicalHellevator hellevator;
 
-        private static LedRope rope = new LedRope(SPI.SPI_module.SPI1, 70);
+        //private static LedRope rope = new LedRope(SPI.SPI_module.SPI1, 70);
 
         public static void Main()
         {
-            Debug.EnableGCMessages(true);
-            //var player = new EffectPlayer(rope);
-            var effect = new RainbowEffect(1, 5);
-            //player.Play(effect);
-
-            while(true)
-            {
-                for(int i = 0; i < 70; i++)
-                {
-                    var c = effect.GetColor((double) i / 70, 0, 0);
-                    rope.SetColor(i, c);
-                    
-                }
-                rope.Update();
-                Thread.Sleep(5000);
-            }
-
+            zone3.Play(playlist2);
             Thread.Sleep(Timeout.Infinite);
-        }
-
-        private Color c = new Color(0, 0, 0);
-        private static void ColorChase(byte red, byte green, byte blue)
-        {
-            for(int i = 0; i < 70; i++)
-            {
-                rope.SetColor(i, new Color(red, green, blue));
-                Thread.Sleep(50);
-            }
-
-            //rope.Update();
-        }
-
-        private static void Run()
-        {
-            Script.Run(hellevator);
         }
     }
 }
