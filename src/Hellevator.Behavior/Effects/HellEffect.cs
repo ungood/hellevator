@@ -15,34 +15,30 @@
 // limitations under the License.
 #endregion
 
+using System;
+
 namespace Hellevator.Behavior.Effects
 {
-    public class HeavenEffect : Effect
+    public class HellEffect : Effect
     {
-        private readonly RainbowEffect rainbow = new RainbowEffect(2, 2);
-
         public override Color GetColor(double light, double floor, long ms)
         {
-            var position = CalcPosition(light, floor);
+            var sec = ms / 1000.0;
 
-            if(position < 24)
-                return Colors.Black;
+            //var w1 = Pulse(sec, 10) / 3; // 0.2 - 0.7
+            var w2 = Pulse(sec, 3)  / 3;
+            var w3 = Pulse(sec, 1)  / 3;
+            var red = 0.2 + w2 + w3;
+            
+            var green = Pulse(sec + light, 2) * (red / 2.5);
+            return new Color(red, green, 0);
+        }
 
-            // white -> blue -> black;
-            if(24 <= position && position < 48)
-            {
-                var s = (position - 24) / 24;
-                var v = 1 - s;
-                return Color.FromHSV(240, s, v);
-            }
-
-            if(48 <= position && position < 72)
-            {
-                var intensity = (position - 48) / 24;
-                return rainbow.GetColor(light, 0, ms) * intensity;
-            }
-
-            return rainbow.GetColor(light, 0, ms);
+        private static double Pulse(double value, double period)
+        {
+            value /= period;
+            value = 2 * (value - Math.Floor(value + 0.5));
+            return value < 0 ? value * -1 : value;
         }
     }
 }

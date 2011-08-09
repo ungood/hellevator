@@ -24,23 +24,24 @@ namespace Hellevator.Behavior.Effects
     /// </summary>
     public class RainbowEffect : Effect
     {
-        private readonly float lightMultiplier;
-        private readonly long timeDiviser;
+        private readonly double lightMult;
+        private readonly double timeMult;
 
         /// <summary>
         /// Create a rainbow effect with a given wavelength and period.
         /// </summary>
         /// <param name="wavelength"></param>
         /// <param name="period"></param>
-        public RainbowEffect(float wavelength, int period)
+        public RainbowEffect(float wavelength, float period)
         {
-            lightMultiplier = 360 / wavelength;
-            timeDiviser = 360 / period;
+            lightMult = 360 / wavelength;
+            timeMult = 360 / period;
         }
 
         public override Color GetColor(double light, double floor, long ms)
         {
-            var hue = (light * lightMultiplier) + (ms / timeDiviser);
+            var sec = (double)ms / 1000;
+            var hue = (light * lightMult) + (sec * timeMult);
             
             return Color.FromHSV(hue, 0.5, 1.0);
         }

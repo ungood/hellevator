@@ -18,7 +18,7 @@ namespace Hellevator.Behavior.Animations
             InitialValue = 0;
             FinalValue = 1;
             Length = new TimeSpan(0, 0, 0, 1);
-            EasingFunction = LinearEase.Identity;
+            EasingFunction = new LinearEase();
         }
 
         public void Animate()

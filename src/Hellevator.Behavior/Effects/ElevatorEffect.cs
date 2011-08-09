@@ -22,21 +22,17 @@ namespace Hellevator.Behavior.Effects
     /// </summary>
     public class ElevatorEffect : Effect
     {
-        public static readonly ElevatorEffect Instance = new ElevatorEffect();
-
-        private static readonly HeavenEffect Heaven = new HeavenEffect();
-        private static readonly FloorEffect Floors = new FloorEffect();
+        private readonly HeavenEffect heaven = new HeavenEffect();
+        private readonly FloorEffect floors = new FloorEffect();
 
         public override Color GetColor(double light, double floor, long ms)
         {
             var position = CalcPosition(light, floor);
 
             if(position > 25)
-                return Heaven.GetColorFromPosition(position, light, ms);
-            if(position < 0)
-                return Colors.Red;
-
-            return Floors.GetColor(light, floor, ms);
+                return heaven.GetColor(light, floor, ms);
+            
+            return floors.GetColor(light, floor, ms);
         }
     }
 }

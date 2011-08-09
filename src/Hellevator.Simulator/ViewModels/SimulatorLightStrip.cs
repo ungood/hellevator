@@ -37,6 +37,12 @@ namespace Hellevator.Simulator.ViewModels
                     light.Update();
             //}));
         }
+
+        public void Reset()
+        {
+            for(int i = 0; i < NumLights; i++)
+                Lights[i].Color = Colors.Black;
+        }
     }
 
     public class LightViewModel : ViewModelBase

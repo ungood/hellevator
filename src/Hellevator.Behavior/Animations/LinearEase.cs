@@ -30,7 +30,5 @@ namespace Hellevator.Behavior.Animations
         {
             return Coefficient * time;
         }
-
-        public static LinearEase Identity = new LinearEase();
     }
 }

@@ -29,7 +29,7 @@ namespace Hellevator.Behavior.Scenarios
         public override void Run()
         {
             Hellevator.GotoHeaven();
-            Hellevator.GotoExit();
+            Hellevator.ExitHeaven();
         }
     }
 }

@@ -48,6 +48,8 @@
     <Compile Include="Animations\LinearEase.cs" />
     <Compile Include="Effects\FloorEffect.cs" />
     <Compile Include="Effects\HeavenEffect.cs" />
+    <Compile Include="Effects\HellEffect.cs" />
+    <Compile Include="Effects\WhiteNoiseEffect.cs" />
     <Compile Include="Effects\RainbowEffect.cs" />
     <Compile Include="ExtensionAttribute.cs" />
     <Compile Include="Hellevator.cs" />

@@ -17,7 +17,7 @@ namespace Hellevator.Behavior.Effects
                 indexToRatio[i] = 1 - ((double) i / strip.NumLights);
         }
 
-        public const int TicksPerSecond = 10;
+        public const int TicksPerSecond = 25;
         public const int MilliPerTick = 1000 / TicksPerSecond;
 
         private Timer timer;
@@ -26,8 +26,11 @@ namespace Hellevator.Behavior.Effects
         public void Play(Effect effect)
         {
             if(timer != null)
-                Stop();
-
+            {
+                timer.Dispose();
+                timer = null;
+            }
+                
             timer = new Timer(TimerElapsed, effect, 0, MilliPerTick);
         }
 
@@ -36,12 +39,16 @@ namespace Hellevator.Behavior.Effects
             if(timer == null)
                 return;
 
+            Strip.Reset();
+
             timer.Dispose();
             timer = null;
         }
 
         private void TimerElapsed(object state)
         {
+            if(timer == null)
+                return;
             ticks++;
             
             var animation = (Effect) state;

@@ -2,8 +2,6 @@
 #include <LPD6803.h>
 
 const byte address = 'a';
-const int clockOut = 5;
-const int dataOut  = 6;
 
 const int numLights = 70;
 
@@ -14,7 +12,7 @@ void setup() {
   strip.begin();
   strip.show();
   
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("HI");
 }
 

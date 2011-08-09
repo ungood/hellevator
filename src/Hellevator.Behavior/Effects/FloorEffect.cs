@@ -30,6 +30,8 @@ namespace Hellevator.Behavior.Effects
         
         public double BlurDistance { get; private set; }
 
+        private readonly HellEffect hell = new HellEffect();
+
         public FloorEffect(double doorHeight = 0.4, double blurDistance = 0.2)
         {
             DoorHeight = doorHeight;
@@ -37,19 +39,17 @@ namespace Hellevator.Behavior.Effects
             BlurDistance = blurDistance;
         }
 
-        public override Color GetColor(double light, double floor, long ticks)
+        public override Color GetColor(double light, double floor, long ms)
         {
-            return GetColorFromPosition(CalcPosition(light, floor));
-        }
-
-        public Color GetColorFromPosition(double position)
-        {
+            var position = CalcPosition(light, floor);
             var x = position - (int) position;
+            x = x < 0 ? x * -1 : x;
 
             var floorIndex = (int) Math.Round(position) - 1;
-            if(floorIndex < 0 || floorIndex > 23)
+            if(floorIndex > 23)
                 return Colors.Black;
-            var floorColor = FloorColors[floorIndex];
+            
+            var floorColor = floorIndex < 0 ? hell.GetColor(light, floor, ms) : FloorColors[floorIndex];
 
             if(HalfDoorHeight > x || x > 1 - HalfDoorHeight)
                 return floorColor;

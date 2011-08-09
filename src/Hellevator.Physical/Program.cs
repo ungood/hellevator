@@ -16,6 +16,7 @@
 #endregion
 
 using System;
+using System.IO.Ports;
 using System.Threading;
 using GHIElectronics.NETMF.FEZ;
 using GHIElectronics.NETMF.Hardware;
@@ -30,22 +31,32 @@ namespace Hellevator.Physical
 {
     public class Program
     {
-        private static readonly IAudioZone zone1 = new PhysicalAudioZone(FEZ_Pin.Digital.Di10, FEZ_Pin.Digital.Di9, FEZ_Pin.Digital.Di8);
-        private static readonly IAudioZone zone2 = new PhysicalAudioZone(FEZ_Pin.Digital.Di7, FEZ_Pin.Digital.Di6, FEZ_Pin.Digital.Di5);
-        private static readonly IAudioZone zone3 = new PhysicalAudioZone(FEZ_Pin.Digital.Di4, FEZ_Pin.Digital.Di3, FEZ_Pin.Digital.Di2);
+        // NOTE: DONT ERASE THIS
         
-        private static Playlist playlist3 = new Playlist(true, "ding1", "ding2");
-        private static Playlist playlist2 = new Playlist(true, "sample");
-        private static Playlist playlist1 = new Playlist(true, "backinblack");
+        
+        //private static Playlist playlist3 = new Playlist(true, "ding1", "ding2");
+        //private static Playlist playlist2 = new Playlist(true, "sample");
+        //private static Playlist playlist1 = new Playlist(true, "backinblack");
 
-        //private static PhysicalHellevator hellevator;
+        private static PhysicalHellevator hellevator = new PhysicalHellevator();
 
         //private static LedRope rope = new LedRope(SPI.SPI_module.SPI1, 70);
 
         public static void Main()
         {
-            zone3.Play(playlist2);
+            //var strip = new SerialLedRope("COM1", 9600, 'a', 70);
+            //var player = new EffectPlayer(strip);
+            //var effect = new RainbowEffect(1, 50);
+            Debug.EnableGCMessages(false);
+            
+            var thread = new Thread(Run);
+            thread.Start();
             Thread.Sleep(Timeout.Infinite);
+        }
+
+        private static void Run()
+        {
+            Script.Run(hellevator);
         }
     }
 }

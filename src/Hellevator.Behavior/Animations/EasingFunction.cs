@@ -51,14 +51,6 @@ namespace Hellevator.Behavior.Animations
                         EaseIn(time * 2.0 ) * 0.5 :
                         (1.0 - EaseIn((1.0 - time) * 2.0)) * 0.5 + 0.5; 
             }
-        }
-
-        public static readonly EasingFunction ToDesitination = new ExponentialEase();
-        
-        public static readonly EasingFunction ToHell = new ExponentialEase { Mode = EasingMode.Out };
-        public static readonly EasingFunction FromHell = new ExponentialEase { Mode = EasingMode.In };
-
-        public static readonly EasingFunction ToMidPurgatory = new BounceEase() {Mode = EasingMode.In};
-        public static readonly EasingFunction ToPurgatory = new BounceEase() {Mode = EasingMode.Out};
+        }        
     }
 }

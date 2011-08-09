@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // Copyright 2011 Jason Walker
 // ungood@onetrue.name
 // 
@@ -15,27 +15,22 @@
 // limitations under the License.
 #endregion
 
-using Hellevator.Behavior.Animations;
-using Hellevator.Behavior.Effects;
-using Hellevator.Behavior.Interface;
-
-namespace Hellevator.Physical.Interface
+namespace Hellevator.Behavior.Effects
 {
-    public class PhysicalLightStrip : ILightStrip
+    public class WhiteNoiseEffect : Effect
     {
-        public int NumLights
-        {
-            get { return 24; }
-        }
+        private int[] previous = new int[1000];
 
-        public void SetColor(int light, Color color)
+        public override Color GetColor(double light, double floor, long ms)
         {
-            
-        }
+            var index = (int) (light * 999);
+            var prev = previous[index];
 
-        public void Update()
-        {
+            var rnd = RNG.Next() % 256;
+            var intensity = (byte) ((prev + rnd) / 2);
             
+            previous[index] = intensity;
+            return new Color(intensity, intensity, intensity);
         }
     }
 }

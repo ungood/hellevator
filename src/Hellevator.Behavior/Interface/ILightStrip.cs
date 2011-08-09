@@ -8,5 +8,6 @@ namespace Hellevator.Behavior.Interface
         int NumLights { get; }
         void SetColor(int light, Color color);
         void Update();
+        void Reset();
     }
 }

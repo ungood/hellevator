@@ -49,19 +49,21 @@ namespace Hellevator.Physical
 
         public PhysicalHellevator()
         {
-            CallButton = new PhysicalButton(FEZ_Pin.Interrupt.Di0);
-            PanelButton = new PhysicalButton(FEZ_Pin.Interrupt.LDR);
-            ModeButton = new PhysicalButton(FEZ_Pin.Interrupt.Di1);
+            CallButton = PanelButton = new PhysicalButton(FEZ_Pin.Interrupt.LDR);
+            //PanelButton = new PhysicalButton(FEZ_Pin.Interrupt.Di42);
+            ModeButton = new PhysicalButton(FEZ_Pin.Interrupt.Di43);
 
             HellLights = new PhysicalRelay(FEZ_Pin.Digital.LED);
             Chandelier = new PhysicalRelay(FEZ_Pin.Digital.Di3);
             DriveWheel = new PhysicalRelay(FEZ_Pin.Digital.Di4);
 
-            ElevatorEffects = new LedRope(SPI.SPI_module.SPI1, 70);
+            ElevatorEffects = new SerialLedRope("COM2", 'a', 40);
             FloorIndicator = new PhysicalFloorIndicator(FEZ_Pin.Digital.Di26, FEZ_Pin.Digital.Di27, FEZ_Pin.Digital.Di28);
 
-            EffectsZone = CarriageZone = LobbyZone = new PhysicalAudioZone(FEZ_Pin.Digital.Di21, FEZ_Pin.Digital.Di23, FEZ_Pin.Digital.Di25);
-
+            EffectsZone  = new PhysicalAudioZone(FEZ_Pin.Digital.Di10, FEZ_Pin.Digital.Di9, FEZ_Pin.Digital.Di8);
+            CarriageZone = new PhysicalAudioZone(FEZ_Pin.Digital.Di7, FEZ_Pin.Digital.Di6, FEZ_Pin.Digital.Di5);
+            LobbyZone    = new PhysicalAudioZone(FEZ_Pin.Digital.Di4, FEZ_Pin.Digital.Di3, FEZ_Pin.Digital.Di2);
+            
             CarriageDoor = new PhysicalDoor();
             MainDoor = new PhysicalDoor();
 
