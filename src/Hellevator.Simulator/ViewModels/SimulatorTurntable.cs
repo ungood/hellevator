@@ -93,7 +93,8 @@ namespace Hellevator.Simulator.ViewModels
             {
                 case Location.Purgatory:
                     return 90;
-                case Location.Hell:
+                case Location.Hell1:
+                case Location.Hell2:
                     return -90;
                 case Location.BlackRockCity:
                     return 180;

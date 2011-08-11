@@ -32,7 +32,7 @@ namespace Hellevator.Behavior.Effects
         /// </summary>
         /// <param name="wavelength"></param>
         /// <param name="period"></param>
-        public RainbowEffect(float wavelength, float period)
+        public RainbowEffect(double wavelength, double period)
         {
             lightMult = 360 / wavelength;
             timeMult = 360 / period;

@@ -2,7 +2,7 @@
 #include <LPD6803.h>
 #include "palette.h"
 
-const int numLights = 70;
+const int numLights = 18;
 
 int src[numLights];
 int dest[numLights];

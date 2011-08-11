@@ -102,8 +102,8 @@ namespace Hellevator.Behavior
         public static void GotoHeaven()
         {
             //hw.EffectsZone.Play(Playlist.ElevatorMusic);
-            Goto(Location.Heaven, 30);
-            Goto(Location.Space, 20);
+            Goto(Location.Heaven, 30, new ExponentialEase(1.1));
+            Goto(Location.Space, 20, new LinearEase());
 
             // TODO
             //hw.MoodLight.Send(Colors.Blue);
@@ -118,8 +118,8 @@ namespace Hellevator.Behavior
         public static void ExitHeaven()
         {
             hw.CarriageDoor.Close();
-            Goto(Location.Heaven, 20);
-            Goto(Location.BlackRockCity, 30);
+            Goto(Location.Heaven, 20, new LinearEase());
+            Goto(Location.BlackRockCity, 30, new ExponentialEase(1.1));
             hw.CarriageDoor.Open();
         }
 
@@ -149,7 +149,7 @@ namespace Hellevator.Behavior
         public static void ExitPurgatory()
         {
             elevatorEffectsPlayer.Play(new WhiteNoiseEffect());
-            Thread.Sleep(30);
+            Thread.Sleep(20 * 1000);
         }
 
         #endregion
@@ -161,7 +161,9 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoHell()
         {
-            Goto(Location.Hell, 40, new ExponentialEase {Mode = EasingMode.Out});
+            Goto(Location.Hell1, 20, new ExponentialEase {Mode = EasingMode.In});
+            Thread.Sleep(2 * 1000);
+            Goto(Location.Hell2, 20, new LinearEase());
             //hw.Fan.TurnOn();
             ////hw.FloorIndicator.StartFlicker();
             ////elevatorEffectsPlayer.Play();
@@ -171,8 +173,14 @@ namespace Hellevator.Behavior
             //hw.CarriageDoor.Open();
             //hw.Chandelier.TurnOff();
 
-            //hw.CarriageDoor.Close()
-            //    .WaitOne();
+            hw.CarriageDoor.Close()
+                .WaitOne();
+        }
+
+        public static void ExitHell()
+        {
+            CurrentFloor = Location.Hell1.GetFloor();
+            Goto(Location.BlackRockCity, 30, new ExponentialEase(1.1));
         }
 
         #endregion

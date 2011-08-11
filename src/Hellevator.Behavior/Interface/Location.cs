@@ -20,7 +20,8 @@ namespace Hellevator.Behavior.Interface
     public enum Location
     {
         Unknown         = 0,
-        Hell,
+        Hell1,
+        Hell2,
         Heaven,
         Space,
         Entrance,
@@ -40,13 +41,15 @@ namespace Hellevator.Behavior.Interface
                 case Location.Heaven:
                     return 24;
                 case Location.Space:
-                    return 72;
+                    return 88;
                 case Location.MidPurgatory:
                     return 13;
                 case Location.Purgatory:
                     return 1;
-                case Location.Hell:
-                    return -30;
+                case Location.Hell1:
+                    return -15;
+                case Location.Hell2:
+                    return -60;
                 default:
                     return 1;
             }

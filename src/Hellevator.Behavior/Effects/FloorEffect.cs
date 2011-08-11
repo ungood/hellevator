@@ -32,7 +32,7 @@ namespace Hellevator.Behavior.Effects
 
         private readonly HellEffect hell = new HellEffect();
 
-        public FloorEffect(double doorHeight = 0.4, double blurDistance = 0.2)
+        public FloorEffect(double doorHeight = 0.35, double blurDistance = 0.1)
         {
             DoorHeight = doorHeight;
             HalfDoorHeight = doorHeight / 2;
@@ -64,6 +64,8 @@ namespace Hellevator.Behavior.Effects
 
         static FloorEffect()
         {
+
+            // GOLD COLOR is HSV 60, 1.0, 1.0
             FloorColors = new Color[24];
             for(int i = 0; i < 24; i++)
             {

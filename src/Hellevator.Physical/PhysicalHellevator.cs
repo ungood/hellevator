@@ -57,7 +57,7 @@ namespace Hellevator.Physical
             Chandelier = new PhysicalRelay(FEZ_Pin.Digital.Di3);
             DriveWheel = new PhysicalRelay(FEZ_Pin.Digital.Di4);
 
-            ElevatorEffects = new SerialLedRope("COM2", 'a', 40);
+            ElevatorEffects = new SerialLedRope("COM2", 'a', 36);
             FloorIndicator = new PhysicalFloorIndicator(FEZ_Pin.Digital.Di26, FEZ_Pin.Digital.Di27, FEZ_Pin.Digital.Di28);
 
             EffectsZone  = new PhysicalAudioZone(FEZ_Pin.Digital.Di10, FEZ_Pin.Digital.Di9, FEZ_Pin.Digital.Di8);
