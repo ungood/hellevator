@@ -21,7 +21,7 @@ using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Simulator.ViewModels
 {
-    public class SimulatorSequencedLight : ViewModelBase, ISequencedLight
+    public class SimulatorSequencedLight : ViewModelBase
     {
         private Color color = Colors.Black;
 

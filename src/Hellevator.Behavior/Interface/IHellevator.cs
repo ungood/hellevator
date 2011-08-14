@@ -8,14 +8,18 @@ namespace Hellevator.Behavior.Interface
         IButton CallButton { get; }
         IButton PanelButton { get; }
         IButton ModeButton { get; }
+
+        // Relays
+        IPatriotLight PatriotLight { get; }
+        IFan Fan { get; }
+        IRelay DriveWheel { get; }
+        IRelay RopeLight { get; }
         
         // Lights
-        IRelay HellLights { get; }
-        IRelay Chandelier { get; }
         ILightStrip ElevatorEffects { get; }
+        ILightStrip CeilingEffects { get; }
         IFloorIndicator FloorIndicator { get; }
-        ISequencedLight MoodLight { get; }
-
+        
         // Music
         IAudioZone LobbyZone { get; }
         IAudioZone CarriageZone { get; }
@@ -23,11 +27,7 @@ namespace Hellevator.Behavior.Interface
 
         // Action
         IDoor CarriageDoor { get; }
-        IDoor MainDoor { get; }
-        ITurntable Turntable { get; }
-        IRelay Fan { get; }
-        IRelay DriveWheel { get; }
-
+        
         // Utility
         Thread CreateThread(ThreadStart start);
         void Display(string message);

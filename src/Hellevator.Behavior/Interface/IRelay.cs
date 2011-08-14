@@ -19,7 +19,7 @@ namespace Hellevator.Behavior.Interface
 {
     public interface IRelay
     {
-        void TurnOn();
-        void TurnOff();
+        void On();
+        void Off();
     }
 }

@@ -38,12 +38,12 @@ namespace Hellevator.Simulator.ViewModels
             
         }
 
-        public void TurnOn()
+        public void On()
         {
             IsOn = true;
         }
 
-        public void TurnOff()
+        public void Off()
         {
             IsOn = false;
         }

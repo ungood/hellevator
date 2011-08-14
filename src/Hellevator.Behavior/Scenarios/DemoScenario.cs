@@ -31,7 +31,7 @@ namespace Hellevator.Behavior.Scenarios
             Hellevator.GotoHeaven();
             Hellevator.GotoPurgatory();
             Hellevator.GotoHell();
-            Hellevator.GotoExit();
+            Hellevator.ExitHell();
         }
     }
 }

@@ -25,7 +25,7 @@ using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Simulator.ViewModels
 {
-    public class SimulatorTurntable : ViewModelBase, ITurntable
+    public class SimulatorTurntable : ViewModelBase
     {
         private float angle;
 

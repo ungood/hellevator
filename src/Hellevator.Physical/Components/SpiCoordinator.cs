@@ -1,3 +1,7 @@
+using System;
+using System.Collections;
+using System.Threading;
+using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 
 namespace Hellevator.Physical.Components
@@ -7,28 +11,51 @@ namespace Hellevator.Physical.Components
     /// </summary>
     public class SpiCoordinator
     {
+        private const long TickInterval = TimeSpan.TicksPerMillisecond * 10;
+
+        private readonly SpiWriter[] writers;
         private readonly SPI spi;
-        private readonly object spiLock = new object();
+        
+        public SPI.SPI_module Module { get; private set; }
+        public bool IsInitialized { get; private set; }
 
-        public delegate void SpiAction(SPI spi);
-
-        public SpiCoordinator(SPI.SPI_module module)
+        private readonly Thread loopThread;
+        
+        public SpiCoordinator(SPI.SPI_module module, int maxSize)
         {
+            Module = module;
             var blankConfig = new SPI.Configuration(Cpu.Pin.GPIO_NONE, false, 0, 0, false, true, 2000, module);
             spi = new SPI(blankConfig);
+
+            writers = new SpiWriter[maxSize];
+
+            loopThread = new Thread(Loop);
         }
 
-        public SPI.SPI_module Module
+        private int writerIndex;
+        public void Add(SpiWriter writer)
         {
-            get { return spi.Config.SPI_mod; }
+            if(IsInitialized)
+                throw new InvalidOperationException(
+                    "Cannot add new SpiWriters after the the SpiCoordinator has been Initialized");
+            writers[writerIndex++] = writer;
         }
 
-        public void Execute(SPI.Configuration config, SpiAction action)
+        public void Initialize()
         {
-            lock(spiLock)
+            loopThread.Start();
+            IsInitialized = true;
+        }
+
+        public void Loop()
+        {
+            while(true)
             {
-                spi.Config = config;
-                action(spi);
+                for(int i = 0; i < writers.Length; i++)
+                {
+                    writers[i].WriteInternal(spi);
+                }
+                //Thread.Sleep(1);
             }
         }
     }

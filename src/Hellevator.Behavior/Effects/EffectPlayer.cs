@@ -34,7 +34,7 @@ namespace Hellevator.Behavior.Effects
             timer = new Timer(TimerElapsed, effect, 0, MilliPerTick);
         }
 
-        public void Stop()
+        public void Off()
         {
             if(timer == null)
                 return;

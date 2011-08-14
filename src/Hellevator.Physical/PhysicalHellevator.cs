@@ -1,10 +1,26 @@
-using System;
+#region License
+// Copyright 2011 Jason Walker
+// ungood@onetrue.name
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); 
+// you may not use this file except in compliance with the License. 
+// You may obtain a copy of the License at 
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+#endregion
+
+using System.IO.Ports;
 using System.Threading;
 using GHIElectronics.NETMF.FEZ;
 using Hellevator.Behavior.Interface;
 using Hellevator.Physical.Interface;
 using Microsoft.SPOT;
-using Microsoft.SPOT.Hardware;
 
 namespace Hellevator.Physical
 {
@@ -13,19 +29,22 @@ namespace Hellevator.Physical
         public IButton CallButton { get; private set; }
         public IButton PanelButton { get; private set; }
         public IButton ModeButton { get; private set; }
-        public IRelay HellLights { get; private set; }
-        public IRelay Chandelier { get; private set; }
+        
+        public IPatriotLight PatriotLight { get; private set; }
+        public IFan Fan { get; private set; }
+        public IRelay DriveWheel { get; private set; }
+        public IRelay RopeLight { get; private set; }
+        public IRelay SmokeMachine { get; private set; }
+
         public ILightStrip ElevatorEffects { get; private set; }
+        public ILightStrip CeilingEffects { get; private set; }
         public IFloorIndicator FloorIndicator { get; private set; }
-        public ISequencedLight MoodLight { get; private set; }
+        
         public IAudioZone LobbyZone { get; private set; }
         public IAudioZone CarriageZone { get; private set; }
         public IAudioZone EffectsZone { get; private set; }
+        
         public IDoor CarriageDoor { get; private set; }
-        public IDoor MainDoor { get; private set; }
-        public ITurntable Turntable { get; private set; }
-        public IRelay Fan { get; private set; }
-        public IRelay DriveWheel { get; private set; }
         
         public Thread CreateThread(ThreadStart start)
         {
@@ -47,29 +66,30 @@ namespace Hellevator.Physical
             Debug.Print("Location: " + location.ToString());
         }
 
+        private readonly SerialPort audioSerial = new SerialPort("COM1", 115200);
+
         public PhysicalHellevator()
         {
-            CallButton = PanelButton = new PhysicalButton(FEZ_Pin.Interrupt.LDR);
-            //PanelButton = new PhysicalButton(FEZ_Pin.Interrupt.Di42);
-            ModeButton = new PhysicalButton(FEZ_Pin.Interrupt.Di43);
+            CallButton = new Button(FEZ_Pin.Interrupt.Di41);
+            PanelButton = new Button(FEZ_Pin.Interrupt.Di43);
+            ModeButton = new Button(FEZ_Pin.Interrupt.LDR);
 
-            HellLights = new PhysicalRelay(FEZ_Pin.Digital.LED);
-            Chandelier = new PhysicalRelay(FEZ_Pin.Digital.Di3);
-            DriveWheel = new PhysicalRelay(FEZ_Pin.Digital.Di4);
+            PatriotLight = new RelayPatriotLight(FEZ_Pin.Digital.Di52, FEZ_Pin.Digital.Di50, FEZ_Pin.Digital.Di48);
+            Fan = new RelayFan(FEZ_Pin.Digital.Di28, FEZ_Pin.Digital.Di44);
+            DriveWheel = new Relay(FEZ_Pin.Digital.Di46);
+            RopeLight = new Relay(FEZ_Pin.Digital.Di26);
+            SmokeMachine = new Relay(FEZ_Pin.Digital.Di24);
 
             ElevatorEffects = new SerialLedRope("COM2", 'a', 36);
-            FloorIndicator = new PhysicalFloorIndicator(FEZ_Pin.Digital.Di26, FEZ_Pin.Digital.Di27, FEZ_Pin.Digital.Di28);
+            CeilingEffects = new SerialLedRope("COM4", 'b', 36);
+            FloorIndicator = new ShiftFloorIndicator(FEZ_Pin.Digital.Di36, FEZ_Pin.Digital.Di34, FEZ_Pin.Digital.Di32);
 
-            EffectsZone  = new PhysicalAudioZone(FEZ_Pin.Digital.Di10, FEZ_Pin.Digital.Di9, FEZ_Pin.Digital.Di8);
-            CarriageZone = new PhysicalAudioZone(FEZ_Pin.Digital.Di7, FEZ_Pin.Digital.Di6, FEZ_Pin.Digital.Di5);
-            LobbyZone    = new PhysicalAudioZone(FEZ_Pin.Digital.Di4, FEZ_Pin.Digital.Di3, FEZ_Pin.Digital.Di2);
+            audioSerial.Open();
+            EffectsZone = new SerialAudioZone(audioSerial, 0x01);
+            CarriageZone = new SerialAudioZone(audioSerial, 0x02);
+            LobbyZone    = new SerialAudioZone(audioSerial, 0x03);
             
-            CarriageDoor = new PhysicalDoor();
-            MainDoor = new PhysicalDoor();
-
-            Turntable = new PhysicalTurntable();
-
-            Fan = new PhysicalRelay(FEZ_Pin.Digital.Di29);
+            CarriageDoor = new Door();
         }
     }
 }

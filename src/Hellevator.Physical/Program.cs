@@ -16,13 +16,12 @@
 #endregion
 
 using System;
-using System.IO.Ports;
+using System.IO;
 using System.Threading;
 using GHIElectronics.NETMF.FEZ;
-using GHIElectronics.NETMF.Hardware;
-using Hellevator.Behavior;
+using GHIElectronics.NETMF.IO;
 using Hellevator.Behavior.Effects;
-using Hellevator.Behavior.Interface;
+using Hellevator.Physical.Components;
 using Hellevator.Physical.Interface;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
@@ -34,6 +33,7 @@ namespace Hellevator.Physical
         // NOTE: DONT ERASE THIS
         
         
+        
         //private static Playlist playlist3 = new Playlist(true, "ding1", "ding2");
         //private static Playlist playlist2 = new Playlist(true, "sample");
         //private static Playlist playlist1 = new Playlist(true, "backinblack");
@@ -42,21 +42,29 @@ namespace Hellevator.Physical
 
         //private static LedRope rope = new LedRope(SPI.SPI_module.SPI1, 70);
 
+
+
         public static void Main()
         {
-            //var strip = new SerialLedRope("COM1", 9600, 'a', 70);
-            //var player = new EffectPlayer(strip);
-            //var effect = new RainbowEffect(1, 50);
-            Debug.EnableGCMessages(false);
-            
             var thread = new Thread(Run);
             thread.Start();
-            Thread.Sleep(Timeout.Infinite);
+
+            while(true)
+                Thread.Sleep(1000);
         }
 
         private static void Run()
         {
-            Script.Run(hellevator);
+            int i = 0;
+            while(true)
+            {
+                hellevator.CallButton.Wait();
+                i++;
+                if(i > 24)
+                    i = 1;
+                hellevator.FloorIndicator.CurrentFloor = i;
+                
+            }
         }
     }
 }

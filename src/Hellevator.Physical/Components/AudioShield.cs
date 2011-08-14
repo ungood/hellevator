@@ -16,6 +16,7 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Threading;
 using Microsoft.SPOT.Hardware;
 
@@ -76,73 +77,52 @@ namespace Hellevator.Physical.Components
 
         #endregion
 
-        protected readonly SpiCoordinator Coordinator;
-        protected readonly ManualResetEvent DreqWait = new ManualResetEvent(false);
-        protected readonly SPI.Configuration DataConfig;
-        protected readonly SPI.Configuration CmdConfig;
-        private readonly InputPort dreq;
+        protected SpiCoordinator Coordinator { get; private set; }
+        protected BufferSpiWriter CommandWriter { get; private set; }
+        protected StreamSpiWriter DataWriter { get; private set; }
         
+
         public AudioShield(SpiCoordinator coordinator, Cpu.Pin dataSelectPin, Cpu.Pin cmdSelectPin, Cpu.Pin dreqPin)
         {
             Coordinator = coordinator;
-            DataConfig = new SPI.Configuration(dataSelectPin, false, 0, 0, false, true, 2000, coordinator.Module, dreqPin, false);
-            CmdConfig = new SPI.Configuration(cmdSelectPin, false, 0, 0, false, true, 2000, coordinator.Module, dreqPin, false);
-            dreq = new InputPort(dreqPin, false, Port.ResistorMode.PullUp);
 
-            Initialize();
-        }
+            var dreq = new InputPort(dreqPin, false, Port.ResistorMode.PullUp);
+            
+            var cmdConfig = new SPI.Configuration(cmdSelectPin, false, 0, 0, false, true, 2000, coordinator.Module);
+            CommandWriter = new BufferSpiWriter(cmdConfig, dreq);
 
-        protected void WaitForDreq()
-        {
-            while(dreq.Read() == false)
-                Thread.Sleep(10);
+            var dataConfig = new SPI.Configuration(dataSelectPin, false, 0, 0, false, true, 2000, coordinator.Module);
+            DataWriter = new StreamSpiWriter(dataConfig, dreq);
+
+            Coordinator.Add(CommandWriter);
+            Coordinator.Add(DataWriter);
         }
 
         public void Initialize()
         {
+            if(!Coordinator.IsInitialized)
+                throw new InvalidOperationException("Initialize SpiCoordinator before initialize AudioShields");
+
             Reset();
 
             WriteMode(Mode.SdiNew);
             WriteRegister(Register.ClockFreq, ClockFreq);
-            
-            // Test if initialized
-            WriteRegister(Register.Volume, 0x0101);
-            if(ReadRegister(Register.Volume) != (0x0101))
-            {
-                // TODO: throw new Exception("Failed to initialize MP3 Decoder.");
-            }
+            SetVolume(255, 255);
         }
 
         private readonly byte[] cmdBuffer = new byte[4];
-
-        /// <summary>
-        /// Reads 16bit value from a register
-        /// </summary>
-        protected ushort ReadRegister(Register register)
-        {
-            WaitForDreq();
-
-            cmdBuffer[0] = (byte) Direction.Read;
-            cmdBuffer[1] = (byte) register;
-            cmdBuffer[2] = 0;
-            cmdBuffer[3] = 0;
-            Coordinator.Execute(CmdConfig, spi => spi.WriteRead(cmdBuffer, cmdBuffer, 2));
-
-            return (ushort) (cmdBuffer[0] << 8 | cmdBuffer[1]);
-        }
 
         /// <summary>
         /// Writes 16bit value to a register
         /// </summary>
         protected void WriteRegister(Register register, ushort data)
         {
-            WaitForDreq();
-
-            cmdBuffer[0] = (byte) Direction.Write;
-            cmdBuffer[1] = (byte) register;
-            cmdBuffer[2] = (byte) (data >> 8);
-            cmdBuffer[3] = (byte) data;
-            Coordinator.Execute(CmdConfig, spi => spi.Write(cmdBuffer));
+            CommandWriter.Write(
+                (byte) Direction.Write,
+                (byte) register,
+                (byte) (data >> 8),
+                (byte) data);
+            CommandWriter.BusyEvent.WaitOne();
         }
 
         protected void WriteMode(Mode mode)
@@ -159,7 +139,6 @@ namespace Hellevator.Physical.Components
             Thread.Sleep(1);
 
             WriteRegister(Register.ClockFreq, ClockFreq);
-            WaitForDreq();
         }
 
         /// <summary>
@@ -172,19 +151,9 @@ namespace Hellevator.Physical.Components
             WriteRegister(Register.Volume, (ushort) ((255 - leftChannelVolume) << 8 | (255 - rightChannelVolume)));
         }
 
-        public void SineTest()
+        public void Play(Stream stream)
         {
-            WriteMode(Mode.SdiNew | Mode.Tests | Mode.Reset);
-
-            var start = new byte[] {0x53, 0xEF, 0x6E, 0x7E};
-            var zero = new byte[] {0x00, 0x00, 0x00, 0x00};
-            var end = new byte[] {0x45, 0x78, 0x69, 0x74};
-        
-            Coordinator.Execute(DataConfig, spi => spi.Write(start));
-            Coordinator.Execute(DataConfig, spi => spi.Write(zero));
-            Thread.Sleep(2000);
-            Coordinator.Execute(DataConfig, spi => spi.Write(end));
-            Coordinator.Execute(DataConfig, spi => spi.Write(zero));
+            DataWriter.Play(stream);
         }
     }
 }

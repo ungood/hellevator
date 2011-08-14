@@ -15,11 +15,16 @@
 // limitations under the License.
 #endregion
 
+using System.Collections;
+using System.Reflection;
+
 namespace Hellevator.Behavior.Interface
 {
     public class Playlist
     {
         public bool Shuffle { get; private set; }
+
+        public int Index { get; private set; }
         
         private readonly string[] filenames;
         private int current;
@@ -62,5 +67,27 @@ namespace Hellevator.Behavior.Interface
         public static readonly Playlist IdleSounds = new Playlist(true, "blah");
 
         public static readonly Playlist WelcomeToHellevator = new Playlist(false, "welcome");
+
+        private static readonly Hashtable Playlists = new Hashtable();
+
+        static Playlist()
+        {
+            var type = typeof(Playlist);
+            var fields = type.GetFields(BindingFlags.Static | BindingFlags.Public);
+            for(var i = 0; i < fields.Length; i++)
+            {
+                var playlist = fields[i].GetValue(null) as Playlist;
+                if(playlist == null)
+                    continue;
+
+                playlist.Index = i;
+                Playlists.Add(i, playlist);
+            }
+        }
+
+        public static Playlist GetPlaylist(int index)
+        {
+            return (Playlist)Playlists[index];
+        }
     }
 }

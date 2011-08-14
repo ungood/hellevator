@@ -28,21 +28,57 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MainBoard|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\MainBoard\</OutputPath>
+    <DefineConstants>DEBUG;TRACE,MF_FRAMEWORK_VERSION_V4_1</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\Hellevator.Physical.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AudioBoard|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\AudioBoard\</OutputPath>
+    <DefineConstants>DEBUG;TRACE,MF_FRAMEWORK_VERSION_V4_1</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\Hellevator.Physical.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;c:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
     <Compile Include="BitExtensions.cs" />
     <Compile Include="Components\AudioShield.cs" />
-    <Compile Include="Components\AudioShieldPlayer.cs" />
     <Compile Include="Components\AudioShieldRecorder.cs" />
+    <Compile Include="Components\BufferSpiWriter.cs" />
+    <Compile Include="Components\MusicShield.cs" />
     <Compile Include="Components\SpiCoordinator.cs" />
     <Compile Include="Components\LPD6803.cs" />
     <Compile Include="Components\ShiftRegister.cs" />
-    <Compile Include="Interface\PhysicalDoor.cs" />
-    <Compile Include="Interface\PhysicalTurntable.cs" />
-    <Compile Include="Interface\PhysicalAudioZone.cs" />
-    <Compile Include="Interface\PhysicalButton.cs" />
-    <Compile Include="Interface\PhysicalRelay.cs" />
-    <Compile Include="Interface\PhysicalFloorIndicator.cs" />
+    <Compile Include="Components\SpiWriter.cs" />
+    <Compile Include="Components\StreamSpiWriter.cs" />
+    <Compile Include="Interface\Door.cs" />
+    <Compile Include="Interface\SerialAudioZone.cs" />
+    <Compile Include="Interface\Button.cs" />
+    <Compile Include="Interface\Relay.cs" />
+    <Compile Include="Interface\RelayFan.cs" />
+    <Compile Include="Interface\RelayPatriotLight.cs" />
+    <Compile Include="Interface\ShiftFloorIndicator.cs" />
     <Compile Include="Interface\SerialLedRope.cs" />
     <Compile Include="PhysicalHellevator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
