@@ -1,11 +1,14 @@
 #include <TimerOne.h>
 #include <LPD6803.h>
 
+// Addresses:
+// Floor Effects = 'a'
+// Ceiling Effects = 'b'
 const byte address = 'a';
 
-const int numLights = 70;
+const int numLights = 35;
 
-LPD6803 strip = LPD6803(numLights, 2, 3);
+LPD6803 strip = LPD6803(numLights, 5, 6);
 
 void setup() {
   strip.setCPUmax(60);

@@ -25,7 +25,7 @@ namespace Hellevator.Audio
         private readonly SerialPort port;
         private readonly byte myAddress;
 
-        private readonly byte[] buffer = new byte[0];
+        private readonly byte[] buffer = new byte[1];
 
         private bool receiving;
 
@@ -46,11 +46,13 @@ namespace Hellevator.Audio
 
             var data = buffer[0];
 
-            if((data & 0x80) == 1)
+            if((data & 0x80) != 0)
             {
                 var address = data & 0x7f;
                 if(address == 0 || address == myAddress)
                     receiving = true;
+                else
+                    receiving = false;
             }
             else if(receiving)
             {
@@ -58,7 +60,9 @@ namespace Hellevator.Audio
                     Command = (CommandType) ((data & 0x60) >> 5),
                     Data = (byte)(data & 0x1f)
                 });
+                receiving = false;
             }
+
         }
 
         protected void OnCommandReceived(ControllerEventArgs e)
@@ -68,6 +72,13 @@ namespace Hellevator.Audio
             ControllerEventHandler handler = CommandReceived;
             if(handler != null)
                 handler(this, e);
+        }
+
+        public void Send(byte value)
+        {
+            var buffer = new byte[1];
+            buffer[0] = value;
+            port.Write(buffer, 0, 1);
         }
     }
 }

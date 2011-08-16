@@ -15,16 +15,8 @@
 // limitations under the License.
 #endregion
 
-using System;
-using System.IO;
 using System.Threading;
-using GHIElectronics.NETMF.FEZ;
-using GHIElectronics.NETMF.IO;
 using Hellevator.Behavior.Effects;
-using Hellevator.Physical.Components;
-using Hellevator.Physical.Interface;
-using Microsoft.SPOT;
-using Microsoft.SPOT.Hardware;
 
 namespace Hellevator.Physical
 {
@@ -38,7 +30,7 @@ namespace Hellevator.Physical
         //private static Playlist playlist2 = new Playlist(true, "sample");
         //private static Playlist playlist1 = new Playlist(true, "backinblack");
 
-        private static PhysicalHellevator hellevator = new PhysicalHellevator();
+        private static readonly PhysicalHellevator hellevator = new PhysicalHellevator();
 
         //private static LedRope rope = new LedRope(SPI.SPI_module.SPI1, 70);
 
@@ -49,21 +41,71 @@ namespace Hellevator.Physical
             var thread = new Thread(Run);
             thread.Start();
 
-            while(true)
-                Thread.Sleep(1000);
+            CycleSmoke();
         }
 
         private static void Run()
         {
-            int i = 0;
+            var player = new EffectPlayer(hellevator.ElevatorEffects);
             while(true)
             {
-                hellevator.CallButton.Wait();
-                i++;
-                if(i > 24)
-                    i = 1;
-                hellevator.FloorIndicator.CurrentFloor = i;
-                
+                player.Play(new RainbowEffect(1, 5));
+                hellevator.PatriotLight.Blue();
+
+                Thread.Sleep(30 * 1000);
+
+                player.Play(new HellEffect());
+                hellevator.PatriotLight.Red();
+
+                Thread.Sleep(30 * 1000);
+            }
+
+            //var i = 0;
+            //while(true)
+            //{
+            //    hellevator.CallButton.Wait();
+            //    i++;
+            //    if(i > 24)
+            //        i = 1;
+            //    hellevator.FloorIndicator.CurrentFloor = i;
+
+            //}
+        }
+
+        private static void LightTest()
+        {
+            while(true)
+            {
+                hellevator.PatriotLight.Red();
+                Thread.Sleep(1000);
+                hellevator.PatriotLight.White();
+                Thread.Sleep(1000);
+                hellevator.PatriotLight.Blue();
+                Thread.Sleep(1000);
+                hellevator.PatriotLight.Off();
+                Thread.Sleep(1000);
+            }
+        }
+
+        private static void Pause(int minute, int second)
+        {
+            for(int i = 0; i < (minute * 60) + second; i++)
+                Thread.Sleep(1000);
+        }
+
+        private static void CycleSmoke()
+        {
+            // Heat it up
+            hellevator.SmokeMachine.On();
+            Pause(4, 30);
+
+            while(true)
+            {
+                hellevator.SmokeMachine.Off();
+                Pause(2, 0);
+
+                hellevator.SmokeMachine.On();
+                Pause(0, 30);
             }
         }
     }

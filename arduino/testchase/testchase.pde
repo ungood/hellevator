@@ -4,11 +4,14 @@
 
 const int numLights = 70;
 
-LPD6803 strip = LPD6803(numLights, 2, 3);
+LPD6803 strip = LPD6803(numLights, 5, 6);
 
 void setup() {
+  pinMode(12, OUTPUT);
+  pinMode(13, OUTPUT);
   Serial.begin(9600);
-  strip.setCPUmax(60);
+  strip.setCPUmax(50);
+  
   strip.begin();
   strip.show();
   randomSeed(analogRead(0));

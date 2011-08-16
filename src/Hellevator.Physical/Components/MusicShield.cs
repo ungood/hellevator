@@ -440,7 +440,7 @@ namespace GHIElectronics.NETMF.FEZ.Shields
                 _spi.Write(block);
             }
  
-            Reset();
+            //Reset();
  
             _playBackData = null;
             _isPlaying = false;

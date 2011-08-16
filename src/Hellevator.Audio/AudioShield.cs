@@ -29,14 +29,14 @@ namespace Hellevator.Audio
         private const ushort ClockFreq = 0xa000;
         protected const int BlockSize = 32;
 
-        public enum Direction : byte
+        protected enum Direction : byte
         {
             Write = 0x02,
             Read = 0x03,
         }
 
         [Flags]
-        public enum Mode : ushort
+        protected enum Mode : ushort
         {
             Reset = 0x0004,
             Cancel = 0x0010,
@@ -46,7 +46,7 @@ namespace Hellevator.Audio
             Line1 = 0x4000,
         }
 
-        public enum Register : byte
+        protected enum Register : byte
         {
             /// <summary>
             /// R/W Mode control
@@ -69,18 +69,33 @@ namespace Hellevator.Audio
             ClockFreq = 0x03,
 
             /// <summary>
+            /// Read/write value from RAM.
+            /// </summary>
+            RamValue = 0x06,
+
+            /// <summary>
+            /// Sets address to read/write from RAM.
+            /// </summary>
+            RamAddress = 0x07,
+
+            /// <summary>
             /// R/W Volume control
             /// </summary>
             Volume = 0x0B,
-
         }
 
+        protected enum RamAddress : ushort
+        {
+            EndFillByte = 0x1e06
+        };
+        
         #endregion
 
         private readonly SPI.Configuration dataConfig;
         private readonly SPI.Configuration cmdConfig;
         private readonly InputPort dreq;
         private readonly SPI spi;
+        private readonly object spiLock = new object();
 
         public AudioShield(SPI.SPI_module module, Cpu.Pin dataSelectPin, Cpu.Pin cmdSelectPin, Cpu.Pin dreqPin)
         {
@@ -90,12 +105,6 @@ namespace Hellevator.Audio
             spi = new SPI(cmdConfig);
         }
 
-        protected void WaitForDreq()
-        {
-            while(dreq.Read() == false)
-                Thread.Sleep(1);
-        }
-
         public void Initialize()
         {
             Reset();
@@ -103,6 +112,34 @@ namespace Hellevator.Audio
             WriteMode(Mode.SdiNew);
             WriteRegister(Register.ClockFreq, ClockFreq);
             SetVolume(255, 255);
+        }
+
+        protected void WaitForDreq()
+        {
+            while(dreq.Read() == false)
+                Thread.Sleep(1);
+        }
+
+        protected void WriteCommand(ref byte[] buffer)
+        {
+            WaitForDreq();
+
+            lock(spiLock)
+            {
+                spi.Config = cmdConfig;
+                spi.WriteRead(buffer, buffer);
+            }
+        }
+
+        protected void WriteData(byte[] buffer)
+        {
+            WaitForDreq();
+
+            lock(spiLock)
+            {
+                spi.Config = dataConfig;
+                spi.Write(buffer);
+            }
         }
 
         /// <summary>
@@ -117,7 +154,8 @@ namespace Hellevator.Audio
             buffer[1] = (byte) register;
             buffer[2] = 0;
             buffer[3] = 0;
-            spi.WriteRead(buffer, buffer);
+
+            WriteCommand(ref buffer);
             return (ushort) (buffer[0] << 8 | buffer[1]);
         }
 
@@ -133,12 +171,19 @@ namespace Hellevator.Audio
             buffer[1] = (byte) register;
             buffer[2] = (byte) (data >> 8);
             buffer[3] = (byte) data;
-            spi.Write(buffer);
+
+            WriteCommand(ref buffer);
         }
 
         protected void WriteMode(Mode mode)
         {
             WriteRegister(Register.Mode, (ushort) mode);
+        }
+
+        protected ushort ReadAddress(RamAddress address)
+        {
+            WriteRegister(Register.RamAddress, (ushort) address);
+            return ReadRegister(Register.RamValue);
         }
 
         /// <summary>
@@ -163,50 +208,6 @@ namespace Hellevator.Audio
             WriteRegister(Register.Volume, (ushort) ((255 - leftChannelVolume) << 8 | (255 - rightChannelVolume)));
         }
 
-        private Thread playThread;
-        private Stream playStream;
-        private bool stopRequested;
-
-        public bool IsPlaying { get; private set; }
-
-
-        public void Play(Stream stream)
-        {
-            stopRequested = false;
-            IsPlaying = true;
-            playStream = stream;
-            playThread = new Thread(PlayStreamTask) {
-                Priority = ThreadPriority.Highest
-            };
-            playThread.Start();
-        }
-
-        private void PlayStreamTask()
-        {
-            var block = new byte[BlockSize];
-
-            while(true)
-            {
-                if(stopRequested)
-                    break;
-
-                var bytesRead = playStream.Read(block, 0, BlockSize);
-                if(bytesRead < 1)
-                    break;
-
-                WaitForDreq();
-
-                spi.Config = dataConfig;
-                spi.Write(block);
-            }
-
-            playStream.Close();
-            Reset();
-        }
-
-        public void Stop()
-        {
-            stopRequested = true;
-        }
+        
     }
 }
