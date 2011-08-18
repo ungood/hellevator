@@ -32,7 +32,27 @@ namespace Hellevator.Behavior.Interface
 
     public static class LocationExtension
     {
-
+        public static string GetName(this Location location)
+        {
+            switch(location)
+            {
+                case Location.Hell1:
+                case Location.Hell2:
+                    return "HELL";
+                case Location.Heaven:
+                    return "HEAVEN";
+                case Location.Space:
+                    return "SPACE";
+                case Location.Entrance:
+                case Location.BlackRockCity:
+                    return "BRC";
+                case Location.Purgatory:
+                case Location.MidPurgatory:
+                    return "PURGATORY";
+                default:
+                    return "UNKNOWN";
+            }
+        }
 
         public static int GetFloor(this Location location)
         {

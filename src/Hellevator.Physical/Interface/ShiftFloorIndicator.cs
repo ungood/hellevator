@@ -17,16 +17,22 @@ namespace Hellevator.Physical.Interface
             CurrentFloor = -1;
         }
 
+        private int currentFloor = 0;
         public int CurrentFloor
         {
             set
             {
-                if(value < 1 || value > 24)
+                if(currentFloor == value)
+                    return;
+                currentFloor = value;
+
+                while(value > 24)
+                    value -= 24;
+                if(value < 1)
                 {
                     shift.ShiftOut(new byte[3]);
                     return;
                 }
-
 
                 value--;
                 var data = new byte[3];

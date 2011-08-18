@@ -33,14 +33,37 @@ namespace Hellevator.Physical.Interface
                 switches[i] = new InputPort((Cpu.Pin) switchPins[i], true, Port.ResistorMode.PullUp);
         }
 
-        public WaitHandle Open()
+        private bool Any(bool value)
         {
-            return new ManualResetEvent(true);
+            foreach(var sw in switches)
+                if(sw.Read() == value)
+                    return true;
+
+            return false;
         }
 
-        public WaitHandle Close()
+        private bool All(bool value)
         {
-            return new ManualResetEvent(true);
+            foreach(var sw in switches)
+                if(sw.Read() != value)
+                    return false;
+
+            return true;
+        }
+
+        public void Open()
+        {
+            Program.TheBox.DisplayInstruction("OPEN DOOR");
+            while(Any(true))
+                Thread.Sleep(100);
+            Program.TheBox.DisplayInstruction("");
+        }
+
+        public void Close()
+        {
+            Program.TheBox.DisplayInstruction("CLOSE DOOR");
+            while(All(false))
+            Program.TheBox.DisplayInstruction("");
         }
     }
 }

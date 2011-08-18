@@ -30,8 +30,9 @@ namespace Hellevator.Behavior.Interface
         
         // Utility
         Thread CreateThread(ThreadStart start);
-        void Display(string message);
-        void BeginScenario(string name);
-        void BeginDestination(Location location);
+
+        void DisplayScenario(string name);
+        void DisplayDestination(string name);
+        void DisplayInstruction(string name);
     }
 }

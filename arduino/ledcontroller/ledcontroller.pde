@@ -8,10 +8,10 @@ const byte address = 'a';
 
 const int numLights = 35;
 
-LPD6803 strip = LPD6803(numLights, 5, 6);
+LPD6803 strip = LPD6803(numLights, 6, 5);
 
 void setup() {
-  strip.setCPUmax(60);
+  strip.setCPUmax(50);
   strip.begin();
   strip.show();
   
@@ -32,22 +32,26 @@ void loop() {
   if(data == 0x80) {
     strip.show();
     isReading = false;
-    return;
-  }
-  
-  if((data & 0x80) != 0) {
-    isReading = (data & 0x7f) == address;
     index = state = 0;
-    Serial.println(isReading ? "READ" : "IGNORE");
+    Serial.println("SET");
     return;
   }
   
-  if(!isReading)
+  if((data & 0x80) != 0)
     return;
+//    isReading = (data & 0x7f) == address;
+//    index = state = 0;
+//    Serial.println(isReading ? "READ" : "IGNORE");
+//    return;
+//  }
+//  
+//  if(!isReading)
+//    return;
     
   buf[state] = data * 2;
   state++;
   if(state > 2) {
+    Serial.println(index, DEC);
     state = 0;
     strip.setPixelColor(index, color(buf[0], buf[1], buf[2]));
     index++;

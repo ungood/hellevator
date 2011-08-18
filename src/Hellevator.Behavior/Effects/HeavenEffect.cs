@@ -19,7 +19,7 @@ namespace Hellevator.Behavior.Effects
 {
     public class HeavenEffect : Effect
     {
-        private readonly RainbowEffect rainbow = new RainbowEffect(0.5, 4);
+        private readonly RainbowEffect rainbow = new RainbowEffect(0.5, 0.5);
 
         public override Color GetColor(double light, double floor, long ms)
         {

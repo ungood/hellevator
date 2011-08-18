@@ -29,9 +29,9 @@ namespace Hellevator.Physical.Interface
         private readonly AutoResetEvent interruptEvent = new AutoResetEvent(false);
         private DateTime lastPressed = DateTime.Now;
 
-        public Button(FEZ_Pin.Interrupt pin)
+        public Button(FEZ_Pin.Interrupt pin, Port.ResistorMode mode = Port.ResistorMode.PullUp)
         {
-            interrupt = new InterruptPort((Cpu.Pin) pin, true, Port.ResistorMode.PullUp,
+            interrupt = new InterruptPort((Cpu.Pin) pin, true, mode,
                 Port.InterruptMode.InterruptEdgeHigh);
             interrupt.OnInterrupt += OnInterrupt;
             interrupt.EnableInterrupt();

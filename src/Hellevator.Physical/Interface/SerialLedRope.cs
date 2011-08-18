@@ -23,23 +23,18 @@ namespace Hellevator.Physical.Interface
 {
     public class SerialLedRope : ILightStrip
     {
-        private readonly byte address;
         public int NumLights { get; private set; }
         
         private readonly SerialPort port;
         private readonly byte[] buffer;
 
-        public SerialLedRope(string comPort, char address, int numLights)
-            : this(comPort, (byte)address, numLights) {}
-
-        public SerialLedRope(string comPort, byte address, int numLights)
+        public SerialLedRope(string comPort, int numLights)
         {
-            this.address = address;
             port = new SerialPort(comPort, 115200);
             port.Open();
         
             NumLights = numLights;
-            buffer = new byte[2 + (3 * numLights)];
+            buffer = new byte[1 + (3 * numLights)];
             Reset();
         }
 
@@ -48,9 +43,9 @@ namespace Hellevator.Physical.Interface
             if(light < 0 || light >= NumLights)
                 return;
 
-            buffer[3 * light + 1] = (byte) (color.Red / 2);
-            buffer[3 * light + 2] = (byte) (color.Green / 2);
-            buffer[3 * light + 3] = (byte) (color.Blue / 2);
+            buffer[3 * light + 0] = (byte) (color.Red / 2);
+            buffer[3 * light + 1] = (byte) (color.Green / 2);
+            buffer[3 * light + 2] = (byte) (color.Blue / 2);
         }
 
         public void Update()
@@ -60,9 +55,8 @@ namespace Hellevator.Physical.Interface
 
         public void Reset()
         {
-            buffer[0] = (byte) (0x80 | address);
             buffer[buffer.Length - 1] = 0x80;
-            for(var i = 1; i < buffer.Length - 1; i++)
+            for(var i = 0; i < buffer.Length - 1; i++)
                 buffer[i] = 0;
             Update();
         }

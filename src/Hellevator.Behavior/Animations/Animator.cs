@@ -5,7 +5,7 @@ namespace Hellevator.Behavior.Animations
 {
     public class Animator
     {
-        public delegate void SetFunc(double value);
+        public delegate void SetFunc(double value, long ticks, bool final);
 
         public double InitialValue { get; set; }
         public double FinalValue { get; set; }
@@ -24,6 +24,7 @@ namespace Hellevator.Behavior.Animations
         public void Animate()
         {
             var startTime = DateTime.Now;
+            var lastTicks = startTime.Ticks;
 
             while(true)
             {
@@ -31,12 +32,14 @@ namespace Hellevator.Behavior.Animations
                 if(interval > Length)
                     break;
 
-                var progress = (double) interval.Ticks / Length.Ticks;
-                Set(Interpolate(InitialValue, FinalValue, progress, EasingFunction));
+                var ticks = interval.Ticks;
+                var progress = (double) ticks / Length.Ticks;
+                Set(Interpolate(InitialValue, FinalValue, progress, EasingFunction), ticks - lastTicks, false);
+                lastTicks = ticks;
                 Thread.Sleep(1);
             }
 
-            Set(FinalValue);
+            Set(FinalValue, (DateTime.Now - startTime).Ticks - lastTicks, true);
         }
 
         public static double Interpolate(double initial, double final, double progress, EasingFunction easing)

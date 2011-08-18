@@ -16,28 +16,19 @@
 #endregion
 
 using System.Threading;
-using Hellevator.Behavior.Effects;
+using Hellevator.Behavior;
+using Microsoft.SPOT;
 
 namespace Hellevator.Physical
 {
-    public class Program
+    public static class Program
     {
-        // NOTE: DONT ERASE THIS
-        
-        
-        
-        //private static Playlist playlist3 = new Playlist(true, "ding1", "ding2");
-        //private static Playlist playlist2 = new Playlist(true, "sample");
-        //private static Playlist playlist1 = new Playlist(true, "backinblack");
-
-        private static readonly PhysicalHellevator hellevator = new PhysicalHellevator();
-
-        //private static LedRope rope = new LedRope(SPI.SPI_module.SPI1, 70);
-
-
+        public static readonly PhysicalHellevator TheBox = new PhysicalHellevator();
 
         public static void Main()
         {
+            Debug.EnableGCMessages(false);
+
             var thread = new Thread(Run);
             thread.Start();
 
@@ -46,65 +37,79 @@ namespace Hellevator.Physical
 
         private static void Run()
         {
-            var player = new EffectPlayer(hellevator.ElevatorEffects);
+            Script.Run(TheBox);
+        }
+
+
+
+        private static void FloorIndicatorTest()
+        {
+            var i = 1;
             while(true)
             {
-                player.Play(new RainbowEffect(1, 5));
-                hellevator.PatriotLight.Blue();
-
-                Thread.Sleep(30 * 1000);
-
-                player.Play(new HellEffect());
-                hellevator.PatriotLight.Red();
-
-                Thread.Sleep(30 * 1000);
+                TheBox.FloorIndicator.CurrentFloor = i;
+                i++;
+                if(i > 24)
+                    i = 1;
+                Thread.Sleep(1000);
             }
-
-            //var i = 0;
-            //while(true)
-            //{
-            //    hellevator.CallButton.Wait();
-            //    i++;
-            //    if(i > 24)
-            //        i = 1;
-            //    hellevator.FloorIndicator.CurrentFloor = i;
-
-            //}
         }
 
         private static void LightTest()
         {
             while(true)
             {
-                hellevator.PatriotLight.Red();
+                TheBox.PatriotLight.Red();
                 Thread.Sleep(1000);
-                hellevator.PatriotLight.White();
+                TheBox.PatriotLight.White();
                 Thread.Sleep(1000);
-                hellevator.PatriotLight.Blue();
+                TheBox.PatriotLight.Blue();
                 Thread.Sleep(1000);
-                hellevator.PatriotLight.Off();
+                TheBox.PatriotLight.Off();
+                Thread.Sleep(3000);
+
+                TheBox.Fan.Low();
+                Thread.Sleep(1000);
+                TheBox.Fan.High();
+                Thread.Sleep(1000);
+                TheBox.Fan.Off();
+                Thread.Sleep(3000);
+
+                TheBox.RopeLight.On();
+                Thread.Sleep(1000);
+                TheBox.RopeLight.Off();
+                Thread.Sleep(1000);
+
+                TheBox.DriveWheel.On();
+                Thread.Sleep(1000);
+                TheBox.DriveWheel.Off();
+                Thread.Sleep(1000);
+
+                TheBox.SmokeMachine.On();
+                Thread.Sleep(1000);
+                TheBox.SmokeMachine.Off();
                 Thread.Sleep(1000);
             }
         }
 
         private static void Pause(int minute, int second)
         {
-            for(int i = 0; i < (minute * 60) + second; i++)
+            for(var i = 0; i < (minute * 60) + second; i++)
                 Thread.Sleep(1000);
         }
 
         private static void CycleSmoke()
         {
             // Heat it up
-            hellevator.SmokeMachine.On();
+            TheBox.SmokeMachine.On();
             Pause(4, 30);
 
             while(true)
             {
-                hellevator.SmokeMachine.Off();
+                TheBox.SmokeMachine.Off();
                 Pause(2, 0);
 
-                hellevator.SmokeMachine.On();
+                TheBox.SmokeMachine.On();
                 Pause(0, 30);
             }
         }

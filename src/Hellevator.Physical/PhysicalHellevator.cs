@@ -19,8 +19,11 @@ using System.IO.Ports;
 using System.Threading;
 using GHIElectronics.NETMF.FEZ;
 using Hellevator.Behavior.Interface;
+using Hellevator.Physical.Components;
 using Hellevator.Physical.Interface;
 using Microsoft.SPOT;
+using Microsoft.SPOT.Hardware;
+using Button = Hellevator.Physical.Interface.Button;
 
 namespace Hellevator.Physical
 {
@@ -51,38 +54,40 @@ namespace Hellevator.Physical
             return new Thread(start);
         }
 
-        public void Display(string message)
+        public void DisplayScenario(string name)
         {
-            Debug.Print(message);
+            lcd.Display(1, name);
         }
 
-        public void BeginScenario(string name)
+        public void DisplayDestination(string name)
         {
-            Debug.Print("Scenario: " + name);
+            lcd.Display(2, name);
         }
 
-        public void BeginDestination(Location location)
+        public void DisplayInstruction(string name)
         {
-            Debug.Print("Location: " + location.ToString());
+            lcd.Display(3, name);
         }
 
         private readonly SerialPort audioSerial = new SerialPort("COM1", 115200);
+        private readonly ModernDeviceSerialLcd lcd = new ModernDeviceSerialLcd("COM3");
 
         public PhysicalHellevator()
         {
-            CallButton = new Button(FEZ_Pin.Interrupt.Di41);
-            PanelButton = new Button(FEZ_Pin.Interrupt.Di43);
+            CallButton = new Button(FEZ_Pin.Interrupt.Di43);
+            PanelButton = new Button(FEZ_Pin.Interrupt.Di41);
             ModeButton = new Button(FEZ_Pin.Interrupt.LDR);
 
             PatriotLight = new RelayPatriotLight(FEZ_Pin.Digital.Di52, FEZ_Pin.Digital.Di50, FEZ_Pin.Digital.Di48);
-            Fan = new RelayFan(FEZ_Pin.Digital.Di28, FEZ_Pin.Digital.Di44);
-            DriveWheel = new Relay(FEZ_Pin.Digital.Di46);
-            RopeLight = new Relay(FEZ_Pin.Digital.Di26);
+            Fan = new RelayFan(FEZ_Pin.Digital.Di44, FEZ_Pin.Digital.Di46);
+            RopeLight = new Relay(FEZ_Pin.Digital.Di28);
+            DriveWheel = new Relay(FEZ_Pin.Digital.Di26);
             SmokeMachine = new Relay(FEZ_Pin.Digital.Di24);
 
-            ElevatorEffects = new SerialLedRope("COM2", 'a', 36);
-            CeilingEffects = new SerialLedRope("COM4", 'b', 36);
-            FloorIndicator = new ShiftFloorIndicator(FEZ_Pin.Digital.Di36, FEZ_Pin.Digital.Di34, FEZ_Pin.Digital.Di32);
+            ElevatorEffects = new SerialLedRope("COM2", 29);
+            CeilingEffects = new SerialLedRope("COM4", 36);
+            FloorIndicator = new SpiFloorIndicator(SPI.SPI_module.SPI2, FEZ_Pin.Digital.Di34);
+            //FloorIndicator = new ShiftFloorIndicator(FEZ_Pin.Digital.Di38, FEZ_Pin.Digital.Di35, FEZ_Pin.Digital.Di34);
 
             audioSerial.Open();
             EffectsZone = new SerialAudioZone(audioSerial, 0x01);
@@ -90,6 +95,8 @@ namespace Hellevator.Physical
             LobbyZone    = new SerialAudioZone(audioSerial, 0x03);
             
             CarriageDoor = new Door();
+
+            lcd.Initialize();
         }
     }
 }

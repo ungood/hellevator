@@ -21,6 +21,8 @@ using Hellevator.Behavior.Animations;
 using Hellevator.Behavior.Effects;
 using Hellevator.Behavior.Interface;
 using Hellevator.Behavior.Scenarios;
+using Microsoft.SPOT;
+using Math = System.Math;
 
 namespace Hellevator.Behavior
 {
@@ -54,8 +56,10 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void Reset(bool firstTime)
         {
-            Display("RESET");
-            
+            hw.DisplayScenario("RESET");
+            hw.DisplayDestination("");
+            hw.DisplayInstruction("");
+
             hw.PatriotLight.Off();
             hw.Fan.Off();
             hw.DriveWheel.Off();
@@ -75,24 +79,25 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void AcceptGuest()
         {
-            hw.RopeLight.On();
-            Pause(1);
+            Pause(5);
             hw.DriveWheel.On();
+            Pause(3);
+            hw.RopeLight.On();
 
-            Pause(10);
-
+            Pause(22);
             hw.DriveWheel.Off();
+
+            CurrentFloor = 1;
+            hw.PatriotLight.White();
             ceiling.Set(Colors.White);
-            hw.CarriageDoor.Open()
-                .WaitOne();
-            
-            // Wait for guest to press the panel button.
+
+            hw.CarriageDoor.Open();
+
+            hw.RopeLight.Off();
             hw.PanelButton
                 .Wait();
-            
-            // Wait for the doors to close before getting underway.
-            hw.CarriageDoor.Close()
-                .WaitOne();
+            // CeilingLights = Gold color
+            hw.CarriageDoor.Close();
         }
 
         #region Heaven
@@ -102,25 +107,26 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoHeaven()
         {
-            //hw.EffectsZone.Play(Playlist.ElevatorMusic);
-            Goto(Location.Heaven, 30, new ExponentialEase(1.1));
+            hw.PatriotLight.Off();
+            Goto(Location.Heaven, 30, new ExponentialEase(1.1) {Mode = EasingMode.In});
             Goto(Location.Space, 20, new LinearEase());
 
-            // TODO
-            //hw.MoodLight.Send(Colors.Blue);
-            hw.CarriageDoor.Open()
-                .WaitOne();
+            hw.PatriotLight.Blue();
+            hw.CarriageDoor.Open();
 
             hw.PanelButton.Wait();
-            hw.CarriageDoor.Close()
-                .WaitOne();
+            hw.PatriotLight.Red();
+            hw.CarriageDoor.Close();
+            hw.PatriotLight.Off();
         }
 
         public static void ExitHeaven()
         {
             hw.CarriageDoor.Close();
-            Goto(Location.Heaven, 20, new LinearEase());
-            Goto(Location.BlackRockCity, 30, new ExponentialEase(1.1));
+            hw.PatriotLight.Off();
+            
+            Goto(Location.Heaven, 20, new ExponentialEase(1.1) {Mode = EasingMode.In});
+            Goto(Location.BlackRockCity, 30, new ExponentialEase(1.1) { Mode = EasingMode.Out});
             hw.CarriageDoor.Open();
         }
 
@@ -135,16 +141,14 @@ namespace Hellevator.Behavior
         {
             Goto(Location.MidPurgatory, 30, new BounceEase {Mode = EasingMode.In});
             Goto(Location.Purgatory, 30, new BounceEase {Mode = EasingMode.Out});
-            
-            hw.CarriageDoor.Open()
-                .WaitOne();
+
+            hw.CarriageDoor.Open();
 
             //hw.MoodLight.Send(Colors.White);
 
             hw.PanelButton
                 .Wait();
-            hw.CarriageDoor.Close()
-                .WaitOne();
+            hw.CarriageDoor.Close();
         }
 
         public static void ExitPurgatory()
@@ -174,8 +178,7 @@ namespace Hellevator.Behavior
             //hw.CarriageDoor.Open();
             //hw.Chandelier.Off();
 
-            hw.CarriageDoor.Close()
-                .WaitOne();
+            hw.CarriageDoor.Close();
         }
 
         /// <summary>
@@ -196,7 +199,7 @@ namespace Hellevator.Behavior
         
         private static void Goto(Location destination, int duration, EasingFunction easing = null)
         {
-            hw.BeginDestination(destination);
+            hw.DisplayDestination(destination.GetName());
             
             elevator.Play(new ElevatorEffect());
 
@@ -211,13 +214,31 @@ namespace Hellevator.Behavior
                 FinalValue = destFloor,
                 EasingFunction = easing,
                 Length = length,
-                Set = v => CurrentFloor = v
+                Set = SetCurrentFloor
             };
             animator.Animate();
         }
 
         private static double currentFloor;
-        
+        private static double delta = 0;
+
+        private static void SetCurrentFloor(double value, long ticks, bool final)
+        {
+            var seconds = (double)ticks / TimeSpan.TicksPerSecond;
+            delta = value - currentFloor;
+            var floorsPerSecond = delta / seconds;
+            CurrentFloor = value;
+
+            if(final)
+                hw.Fan.Off();
+            else if(floorsPerSecond < -2) // High speed cutoff
+                hw.Fan.High();
+            else if(floorsPerSecond < -1) // Low speed cutoff
+                hw.Fan.Low();
+            else
+                hw.Fan.Off();
+        }
+
         public static double CurrentFloor
         {
             get { return currentFloor; }
@@ -228,15 +249,9 @@ namespace Hellevator.Behavior
             }
         }
 
-        public static void BeginScenario(Scenario scenario)
+        public static void DisplayScenario(Scenario scenario)
         {
-            hw.BeginScenario(scenario.Name);
-            scenario.Run();
-        }
-
-        public static void Display(string message)
-        {
-            hw.Display(message);
+            hw.DisplayScenario(scenario.Name);
         }
     }
 }

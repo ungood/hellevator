@@ -15,9 +15,7 @@
 // limitations under the License.
 #endregion
 
-using System;
 using System.Threading;
-using Hellevator.Behavior.Animations;
 using Hellevator.Behavior.Interface;
 using Hellevator.Behavior.Scenarios;
 
@@ -28,11 +26,11 @@ namespace Hellevator.Behavior
         public static bool IsScenarioRunning;
 
         private static readonly ScenarioLoop Loop = new ScenarioLoop {
-            //HeavenScenario.Instance,
+            HeavenScenario.Instance,
             //PurgatoryScenario.Instance,
             //SequenceScenario.Instance,
-            HellScenario.Instance,
-            DemoScenario.Instance
+            //HellScenario.Instance,
+            //DemoScenario.Instance
         };
 
         
@@ -42,14 +40,16 @@ namespace Hellevator.Behavior
             hardware.ModeButton.Pressed += ModeButtonPressed;
 
             Hellevator.Reset(true);
-            //Hellevator.GotoPurgatory();
-            //Hellevator.ExitPurgatory();
-            Hellevator.Display(Loop.Current.Name);
+            Hellevator.DisplayScenario(Loop.Current);
             while(true)
             {
-                hardware.CallButton.Wait();
-                RunScenario();
-                Loop.Next();
+                Hellevator.Reset(false);
+                //Hellevator.CurrentFloor = Location.Space.GetFloor();
+                //hardware.CallButton.Wait();
+                Hellevator.GotoPurgatory();
+                //Hellevator.ExitHeaven();
+
+                //RunScenario();
             }
         }
         
@@ -58,7 +58,9 @@ namespace Hellevator.Behavior
             Hellevator.AcceptGuest();
 
             IsScenarioRunning = true;
-            Hellevator.BeginScenario(Loop.Current);
+            Hellevator.DisplayScenario(Loop.Current);
+            Loop.Current.Run();
+            
             Thread.Sleep(10 * 1000);
             Hellevator.Reset(false);
             IsScenarioRunning = false;
@@ -67,7 +69,7 @@ namespace Hellevator.Behavior
         private static void ModeButtonPressed()
         {
             Loop.Next();
-            Hellevator.Display(Loop.Current.Name);
+            Hellevator.DisplayScenario(Loop.Current);
         }
     }
 }
