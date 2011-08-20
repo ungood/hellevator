@@ -17,6 +17,9 @@
 
 using System.Threading;
 using Hellevator.Behavior;
+using Hellevator.Behavior.Effects;
+using Hellevator.Behavior.Interface;
+using Hellevator.Physical.Interface;
 using Microsoft.SPOT;
 
 namespace Hellevator.Physical
@@ -28,19 +31,25 @@ namespace Hellevator.Physical
         public static void Main()
         {
             Debug.EnableGCMessages(false);
+            
+            TheBox.DisplayScenario("SCENARIO");
+            TheBox.DisplayDestination("DESTINATION");
+            TheBox.DisplayInstruction("INSTRUCTION");
 
             var thread = new Thread(Run);
             thread.Start();
-
+            
             CycleSmoke();
         }
 
         private static void Run()
         {
-            Script.Run(TheBox);
+            Behavior.Hellevator.Initialize(TheBox);
+            Behavior.Hellevator.Reset(true);
+            Behavior.Hellevator.CurrentFloor = Location.Heaven.GetFloor();
+            Behavior.Hellevator.ExitHeaven();
+            //Script.Run(TheBox);
         }
-
-
 
         private static void FloorIndicatorTest()
         {
@@ -55,7 +64,7 @@ namespace Hellevator.Physical
             }
         }
 
-        private static void LightTest()
+        private static void RelayTest()
         {
             while(true)
             {
@@ -64,32 +73,21 @@ namespace Hellevator.Physical
                 TheBox.PatriotLight.White();
                 Thread.Sleep(1000);
                 TheBox.PatriotLight.Blue();
-                Thread.Sleep(1000);
-                TheBox.PatriotLight.Off();
                 Thread.Sleep(3000);
 
-                TheBox.Fan.Low();
-                Thread.Sleep(1000);
-                TheBox.Fan.High();
-                Thread.Sleep(1000);
-                TheBox.Fan.Off();
-                Thread.Sleep(3000);
-
-                TheBox.RopeLight.On();
-                Thread.Sleep(1000);
-                TheBox.RopeLight.Off();
-                Thread.Sleep(1000);
-
-                TheBox.DriveWheel.On();
-                Thread.Sleep(1000);
-                TheBox.DriveWheel.Off();
-                Thread.Sleep(1000);
-
-                TheBox.SmokeMachine.On();
-                Thread.Sleep(1000);
-                TheBox.SmokeMachine.Off();
-                Thread.Sleep(1000);
+                Cycle(TheBox.Fan);
+                Cycle(TheBox.RopeLight);
+                Cycle(TheBox.DriveWheel);
+                Cycle(TheBox.SmokeMachine);
             }
+        }
+
+        private static void Cycle(IRelay relay)
+        {
+            relay.On();
+            Thread.Sleep(1000);
+            relay.Off();
+            Thread.Sleep(1000);
         }
 
         private static void Pause(int minute, int second)

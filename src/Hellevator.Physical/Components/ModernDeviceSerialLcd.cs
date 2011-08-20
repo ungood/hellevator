@@ -17,13 +17,21 @@ namespace Hellevator.Physical.Components
 
         public void Initialize()
         {
+            Thread.Sleep(1000);
             port.Write("?G420?BFF");  // Set Geometry to 4x20 and backlight full on
-            Thread.Sleep(100);
+            Thread.Sleep(2000);
+            Display(0, "HELLEVATOR 2011");
         }
 
         public void Display(int line, string message)
         {
-            port.Write("?x00?y" + line + "?l" + message);
+            var spacing = (20 - message.Length) / 2;
+            port.Write("?y" + line + "?l?x" + Pad(spacing) + message);
+        }
+
+        public string Pad(int value)
+        {
+            return value < 10 ? "0" + value : value.ToString();
         }
     }
 }

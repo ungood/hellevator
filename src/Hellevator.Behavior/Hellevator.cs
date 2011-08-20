@@ -26,7 +26,7 @@ using Math = System.Math;
 
 namespace Hellevator.Behavior
 {
-    internal static class Hellevator
+    public static class Hellevator
     {
         private static IHellevator hw;
         private static EffectPlayer elevator;
@@ -51,16 +51,29 @@ namespace Hellevator.Behavior
             Thread.Sleep((int) (1000 * seconds));
         }
 
+        private static DateTime mark = DateTime.Now;
+
+        private static void Mark(string note)
+        {
+            mark = DateTime.Now;
+            var interval = TimeSpan.Zero;
+            Debug.Print("| " + interval.ToString() + " | " + note + " | |");
+        }
+
+        private static void Time(string note)
+        {
+            var interval = DateTime.Now - mark;
+            Debug.Print("| " + interval.ToString() + " | " + note + " | |");
+        }
+
         /// <summary>
         /// Begin attract mode.
         /// </summary>
         public static void Reset(bool firstTime)
         {
-            hw.DisplayScenario("RESET");
-            hw.DisplayDestination("");
+            hw.DisplayDestination("BRC");
             hw.DisplayInstruction("");
 
-            hw.PatriotLight.Off();
             hw.Fan.Off();
             hw.DriveWheel.Off();
             hw.RopeLight.Off();
@@ -72,6 +85,7 @@ namespace Hellevator.Behavior
             hw.LobbyZone.Stop();
             hw.CarriageZone.Stop();
             hw.EffectsZone.Stop();
+            hw.PatriotLight.Off();
         }
 
         /// <summary>
@@ -79,25 +93,34 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void AcceptGuest()
         {
+            hw.CallButton.Wait();
+            Mark("Call Button Pressed");
+
             Pause(5);
             hw.DriveWheel.On();
+            Time("Drive Wheel On");
+
             Pause(3);
             hw.RopeLight.On();
+            Time("Rope Light On");
 
             Pause(22);
             hw.DriveWheel.Off();
+            Time("Drive Wheel Off");
 
             CurrentFloor = 1;
-            hw.PatriotLight.White();
             ceiling.Set(Colors.White);
+            hw.PatriotLight.White();
 
+            Time("White Light On, Open Doors");
+            
             hw.CarriageDoor.Open();
+            Pause(10);
 
             hw.RopeLight.Off();
-            hw.PanelButton
-                .Wait();
-            // CeilingLights = Gold color
-            hw.CarriageDoor.Close();
+            Time("Rope Light Off, Waiting on Panel Button");
+
+            hw.PanelButton.Wait();
         }
 
         #region Heaven
@@ -107,27 +130,41 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoHeaven()
         {
-            hw.PatriotLight.Off();
-            Goto(Location.Heaven, 30, new ExponentialEase(1.1) {Mode = EasingMode.In});
-            Goto(Location.Space, 20, new LinearEase());
-
-            hw.PatriotLight.Blue();
-            hw.CarriageDoor.Open();
-
-            hw.PanelButton.Wait();
-            hw.PatriotLight.Red();
+            Mark("Panel Button Pressed, Closing Doors");
             hw.CarriageDoor.Close();
             hw.PatriotLight.Off();
+
+            Time("Doors Closed, Going Up");
+            Goto(Location.TopFloor, 30, new ExponentialEase(1.1) {Mode = EasingMode.In});
+            
+            Time("Breaking through top floor");
+            Goto(Location.Heaven, 20, new LinearEase());
+            
+            Time("Arrived in Heaven, Open Doors");
+            hw.PatriotLight.Blue();
+            hw.CarriageDoor.Open();
+            
+            Time("Doors Open, Waiting on Panel Button");
+            hw.PanelButton.Wait();
         }
 
         public static void ExitHeaven()
         {
+            Mark("Panel Button Pressed, Closing Doors");
             hw.CarriageDoor.Close();
             hw.PatriotLight.Off();
             
-            Goto(Location.Heaven, 20, new ExponentialEase(1.1) {Mode = EasingMode.In});
+            Time("Doors Closed, Going Down");
+            Goto(Location.TopFloor, 20, new ExponentialEase(1.1) {Mode = EasingMode.In});
+            
+            Time("Breaking through top floor");
             Goto(Location.BlackRockCity, 30, new ExponentialEase(1.1) { Mode = EasingMode.Out});
+            
+            Time("Arrived at BRC, Open Doors");
+            hw.PatriotLight.White();
             hw.CarriageDoor.Open();
+            
+            Time("Doors Open, Sequence Finished");
         }
 
         #endregion 
@@ -139,20 +176,25 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoPurgatory()
         {
+            hw.PatriotLight.Off();
             Goto(Location.MidPurgatory, 30, new BounceEase {Mode = EasingMode.In});
             Goto(Location.Purgatory, 30, new BounceEase {Mode = EasingMode.Out});
 
+            // If there is time, cycle lights
+            hw.PatriotLight.White();
             hw.CarriageDoor.Open();
-
-            //hw.MoodLight.Send(Colors.White);
-
-            hw.PanelButton
-                .Wait();
+            elevator.Play(new WhiteNoiseEffect());
+            
+            hw.PanelButton.Wait();
             hw.CarriageDoor.Close();
+            hw.PatriotLight.Off();
+            Pause(10);
         }
 
         public static void ExitPurgatory()
         {
+            // If there is time, fade to GOLD.
+            hw.DisplayDestination("BRC");
             elevator.Play(new WhiteNoiseEffect());
             Thread.Sleep(20 * 1000);
         }
@@ -166,19 +208,19 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoHell()
         {
-            Goto(Location.Hell1, 20, new ExponentialEase {Mode = EasingMode.In});
-            Thread.Sleep(2 * 1000);
-            Goto(Location.Hell2, 20, new LinearEase());
-            //hw.Fan.On();
-            ////hw.FloorIndicator.StartFlicker();
-            ////elevatorEffectsPlayer.Play();
+            hw.PatriotLight.Off();
+            Goto(Location.Hell1, 12, new ExponentialEase {Mode = EasingMode.In});
+            Pause(2);
+            Goto(Location.Hell2, 28, new LinearEase());
 
-            //hw.Fan.Off();
-            //hw.HellLights.On();
-            //hw.CarriageDoor.Open();
-            //hw.Chandelier.Off();
-
+            hw.PatriotLight.Red();
+            hw.CarriageDoor.Open();
+            
+            hw.PanelButton.Wait();
+            
             hw.CarriageDoor.Close();
+            hw.PatriotLight.Off();
+            Pause(10);
         }
 
         /// <summary>
@@ -220,23 +262,10 @@ namespace Hellevator.Behavior
         }
 
         private static double currentFloor;
-        private static double delta = 0;
-
+        
         private static void SetCurrentFloor(double value, long ticks, bool final)
         {
-            var seconds = (double)ticks / TimeSpan.TicksPerSecond;
-            delta = value - currentFloor;
-            var floorsPerSecond = delta / seconds;
             CurrentFloor = value;
-
-            if(final)
-                hw.Fan.Off();
-            else if(floorsPerSecond < -2) // High speed cutoff
-                hw.Fan.High();
-            else if(floorsPerSecond < -1) // Low speed cutoff
-                hw.Fan.Low();
-            else
-                hw.Fan.Off();
         }
 
         public static double CurrentFloor
@@ -245,7 +274,13 @@ namespace Hellevator.Behavior
             set
             {
                 currentFloor = value;
-                hw.FloorIndicator.CurrentFloor = (int) Math.Round(value);
+
+                var intFloor = (int) value;
+                if(intFloor != hw.FloorIndicator.CurrentFloor)
+                {
+                    hw.FloorIndicator.CurrentFloor = (int) value;
+                    Time("Ding " + intFloor);
+                }
             }
         }
 

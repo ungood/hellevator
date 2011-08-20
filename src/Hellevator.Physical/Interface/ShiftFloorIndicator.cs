@@ -7,6 +7,7 @@ using Microsoft.SPOT.Hardware;
 
 namespace Hellevator.Physical.Interface
 {
+    [Obsolete]
     public class ShiftFloorIndicator : IFloorIndicator
     {
         private readonly ShiftRegister shift;
@@ -20,6 +21,7 @@ namespace Hellevator.Physical.Interface
         private int currentFloor = 0;
         public int CurrentFloor
         {
+            get { return currentFloor; }
             set
             {
                 if(currentFloor == value)

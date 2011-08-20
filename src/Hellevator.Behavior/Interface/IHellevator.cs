@@ -11,7 +11,7 @@ namespace Hellevator.Behavior.Interface
 
         // Relays
         IPatriotLight PatriotLight { get; }
-        IFan Fan { get; }
+        IRelay Fan { get; }
         IRelay DriveWheel { get; }
         IRelay RopeLight { get; }
         

@@ -7,14 +7,15 @@ namespace Hellevator.Behavior.Scenarios
         public static readonly SequenceScenario Instance = new SequenceScenario();
 
         private readonly ScenarioLoop loop = new ScenarioLoop {
+            HellScenario.Instance,
             HeavenScenario.Instance,
             PurgatoryScenario.Instance,
-            HellScenario.Instance
+            
         };
 
         public override string Name
         {
-            get { return "SEQ: " + loop.Current.Name; }
+            get { return "SEQUENCE"; }
         }
 
         public override void Run()

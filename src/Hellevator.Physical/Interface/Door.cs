@@ -53,16 +53,19 @@ namespace Hellevator.Physical.Interface
 
         public void Open()
         {
-            Program.TheBox.DisplayInstruction("OPEN DOOR");
-            while(Any(true))
-                Thread.Sleep(100);
+            Program.TheBox.DisplayInstruction("OPEN FUCKING DOOR");
+            Thread.Sleep(10 * 1000);
+            //Thread.Sleep(2000);
+            //while(Any(true))
+            //    Thread.Sleep(100);
             Program.TheBox.DisplayInstruction("");
         }
 
         public void Close()
         {
-            Program.TheBox.DisplayInstruction("CLOSE DOOR");
-            while(All(false))
+            Program.TheBox.DisplayInstruction("CLOSE FUCKING DOOR");
+            Thread.Sleep(10 * 1000);
+            //Thread.Sleep(2000);
             Program.TheBox.DisplayInstruction("");
         }
     }

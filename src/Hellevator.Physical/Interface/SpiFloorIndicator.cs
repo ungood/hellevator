@@ -28,42 +28,38 @@ namespace Hellevator.Physical.Interface
         
         public SpiFloorIndicator(SPI.SPI_module module, FEZ_Pin.Digital latchPin)
         {
-            var config = new SPI.Configuration(Cpu.Pin.GPIO_NONE, false, 0, 0, false, true, 1000, module);
+            var config = new SPI.Configuration(Cpu.Pin.GPIO_NONE, false, 0, 0, false, true, 200, module);
             spi = new SPI(config);
 
             latch = new OutputPort((Cpu.Pin) latchPin, true);
 
-            CurrentFloor = -1;
+            CurrentFloor = 1;
         }
 
         private int currentFloor;
 
         public int CurrentFloor
         {
+            get { return currentFloor; }
             set
             {
                 if(value == currentFloor)
                     return;
                 currentFloor = value;
 
-                if(value < 1 || value > 24)
-                {
-                    Write(0, 0, 0);
-                    return;
-                }
-                
-                value--;
-                var buffer = new byte[3];
-                buffer[value / 8] = (byte) (1 << (value % 8));
-                Write(buffer);
-            }
-        }
+                while(value > 24)
+                    value -= 24;
+                while(value < 1)
+                    value += 24;
 
-        private void Write(params byte[] buffer)
-        {
-            latch.Write(false);
-            spi.Write(buffer);
-            latch.Write(true);
+                value = (24 - value);
+                var buffer = new byte[3];
+                buffer[2- (value / 8)] = (byte) (1 << (value % 8));
+
+                latch.Write(false);
+                spi.Write(buffer);
+                latch.Write(true);
+            }
         }
     }
 }

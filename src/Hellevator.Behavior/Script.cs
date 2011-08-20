@@ -26,9 +26,9 @@ namespace Hellevator.Behavior
         public static bool IsScenarioRunning;
 
         private static readonly ScenarioLoop Loop = new ScenarioLoop {
-            HeavenScenario.Instance,
+            //HeavenScenario.Instance,
             //PurgatoryScenario.Instance,
-            //SequenceScenario.Instance,
+            SequenceScenario.Instance,
             //HellScenario.Instance,
             //DemoScenario.Instance
         };
@@ -44,12 +44,7 @@ namespace Hellevator.Behavior
             while(true)
             {
                 Hellevator.Reset(false);
-                //Hellevator.CurrentFloor = Location.Space.GetFloor();
-                //hardware.CallButton.Wait();
-                Hellevator.GotoPurgatory();
-                //Hellevator.ExitHeaven();
-
-                //RunScenario();
+                RunScenario();
             }
         }
         

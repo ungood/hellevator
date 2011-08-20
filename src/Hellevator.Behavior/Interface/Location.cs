@@ -22,8 +22,8 @@ namespace Hellevator.Behavior.Interface
         Unknown         = 0,
         Hell1,
         Hell2,
+        TopFloor,
         Heaven,
-        Space,
         Entrance,
         MidPurgatory,
         Purgatory,
@@ -39,16 +39,16 @@ namespace Hellevator.Behavior.Interface
                 case Location.Hell1:
                 case Location.Hell2:
                     return "HELL";
+                case Location.TopFloor:
+                    return "TOP FLOOR";
                 case Location.Heaven:
                     return "HEAVEN";
-                case Location.Space:
-                    return "SPACE";
                 case Location.Entrance:
                 case Location.BlackRockCity:
                     return "BRC";
                 case Location.Purgatory:
                 case Location.MidPurgatory:
-                    return "PURGATORY";
+                    return "NOWHERE";
                 default:
                     return "UNKNOWN";
             }
@@ -58,18 +58,18 @@ namespace Hellevator.Behavior.Interface
         {
             switch(location)
             {
-                case Location.Heaven:
+                case Location.TopFloor:
                     return 24;
-                case Location.Space:
+                case Location.Heaven:
                     return 88;
                 case Location.MidPurgatory:
                     return 13;
                 case Location.Purgatory:
                     return 1;
                 case Location.Hell1:
-                    return -15;
+                    return -12;
                 case Location.Hell2:
-                    return -60;
+                    return -100;
                 default:
                     return 1;
             }

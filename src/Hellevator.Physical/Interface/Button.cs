@@ -25,27 +25,60 @@ namespace Hellevator.Physical.Interface
 {
     public class Button : IButton
     {
-        private readonly InterruptPort interrupt;
+        private readonly InputPort interrupt;
         private readonly AutoResetEvent interruptEvent = new AutoResetEvent(false);
-        private DateTime lastPressed = DateTime.Now;
+        private readonly Thread thread;
 
         public Button(FEZ_Pin.Interrupt pin, Port.ResistorMode mode = Port.ResistorMode.PullUp)
         {
-            interrupt = new InterruptPort((Cpu.Pin) pin, true, mode,
-                Port.InterruptMode.InterruptEdgeHigh);
-            interrupt.OnInterrupt += OnInterrupt;
-            interrupt.EnableInterrupt();
+            interrupt = new InputPort((Cpu.Pin) pin, true, mode);
+            thread  = new Thread(Run);
+            thread.Start();
         }
 
-        private void OnInterrupt(uint data1, uint data2, DateTime time)
+        private int count;
+        
+        private void Run()
         {
-            var interval = time - lastPressed;
-            lastPressed = time;
-            if(interval.Ticks < TimeSpan.TicksPerMillisecond * 250)
-                return;
-
-            interruptEvent.Set();
+            while(true)
+            {
+                if(interrupt.Read() == false)
+                {
+                    count++;
+                    if(count > 5)
+                        interruptEvent.Set();
+                }
+                else
+                {
+                    count = 0;
+                }
+                Thread.Sleep(10);
+            }
         }
+
+        //private void OnInterrupt(uint data1, uint data2, DateTime time)
+        //{
+        //    if(data2 == 1)
+        //        return;
+
+        //    if(count == 0)
+        //        firstPressed = time.Ticks;
+        //    count++;
+
+        //    var interval = time.Ticks - firstPressed;
+        //    if(interval > TimeSpan.TicksPerMillisecond * 10)
+        //    {
+        //        count = 0;
+        //        interrupt.ClearInterrupt();
+        //    }
+
+        //    if(count > 50)
+        //    {
+        //        count = 0;
+        //        interrupt.ClearInterrupt();
+        //        interruptEvent.Set();
+        //    }
+        //}
 
         public event PressedEventHandler Pressed;
         

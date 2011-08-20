@@ -21,6 +21,6 @@ namespace Hellevator.Behavior.Interface
 
     public interface IFloorIndicator
     {
-        int CurrentFloor { set; }
+        int CurrentFloor { get; set; }
     }
 }
