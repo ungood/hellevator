@@ -19,18 +19,22 @@ namespace Hellevator.Behavior.Effects
 {
     public class WhiteNoiseEffect : Effect
     {
-        private int[] previous = new int[1000];
-
+        private double[] prev = new double[72];
+        
         public override Color GetColor(double light, double floor, long ms)
         {
-            var index = (int) (light * 999);
-            var prev = previous[index];
-
-            var rnd = RNG.Next() % 256;
-            var intensity = (byte) ((prev + rnd) / 2);
-            
-            previous[index] = intensity;
+            var intensity = GetIntensity(light);
             return new Color(intensity, intensity, intensity);
+        }
+
+        public double GetIntensity(double light)
+        {
+            var rnd = (double) (RNG.Next() % 256) / 256;
+            var index = (int) (70 * light);
+            var intensity = (prev[index] + rnd) / 2;
+
+            prev[index] = intensity;
+            return intensity;
         }
     }
 }

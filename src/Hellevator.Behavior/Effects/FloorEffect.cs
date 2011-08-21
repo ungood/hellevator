@@ -16,6 +16,7 @@
 #endregion
 
 using System;
+using Hellevator.Behavior.Interface;
 
 namespace Hellevator.Behavior.Effects
 {
@@ -48,9 +49,12 @@ namespace Hellevator.Behavior.Effects
             var floorIndex = (int) Math.Round(position) - 1;
             if(floorIndex > 23)
                 return Colors.Black;
+
+            if(floorIndex < Location.BrokenFloor.GetFloor())
+                return hell.GetColor(light, floor, ms);
             
             var floorColor = floorIndex < 0 ? hell.GetColor(light, floor, ms) : FloorColors[floorIndex];
-
+            
             if(HalfDoorHeight > x || x > 1 - HalfDoorHeight)
                 return floorColor;
 

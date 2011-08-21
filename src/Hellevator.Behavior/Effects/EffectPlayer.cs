@@ -27,6 +27,7 @@ namespace Hellevator.Behavior.Effects
         
         public void Play(Effect effect)
         {
+            ticks = 0;
             if(timer != null)
             {
                 timer.Dispose();
@@ -44,7 +45,7 @@ namespace Hellevator.Behavior.Effects
             timer.Dispose();
             timer = null;
 
-            Thread.Sleep(500);
+            Thread.Sleep(4 * MilliPerTick);
             Strip.Reset();
         }
 

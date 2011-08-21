@@ -82,6 +82,7 @@
     <Compile Include="Effects\ElevatorEffect.cs" />
     <Compile Include="Animations\ExponentialEase.cs" />
     <Compile Include="Animations\LinearEase.cs" />
+    <Compile Include="Effects\FadeToGoldEffect.cs" />
     <Compile Include="Effects\FloorEffect.cs" />
     <Compile Include="Effects\HeavenEffect.cs" />
     <Compile Include="Effects\HellEffect.cs" />

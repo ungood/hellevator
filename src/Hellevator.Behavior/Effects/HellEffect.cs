@@ -23,12 +23,12 @@ namespace Hellevator.Behavior.Effects
     {
         public override Color GetColor(double light, double floor, long ms)
         {
-            var sec = ms / 1000.0;
+            var sec = ms / 125.0;
 
             //var w1 = Pulse(sec, 10) / 3; // 0.2 - 0.7
-            var w2 = Pulse(sec, 3)  / 3;
-            var w3 = Pulse(sec, 1)  / 3;
-            var red = 0.2 + w2 + w3;
+            var w2 = Pulse(sec, 3)  / 2;
+            var w3 = Pulse(sec, 1)  / 2;
+            var red = w2 + w3;
             
             var green = Pulse(sec + light, 2) * (red / 2.5);
             return new Color(red, green, 0);

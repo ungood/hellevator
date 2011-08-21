@@ -15,6 +15,8 @@
 // limitations under the License.
 #endregion
 
+using Hellevator.Behavior.Interface;
+
 namespace Hellevator.Behavior.Effects
 {
     /// <summary>
@@ -32,6 +34,9 @@ namespace Hellevator.Behavior.Effects
             if(position > 25)
                 return heaven.GetColor(light, floor, ms);
             
+            if((int)floor == Location.BrokenFloor.GetFloor())
+                return Colors.Black;
+
             return floors.GetColor(light, floor, ms);
         }
     }

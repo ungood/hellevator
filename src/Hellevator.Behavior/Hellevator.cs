@@ -131,6 +131,7 @@ namespace Hellevator.Behavior
         public static void GotoHeaven()
         {
             Mark("Panel Button Pressed, Closing Doors");
+            ceiling.Off();
             hw.CarriageDoor.Close();
             hw.PatriotLight.Off();
 
@@ -138,12 +139,13 @@ namespace Hellevator.Behavior
             Goto(Location.TopFloor, 30, new ExponentialEase(1.1) {Mode = EasingMode.In});
             
             Time("Breaking through top floor");
-            Goto(Location.Heaven, 20, new LinearEase());
+            Goto(Location.Heaven, 20, new ExponentialEase(1.1) {Mode = EasingMode.Out});
             
             Time("Arrived in Heaven, Open Doors");
             hw.PatriotLight.Blue();
+            ceiling.Set(Colors.Blue);
             hw.CarriageDoor.Open();
-            
+
             Time("Doors Open, Waiting on Panel Button");
             hw.PanelButton.Wait();
         }
@@ -164,7 +166,7 @@ namespace Hellevator.Behavior
             hw.PatriotLight.White();
             hw.CarriageDoor.Open();
             
-            Time("Doors Open, Sequence Finished");
+            Time("Doors Open, Sequence Done");
         }
 
         #endregion 
@@ -176,27 +178,45 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoPurgatory()
         {
-            hw.PatriotLight.Off();
-            Goto(Location.MidPurgatory, 30, new BounceEase {Mode = EasingMode.In});
-            Goto(Location.Purgatory, 30, new BounceEase {Mode = EasingMode.Out});
-
-            // If there is time, cycle lights
-            hw.PatriotLight.White();
-            hw.CarriageDoor.Open();
-            elevator.Play(new WhiteNoiseEffect());
-            
-            hw.PanelButton.Wait();
+            Mark("Panel Button Pressed, Closing Doors");
+            ceiling.Off();
             hw.CarriageDoor.Close();
             hw.PatriotLight.Off();
-            Pause(10);
+
+            Time("Doors Closed, Going Up?");
+            Goto(Location.MidPurgatory, 30, new BounceEase {Mode = EasingMode.In});
+
+            Time("Mid-point");
+            Goto(Location.Purgatory, 30, new BounceEase {Mode = EasingMode.Out});
+
+            Time("Arrived at Purgatory, Play Static, Open Doors");
+            hw.PatriotLight.White();
+            ceiling.Set(Colors.White);
+            elevator.Play(new WhiteNoiseEffect());
+
+            hw.CarriageDoor.Open();
+
+            Time("Doors Open, Waiting on Panel Button");
+            hw.PanelButton.Wait();
         }
 
         public static void ExitPurgatory()
         {
+            Mark("Panel Button Pressed, Closing Doors");
+            hw.CarriageDoor.Close();
+            hw.PatriotLight.Off();
+
+            Time("Doors Closed, Fade Static to Gold");
             // If there is time, fade to GOLD.
-            hw.DisplayDestination("BRC");
-            elevator.Play(new WhiteNoiseEffect());
-            Thread.Sleep(20 * 1000);
+            var gold = new FadeToGoldEffect(20);
+            elevator.Play(gold);
+            Pause(gold.Seconds);
+
+            Time("Arrived at BRC, Open Doors");
+            hw.PatriotLight.White();
+            hw.CarriageDoor.Open();
+
+            Time("Doors Open, Sequence Done");
         }
 
         #endregion
@@ -208,19 +228,27 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void GotoHell()
         {
-            hw.PatriotLight.Off();
-            Goto(Location.Hell1, 12, new ExponentialEase {Mode = EasingMode.In});
-            Pause(2);
-            Goto(Location.Hell2, 28, new LinearEase());
-
-            hw.PatriotLight.Red();
-            hw.CarriageDoor.Open();
-            
-            hw.PanelButton.Wait();
-            
+            Mark("Panel Button Pressed, Closing Doors");
+            ceiling.Off();
             hw.CarriageDoor.Close();
             hw.PatriotLight.Off();
-            Pause(10);
+
+            Time("Doors Closed, Going Down");
+            Goto(Location.BrokenFloor, 12, new ExponentialEase(1.1));
+
+            Time("Elevator 'Breaks', 5 second pause");
+            Pause(5);
+
+            Time("Falling to hell");
+            Goto(Location.Hell, 28, new LinearEase());
+
+            Time("Arrived in Hell, Open Doors");
+            hw.PatriotLight.Red();
+            ceiling.Set(Colors.Red);
+            hw.CarriageDoor.Open();
+
+            Time("Doors Open, Wait for Button");
+            hw.PanelButton.Wait();
         }
 
         /// <summary>
@@ -228,17 +256,22 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void ExitHell()
         {
-            CurrentFloor = Location.Hell1.GetFloor();
+            Mark("Panel button pressed, closing doors");
+            hw.CarriageDoor.Close();
+            hw.PatriotLight.Off();
+
+            Time("Doors closed, Going up");
+            CurrentFloor = Location.BrokenFloor.GetFloor();
             Goto(Location.BlackRockCity, 30, new ExponentialEase(1.1));
+
+            Time("Arrived at BRC, Open Doors");
+            hw.CarriageDoor.Open();
         }
 
         #endregion
-        
-        private static void WaitAll(params WaitHandle[] handles)
-        {
-            WaitHandle.WaitAll(handles);
-        }
-        
+
+        #region GOTO
+
         private static void Goto(Location destination, int duration, EasingFunction easing = null)
         {
             hw.DisplayDestination(destination.GetName());
@@ -283,6 +316,8 @@ namespace Hellevator.Behavior
                 }
             }
         }
+
+        #endregion
 
         public static void DisplayScenario(Scenario scenario)
         {

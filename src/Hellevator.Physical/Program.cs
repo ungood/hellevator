@@ -44,11 +44,7 @@ namespace Hellevator.Physical
 
         private static void Run()
         {
-            Behavior.Hellevator.Initialize(TheBox);
-            Behavior.Hellevator.Reset(true);
-            Behavior.Hellevator.CurrentFloor = Location.Heaven.GetFloor();
-            Behavior.Hellevator.ExitHeaven();
-            //Script.Run(TheBox);
+            Script.Run(TheBox);
         }
 
         private static void FloorIndicatorTest()

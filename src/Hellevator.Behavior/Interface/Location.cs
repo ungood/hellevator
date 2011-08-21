@@ -20,14 +20,14 @@ namespace Hellevator.Behavior.Interface
     public enum Location
     {
         Unknown         = 0,
-        Hell1,
-        Hell2,
+        BrokenFloor,
+        Hell,
         TopFloor,
         Heaven,
         Entrance,
         MidPurgatory,
         Purgatory,
-        BlackRockCity
+        BlackRockCity,
     }
 
     public static class LocationExtension
@@ -36,8 +36,8 @@ namespace Hellevator.Behavior.Interface
         {
             switch(location)
             {
-                case Location.Hell1:
-                case Location.Hell2:
+                case Location.BrokenFloor:
+                case Location.Hell:
                     return "HELL";
                 case Location.TopFloor:
                     return "TOP FLOOR";
@@ -66,10 +66,10 @@ namespace Hellevator.Behavior.Interface
                     return 13;
                 case Location.Purgatory:
                     return 1;
-                case Location.Hell1:
-                    return -12;
-                case Location.Hell2:
-                    return -100;
+                case Location.BrokenFloor:
+                    return -11;
+                case Location.Hell:
+                    return -227;
                 default:
                     return 1;
             }
