@@ -37,13 +37,6 @@ namespace Hellevator.Behavior
             hw = hardware;
             elevator = new EffectPlayer(hardware.ElevatorEffects);
             ceiling = new SolidColorPlayer(hardware.CeilingEffects);
-
-            hw.PanelButton.Pressed += PanelButtonPressed;
-        }
-
-        private static void PanelButtonPressed()
-        {
-            hw.EffectsZone.Play(Playlist.Beep);
         }
 
         private static void Pause(double seconds)
@@ -66,6 +59,8 @@ namespace Hellevator.Behavior
             Debug.Print("| " + interval.ToString() + " | " + note + " | |");
         }
 
+        private const int AudioOffset = 200;
+
         /// <summary>
         /// Begin attract mode.
         /// </summary>
@@ -82,9 +77,8 @@ namespace Hellevator.Behavior
             ceiling.Off();
             CurrentFloor = 1;
 
-            hw.LobbyZone.Stop();
-            hw.CarriageZone.Stop();
-            hw.EffectsZone.Stop();
+            hw.ExteriorZone.Stop(false);
+            hw.InteriorZone.Stop(false);
             hw.PatriotLight.Off();
         }
 
@@ -94,6 +88,8 @@ namespace Hellevator.Behavior
         public static void AcceptGuest()
         {
             hw.CallButton.Wait();
+            hw.ExteriorZone.Play(Playlists.Accept.TravelExterior);
+            hw.DisplayInstruction("CALL BUTTON PRESSED");
             Mark("Call Button Pressed");
 
             Pause(5);
@@ -113,14 +109,18 @@ namespace Hellevator.Behavior
             hw.PatriotLight.White();
 
             Time("White Light On, Open Doors");
-            
-            hw.CarriageDoor.Open();
-            Pause(10);
 
+            hw.CarriageDoor.Open();
+            hw.ExteriorZone.Loop(Playlists.Idle.DestinationExterior);
+            hw.InteriorZone.Loop(Playlists.Accept.DestintationInterior);
+            
             hw.RopeLight.Off();
             Time("Rope Light Off, Waiting on Panel Button");
 
             hw.PanelButton.Wait();
+            hw.InteriorZone.Stop(true);
+            hw.ExteriorZone.Stop(true);
+            hw.InteriorZone.Wait();
         }
 
         #region Heaven
@@ -132,39 +132,58 @@ namespace Hellevator.Behavior
         {
             Mark("Panel Button Pressed, Closing Doors");
             ceiling.Off();
+            hw.InteriorZone.Play(Playlists.Heaven.GotoInterior);
+            hw.ExteriorZone.Play(Playlists.Heaven.GotoExterior);
+            Thread.Sleep(AudioOffset);
             hw.CarriageDoor.Close();
             hw.PatriotLight.Off();
 
             Time("Doors Closed, Going Up");
+            hw.RopeLight.On();
             Goto(Location.TopFloor, 30, new ExponentialEase(1.1) {Mode = EasingMode.In});
             
             Time("Breaking through top floor");
             Goto(Location.Heaven, 20, new ExponentialEase(1.1) {Mode = EasingMode.Out});
-            
+            hw.RopeLight.Off();
+
             Time("Arrived in Heaven, Open Doors");
             hw.PatriotLight.Blue();
             ceiling.Set(Colors.Blue);
-            hw.CarriageDoor.Open();
+            hw.CarriageDoor.Open(false);
+            hw.InteriorZone.Wait();
 
             Time("Doors Open, Waiting on Panel Button");
+            hw.InteriorZone.Loop(Playlists.Heaven.DestinationInterior);
+            hw.ExteriorZone.Loop(Playlists.Idle.DestinationExterior);
             hw.PanelButton.Wait();
+            hw.InteriorZone.Stop(true);
+            hw.ExteriorZone.Stop(true);
+            hw.ExteriorZone.Wait();
         }
 
         public static void ExitHeaven()
         {
             Mark("Panel Button Pressed, Closing Doors");
+            hw.InteriorZone.Play(Playlists.Heaven.ExitInterior);
+            hw.ExteriorZone.Play(Playlists.Heaven.ExitExterior);
+            Thread.Sleep(AudioOffset);
             hw.CarriageDoor.Close();
             hw.PatriotLight.Off();
+            ceiling.Off();
             
             Time("Doors Closed, Going Down");
+            hw.RopeLight.On();
             Goto(Location.TopFloor, 20, new ExponentialEase(1.1) {Mode = EasingMode.In});
             
             Time("Breaking through top floor");
             Goto(Location.BlackRockCity, 30, new ExponentialEase(1.1) { Mode = EasingMode.Out});
+            hw.RopeLight.Off();
             
             Time("Arrived at BRC, Open Doors");
             hw.PatriotLight.White();
             hw.CarriageDoor.Open();
+            hw.InteriorZone.Stop(true);
+            hw.ExteriorZone.Loop(Playlists.Idle.DestinationExterior);
             
             Time("Doors Open, Sequence Done");
         }
@@ -180,42 +199,59 @@ namespace Hellevator.Behavior
         {
             Mark("Panel Button Pressed, Closing Doors");
             ceiling.Off();
+            hw.InteriorZone.Play(Playlists.Purgatory.GotoInterior);
+            hw.ExteriorZone.Play(Playlists.Purgatory.GotoExterior);
+            Thread.Sleep(AudioOffset);
             hw.CarriageDoor.Close();
             hw.PatriotLight.Off();
 
             Time("Doors Closed, Going Up?");
+            hw.RopeLight.On();
             Goto(Location.MidPurgatory, 30, new BounceEase {Mode = EasingMode.In});
 
             Time("Mid-point");
             Goto(Location.Purgatory, 30, new BounceEase {Mode = EasingMode.Out});
+            hw.RopeLight.Off();
 
             Time("Arrived at Purgatory, Play Static, Open Doors");
             hw.PatriotLight.White();
             ceiling.Set(Colors.White);
             elevator.Play(new WhiteNoiseEffect());
 
-            hw.CarriageDoor.Open();
+            hw.CarriageDoor.Open(false);
+            hw.InteriorZone.Wait();
+            hw.InteriorZone.Loop(Playlists.Purgatory.DestinationInterior);
+            hw.ExteriorZone.Loop(Playlists.Idle.DestinationExterior);
 
             Time("Doors Open, Waiting on Panel Button");
             hw.PanelButton.Wait();
+            hw.InteriorZone.Stop(true);
+            hw.ExteriorZone.Stop(true);
+            hw.ExteriorZone.Wait();
         }
 
         public static void ExitPurgatory()
         {
             Mark("Panel Button Pressed, Closing Doors");
+            hw.InteriorZone.Play(Playlists.Purgatory.ExitInterior);
+            hw.ExteriorZone.Play(Playlists.Purgatory.ExitExterior);
+            Thread.Sleep(AudioOffset);
             hw.CarriageDoor.Close();
             hw.PatriotLight.Off();
+            ceiling.Off();
 
             Time("Doors Closed, Fade Static to Gold");
             // If there is time, fade to GOLD.
-            var gold = new FadeToGoldEffect(20);
-            elevator.Play(gold);
-            Pause(gold.Seconds);
+            elevator.Play(new WhiteNoiseEffect());
+            Pause(20);
+
 
             Time("Arrived at BRC, Open Doors");
             hw.PatriotLight.White();
             hw.CarriageDoor.Open();
 
+            hw.InteriorZone.Stop(true);
+            hw.ExteriorZone.Loop(Playlists.Idle.DestinationExterior);
             Time("Doors Open, Sequence Done");
         }
 
@@ -230,25 +266,36 @@ namespace Hellevator.Behavior
         {
             Mark("Panel Button Pressed, Closing Doors");
             ceiling.Off();
+            hw.InteriorZone.Play(Playlists.Hell.GotoInterior);
+            hw.ExteriorZone.Play(Playlists.Hell.GotoExterior);
+            Thread.Sleep(AudioOffset);
             hw.CarriageDoor.Close();
             hw.PatriotLight.Off();
 
             Time("Doors Closed, Going Down");
-            Goto(Location.BrokenFloor, 12, new ExponentialEase(1.1));
-
+            hw.RopeLight.On();
+            Goto(Location.BrokenFloor, 15, new ExponentialEase(1.1));
+            
             Time("Elevator 'Breaks', 5 second pause");
             Pause(5);
 
             Time("Falling to hell");
-            Goto(Location.Hell, 28, new LinearEase());
+            Goto(Location.Hell, 20, new LinearEase());
+            hw.RopeLight.Off();
 
             Time("Arrived in Hell, Open Doors");
             hw.PatriotLight.Red();
             ceiling.Set(Colors.Red);
-            hw.CarriageDoor.Open();
+            hw.CarriageDoor.Open(false);
 
             Time("Doors Open, Wait for Button");
+            hw.InteriorZone.Wait();
+            hw.InteriorZone.Play(Playlists.Hell.DestinationInterior);
+            hw.ExteriorZone.Play(Playlists.Idle.DestinationExterior);
             hw.PanelButton.Wait();
+            hw.InteriorZone.Stop(true);
+            hw.ExteriorZone.Stop(true);
+            hw.ExteriorZone.Wait();
         }
 
         /// <summary>
@@ -257,15 +304,23 @@ namespace Hellevator.Behavior
         public static void ExitHell()
         {
             Mark("Panel button pressed, closing doors");
+            hw.InteriorZone.Play(Playlists.Hell.ExitInterior);
+            hw.ExteriorZone.Play(Playlists.Hell.ExitExterior);
             hw.CarriageDoor.Close();
             hw.PatriotLight.Off();
+            ceiling.Off();
 
             Time("Doors closed, Going up");
             CurrentFloor = Location.BrokenFloor.GetFloor();
+            hw.RopeLight.On();
             Goto(Location.BlackRockCity, 30, new ExponentialEase(1.1));
+            hw.RopeLight.Off();
 
             Time("Arrived at BRC, Open Doors");
+            hw.PatriotLight.White();
             hw.CarriageDoor.Open();
+            hw.InteriorZone.Stop(true);
+            hw.ExteriorZone.Loop(Playlists.Idle.DestinationExterior);
         }
 
         #endregion

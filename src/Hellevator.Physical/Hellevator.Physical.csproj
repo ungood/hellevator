@@ -63,17 +63,12 @@
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
     <Compile Include="BitExtensions.cs" />
-    <Compile Include="Components\AudioShield.cs" />
-    <Compile Include="Components\AudioShieldRecorder.cs" />
-    <Compile Include="Components\BufferSpiWriter.cs" />
     <Compile Include="Components\ModernDeviceSerialLcd.cs" />
-    <Compile Include="Components\MusicShield.cs" />
+    <Compile Include="Components\AudioControllerCoordinator.cs" />
     <Compile Include="Components\SerialPortExtensions.cs" />
-    <Compile Include="Components\SpiCoordinator.cs" />
     <Compile Include="Components\LPD6803.cs" />
     <Compile Include="Components\ShiftRegister.cs" />
-    <Compile Include="Components\SpiWriter.cs" />
-    <Compile Include="Components\StreamSpiWriter.cs" />
+    <Compile Include="Interface\BufferSpiWriter.cs" />
     <Compile Include="Interface\Door.cs" />
     <Compile Include="Interface\SerialAudioZone.cs" />
     <Compile Include="Interface\Button.cs" />
@@ -83,6 +78,7 @@
     <Compile Include="Interface\ShiftFloorIndicator.cs" />
     <Compile Include="Interface\SerialLedRope.cs" />
     <Compile Include="Interface\SpiFloorIndicator.cs" />
+    <Compile Include="Interface\SpiWriter.cs" />
     <Compile Include="PhysicalHellevator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

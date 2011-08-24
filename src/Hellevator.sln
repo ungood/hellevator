@@ -62,7 +62,6 @@ Global
 		{DB06941B-7A5D-4E31-8585-DB5255DBC0DC}.AudioBoard|Any CPU.ActiveCfg = AudioBoard|Any CPU
 		{DB06941B-7A5D-4E31-8585-DB5255DBC0DC}.AudioBoard|Any CPU.Build.0 = AudioBoard|Any CPU
 		{DB06941B-7A5D-4E31-8585-DB5255DBC0DC}.AudioBoard|Mixed Platforms.ActiveCfg = AudioBoard|Any CPU
-		{DB06941B-7A5D-4E31-8585-DB5255DBC0DC}.AudioBoard|Mixed Platforms.Build.0 = AudioBoard|Any CPU
 		{DB06941B-7A5D-4E31-8585-DB5255DBC0DC}.AudioBoard|x86.ActiveCfg = AudioBoard|Any CPU
 		{DB06941B-7A5D-4E31-8585-DB5255DBC0DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DB06941B-7A5D-4E31-8585-DB5255DBC0DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -88,8 +87,6 @@ Global
 		{0AAB6B1C-1F4E-490C-821A-83F08C6862A8}.AudioBoard|Any CPU.Build.0 = AudioBoard|Any CPU
 		{0AAB6B1C-1F4E-490C-821A-83F08C6862A8}.AudioBoard|Any CPU.Deploy.0 = AudioBoard|Any CPU
 		{0AAB6B1C-1F4E-490C-821A-83F08C6862A8}.AudioBoard|Mixed Platforms.ActiveCfg = AudioBoard|Any CPU
-		{0AAB6B1C-1F4E-490C-821A-83F08C6862A8}.AudioBoard|Mixed Platforms.Build.0 = AudioBoard|Any CPU
-		{0AAB6B1C-1F4E-490C-821A-83F08C6862A8}.AudioBoard|Mixed Platforms.Deploy.0 = AudioBoard|Any CPU
 		{0AAB6B1C-1F4E-490C-821A-83F08C6862A8}.AudioBoard|x86.ActiveCfg = AudioBoard|Any CPU
 		{0AAB6B1C-1F4E-490C-821A-83F08C6862A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0AAB6B1C-1F4E-490C-821A-83F08C6862A8}.Debug|Any CPU.Build.0 = Debug|Any CPU

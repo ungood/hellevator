@@ -21,8 +21,9 @@ namespace Hellevator.Behavior.Interface
 {
     public interface IAudioZone
     {
-        WaitHandle Play(Playlist playlist);
-        void Loop(Playlist playlist);
-        WaitHandle Stop();
+        void Play(string file);
+        void Loop(string file);
+        void Stop(bool fade);
+        void Wait();
     }
 }

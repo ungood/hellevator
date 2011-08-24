@@ -19,48 +19,45 @@ using System.IO.Ports;
 using System.Threading;
 using GHIElectronics.NETMF.FEZ;
 using Hellevator.Behavior.Interface;
+using Hellevator.Physical.Components;
+using Microsoft.SPOT.Hardware;
 
 namespace Hellevator.Physical.Interface
 {
     public class SerialAudioZone : IAudioZone
     {
-        //private static readonly PersistentStorage Storage
-        //    = new PersistentStorage("SD");
+        private readonly AudioControllerCoordinator coord;
+        private readonly byte address;
+        private readonly InputPort isPlaying;
 
-        //private static readonly SpiCoordinator Coordinator
-        //    = new SpiCoordinator(SPI.SPI_module.SPI1);
-
-        //private readonly ShieldPlayer player;
-
-        public SerialAudioZone(SerialPort serial, byte address)
+        public SerialAudioZone(AudioControllerCoordinator coord, byte address, FEZ_Pin.Digital isPlayingPin)
         {
-            //player = new AudioShieldPlayer(
-            //    Coordinator,
-            //    (Cpu.Pin) dataPin,
-            //    (Cpu.Pin) cmdPin,
-            //    (Cpu.Pin) dreqPin);
-
-            //player.SetVolume(255, 255);
+            this.coord = coord;
+            this.address = address;
+            isPlaying = new InputPort((Cpu.Pin)isPlayingPin, false, Port.ResistorMode.Disabled);
         }
 
-        public WaitHandle Play(Playlist playlist)
-        {
-            //var stream = new FileStream(@"\SD\" + playlist.GetNext() + ".ogg", FileMode.Open);
-            //player.Play(stream);
 
-            return new ManualResetEvent(true);
+        public void Play(string file)
+        {
+            coord.SendCommand(address, AudioControllerCommand.Play, file);
         }
 
-        public void Loop(Playlist playlist)
+        public void Loop(string file)
         {
-            //throw new System.NotImplementedException();
+            coord.SendCommand(address, AudioControllerCommand.Loop, file);
         }
 
-        WaitHandle IAudioZone.Stop()
+        public void Stop(bool fade)
         {
-            return new ManualResetEvent(true);
-            // TODO
+            var command = fade ? AudioControllerCommand.Fade : AudioControllerCommand.Stop;
+            coord.SendCommand(address, command);
         }
 
+        public void Wait()
+        {
+            while(isPlaying.Read())
+                Thread.Sleep(10);
+        }
     }
 }

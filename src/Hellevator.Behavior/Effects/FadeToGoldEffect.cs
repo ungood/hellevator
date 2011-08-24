@@ -15,6 +15,8 @@
 // limitations under the License.
 #endregion
 
+using Microsoft.SPOT;
+
 namespace Hellevator.Behavior.Effects
 {
     public class FadeToGoldEffect : Effect
@@ -35,8 +37,15 @@ namespace Hellevator.Behavior.Effects
 
             var gold = Cache[(int) (progress * 100)];
             var intensity = RNG.Next(256) * (1 - progress);
-            
-            return new Color((byte)(gold.Red + intensity), (byte)(gold.Green + intensity), (byte)(gold.Blue + intensity));
+
+            var red = gold.Red + intensity;
+            var green = gold.Green + intensity;
+            var blue = gold.Blue + intensity;
+
+            red = red > 255 ? 255 : red;
+            blue = blue > 255 ? 255 : blue;
+            green = green > 255 ? 255 : green;
+            return new Color((byte)red, (byte)green, (byte)blue);
             //return (Colors.Gold * progress) + (noise.GetColor(light, floor, ms) * (1 - progress));
         }
 

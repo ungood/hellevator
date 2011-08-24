@@ -15,7 +15,7 @@ namespace Hellevator.Behavior.Scenarios
 
         public override string Name
         {
-            get { return "SEQUENCE"; }
+            get { return "SEQ:" + loop.Current.Name; }
         }
 
         public override void Run()

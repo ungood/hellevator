@@ -66,6 +66,9 @@
   <ItemGroup>
     <Compile Include="AudioShield.cs" />
     <Compile Include="AudioShieldPlayer.cs" />
+    <Compile Include="CommandHandler.cs" />
+    <Compile Include="ExtensionAttribute.cs" />
+    <Compile Include="SerialPortExtensions.cs" />
     <Compile Include="SerialReceiver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
@@ -75,6 +78,7 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
+    <Reference Include="GHIElectronics.NETMF.Hardware, Version=4.1.5.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="GHIElectronics.NETMF.IO, Version=4.1.5.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="GHIElectronics.NETMF.System, Version=4.1.5.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SPOT.Hardware" />
@@ -82,11 +86,5 @@
     <Reference Include="Microsoft.SPOT.Native">
     </Reference>
     <Reference Include="System.IO" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Hellevator.Behavior\Hellevator.Behavior.csproj">
-      <Project>{DB06941B-7A5D-4E31-8585-DB5255DBC0DC}</Project>
-      <Name>Hellevator.Behavior</Name>
-    </ProjectReference>
   </ItemGroup>
 </Project>

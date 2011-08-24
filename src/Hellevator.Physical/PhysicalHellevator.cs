@@ -43,9 +43,8 @@ namespace Hellevator.Physical
         public ILightStrip CeilingEffects { get; private set; }
         public IFloorIndicator FloorIndicator { get; private set; }
         
-        public IAudioZone LobbyZone { get; private set; }
-        public IAudioZone CarriageZone { get; private set; }
-        public IAudioZone EffectsZone { get; private set; }
+        public IAudioZone ExteriorZone { get; private set; }
+        public IAudioZone InteriorZone { get; private set; }
         
         public IDoor CarriageDoor { get; private set; }
         
@@ -61,7 +60,7 @@ namespace Hellevator.Physical
 
         public void DisplayDestination(string name)
         {
-            lcd.Display(2, "GOING: " + name);
+            lcd.Display(2, name);
         }
 
         public void DisplayInstruction(string name)
@@ -69,14 +68,14 @@ namespace Hellevator.Physical
             lcd.Display(3, name);
         }
 
-        private readonly SerialPort audioSerial = new SerialPort("COM1", 115200);
+        private readonly AudioControllerCoordinator audioCoordinator = new AudioControllerCoordinator("COM1");
         private readonly ModernDeviceSerialLcd lcd = new ModernDeviceSerialLcd("COM3");
 
         public PhysicalHellevator()
         {
-            CallButton = new Button(FEZ_Pin.Interrupt.Di43);
-            PanelButton = new Button(FEZ_Pin.Interrupt.Di41);
-            ModeButton = new Button(FEZ_Pin.Interrupt.LDR);
+            CallButton = new Button(FEZ_Pin.Digital.Di43);
+            PanelButton = new Button(FEZ_Pin.Digital.Di41);
+            ModeButton = new Button(FEZ_Pin.Digital.Di21);
 
             PatriotLight = new RelayPatriotLight(FEZ_Pin.Digital.Di52, FEZ_Pin.Digital.Di50, FEZ_Pin.Digital.Di48);
             Fan = new Relay(FEZ_Pin.Digital.Di46);
@@ -86,13 +85,11 @@ namespace Hellevator.Physical
             SmokeMachine = new Relay(FEZ_Pin.Digital.Di24);
 
             ElevatorEffects = new SerialLedRope("COM2", 29);
-            CeilingEffects = new SerialLedRope("COM4", 56);
+            CeilingEffects = new SerialLedRope("COM4", 60);
             FloorIndicator = new SpiFloorIndicator(SPI.SPI_module.SPI2, FEZ_Pin.Digital.Di34);
-            
-            audioSerial.Open();
-            EffectsZone = new SerialAudioZone(audioSerial, 0x01);
-            CarriageZone = new SerialAudioZone(audioSerial, 0x02);
-            LobbyZone    = new SerialAudioZone(audioSerial, 0x03);
+
+            InteriorZone = new SerialAudioZone(audioCoordinator, 1, FEZ_Pin.Digital.Di5);
+            ExteriorZone = new SerialAudioZone(audioCoordinator, 2, FEZ_Pin.Digital.Di10);
             
             CarriageDoor = new Door();
 

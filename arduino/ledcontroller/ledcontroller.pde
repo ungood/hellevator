@@ -6,7 +6,7 @@
 // Ceiling Effects = 'b'
 const byte address = 'a';
 
-const int numLights = 35;
+const int numLights = 60;
 
 LPD6803 strip = LPD6803(numLights, 6, 5);
 

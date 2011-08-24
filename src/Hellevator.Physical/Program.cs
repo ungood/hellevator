@@ -16,9 +16,11 @@
 #endregion
 
 using System.Threading;
+using GHIElectronics.NETMF.FEZ;
 using Hellevator.Behavior;
 using Hellevator.Behavior.Effects;
 using Hellevator.Behavior.Interface;
+using Hellevator.Physical.Components;
 using Hellevator.Physical.Interface;
 using Microsoft.SPOT;
 
@@ -32,9 +34,9 @@ namespace Hellevator.Physical
         {
             Debug.EnableGCMessages(false);
             
-            TheBox.DisplayScenario("SCENARIO");
-            TheBox.DisplayDestination("DESTINATION");
-            TheBox.DisplayInstruction("INSTRUCTION");
+            TheBox.DisplayScenario("STARTUP");
+            TheBox.DisplayDestination("STARTUP");
+            TheBox.DisplayInstruction("STARTUP");
 
             var thread = new Thread(Run);
             thread.Start();
@@ -45,6 +47,11 @@ namespace Hellevator.Physical
         private static void Run()
         {
             Script.Run(TheBox);
+        }
+
+        private static void AudioTest()
+        {
+            TheBox.InteriorZone.Play("accept\\travel-exterior.mp3");
         }
 
         private static void FloorIndicatorTest()

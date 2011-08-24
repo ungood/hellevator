@@ -21,9 +21,8 @@ namespace Hellevator.Behavior.Interface
         IFloorIndicator FloorIndicator { get; }
         
         // Music
-        IAudioZone LobbyZone { get; }
-        IAudioZone CarriageZone { get; }
-        IAudioZone EffectsZone { get; }
+        IAudioZone ExteriorZone { get; }
+        IAudioZone InteriorZone { get; }
 
         // Action
         IDoor CarriageDoor { get; }

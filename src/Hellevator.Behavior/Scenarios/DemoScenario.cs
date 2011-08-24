@@ -15,6 +15,8 @@
 // limitations under the License.
 #endregion
 
+using Hellevator.Behavior.Interface;
+
 namespace Hellevator.Behavior.Scenarios
 {
     public class DemoScenario : Scenario
@@ -29,6 +31,7 @@ namespace Hellevator.Behavior.Scenarios
         public override void Run()
         {
             Hellevator.GotoHeaven();
+            Hellevator.CurrentFloor = Location.Entrance.GetFloor();
             Hellevator.GotoPurgatory();
             Hellevator.GotoHell();
             Hellevator.ExitHell();

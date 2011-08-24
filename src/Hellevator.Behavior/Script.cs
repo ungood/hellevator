@@ -26,11 +26,11 @@ namespace Hellevator.Behavior
         public static bool IsScenarioRunning;
 
         private static readonly ScenarioLoop Loop = new ScenarioLoop {
-            //HeavenScenario.Instance,
-            //PurgatoryScenario.Instance,
             SequenceScenario.Instance,
-            //HellScenario.Instance,
-            //DemoScenario.Instance
+            HeavenScenario.Instance,
+            PurgatoryScenario.Instance,
+            HellScenario.Instance,
+            DemoScenario.Instance
         };
 
         
@@ -56,7 +56,7 @@ namespace Hellevator.Behavior
             Hellevator.DisplayScenario(Loop.Current);
             Loop.Current.Run();
             
-            Thread.Sleep(10 * 1000);
+            Thread.Sleep(30 * 1000);
             Hellevator.Reset(false);
             IsScenarioRunning = false;
         }
@@ -65,6 +65,7 @@ namespace Hellevator.Behavior
         {
             Loop.Next();
             Hellevator.DisplayScenario(Loop.Current);
+            Thread.Sleep(250);
         }
     }
 }

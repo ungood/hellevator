@@ -15,8 +15,10 @@
 // limitations under the License.
 #endregion
 
+using System;
 using GHIElectronics.NETMF.FEZ;
 using Hellevator.Behavior.Interface;
+using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 
 namespace Hellevator.Physical.Interface
@@ -25,6 +27,7 @@ namespace Hellevator.Physical.Interface
     {
         private readonly SPI spi;
         private readonly OutputPort latch;
+        private readonly ExtendedTimer timer;
         
         public SpiFloorIndicator(SPI.SPI_module module, FEZ_Pin.Digital latchPin)
         {
@@ -34,9 +37,13 @@ namespace Hellevator.Physical.Interface
             latch = new OutputPort((Cpu.Pin) latchPin, true);
 
             CurrentFloor = 1;
+
+            timer = new ExtendedTimer(UpdateIndicator, null, DateTime.Now,
+                TimeSpan.FromTicks(25 * TimeSpan.TicksPerMillisecond));
         }
 
         private int currentFloor;
+        private readonly byte[] buffer = new byte[3];
 
         public int CurrentFloor
         {
@@ -53,13 +60,18 @@ namespace Hellevator.Physical.Interface
                     value += 24;
 
                 value = (24 - value);
-                var buffer = new byte[3];
+                buffer[0] = buffer[1] = buffer[2] = 0;
                 buffer[2- (value / 8)] = (byte) (1 << (value % 8));
 
-                latch.Write(false);
-                spi.Write(buffer);
-                latch.Write(true);
+                
             }
+        }
+
+        private void UpdateIndicator(object state)
+        {
+            latch.Write(false);
+            spi.Write(buffer);
+            latch.Write(true);
         }
     }
 }

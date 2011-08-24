@@ -93,6 +93,7 @@
     <Compile Include="Hellevator.cs" />
     <Compile Include="Interface\IFan.cs" />
     <Compile Include="Interface\IPatriotLight.cs" />
+    <Compile Include="Interface\Playlists.cs" />
     <Compile Include="Scenarios\DemoScenario.cs" />
     <Compile Include="Scenarios\SequenceScenario.cs" />
     <Compile Include="Script.cs" />
@@ -103,7 +104,6 @@
     <Compile Include="Interface\IHellevator.cs" />
     <Compile Include="Interface\ILightStrip.cs" />
     <Compile Include="Interface\IRelay.cs" />
-    <Compile Include="Interface\Playlist.cs" />
     <Compile Include="Interface\Location.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RNG.cs" />

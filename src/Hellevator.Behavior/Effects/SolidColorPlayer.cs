@@ -20,6 +20,7 @@ namespace Hellevator.Behavior.Effects
         {
             for(int i = 0; i < strip.NumLights; i++)
                 strip.SetColor(i, color);
+            strip.Update();
         }
     }
 }

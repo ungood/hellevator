@@ -29,9 +29,9 @@ namespace Hellevator.Physical.Interface
         private readonly AutoResetEvent interruptEvent = new AutoResetEvent(false);
         private readonly Thread thread;
 
-        public Button(FEZ_Pin.Interrupt pin, Port.ResistorMode mode = Port.ResistorMode.PullUp)
+        public Button(FEZ_Pin.Digital pin, Port.ResistorMode mode = Port.ResistorMode.PullUp)
         {
-            interrupt = new InputPort((Cpu.Pin) pin, true, mode);
+            interrupt = new InputPort((Cpu.Pin) pin, false, mode);
             thread  = new Thread(Run);
             thread.Start();
         }
@@ -46,7 +46,7 @@ namespace Hellevator.Physical.Interface
                 {
                     count++;
                     if(count > 5)
-                        interruptEvent.Set();
+                        OnPressed();
                 }
                 else
                 {
@@ -55,31 +55,15 @@ namespace Hellevator.Physical.Interface
                 Thread.Sleep(10);
             }
         }
-
-        //private void OnInterrupt(uint data1, uint data2, DateTime time)
-        //{
-        //    if(data2 == 1)
-        //        return;
-
-        //    if(count == 0)
-        //        firstPressed = time.Ticks;
-        //    count++;
-
-        //    var interval = time.Ticks - firstPressed;
-        //    if(interval > TimeSpan.TicksPerMillisecond * 10)
-        //    {
-        //        count = 0;
-        //        interrupt.ClearInterrupt();
-        //    }
-
-        //    if(count > 50)
-        //    {
-        //        count = 0;
-        //        interrupt.ClearInterrupt();
-        //        interruptEvent.Set();
-        //    }
-        //}
-
+        
+        protected void OnPressed()
+        {
+            interruptEvent.Set();
+            var handler = Pressed;
+            if(handler != null)
+                handler();
+        }
+        
         public event PressedEventHandler Pressed;
         
         public void Wait()

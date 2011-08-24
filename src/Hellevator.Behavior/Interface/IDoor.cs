@@ -21,7 +21,7 @@ namespace Hellevator.Behavior.Interface
 {
     public interface IDoor
     {
-        void Open();
-        void Close();
+        void Open(bool wait = true);
+        void Close(bool wait = true);
     }
 }
