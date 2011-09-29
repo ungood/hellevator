@@ -32,7 +32,7 @@ namespace Hellevator.Behavior.Scenarios
         public override void Run()
         {
             Hellevator.GotoPurgatory();
-            Hellevator.ExitPurgatory();
+            //Hellevator.ExitPurgatory();
         }
     }
 }

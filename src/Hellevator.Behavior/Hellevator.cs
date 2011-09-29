@@ -87,22 +87,22 @@ namespace Hellevator.Behavior
         /// </summary>
         public static void AcceptGuest()
         {
-            hw.CallButton.Wait();
-            hw.ExteriorZone.Play(Playlists.Accept.TravelExterior);
-            hw.DisplayInstruction("CALL BUTTON PRESSED");
-            Mark("Call Button Pressed");
+            //hw.CallButton.Wait();
+            //hw.ExteriorZone.Play(Playlists.Accept.TravelExterior);
+            //hw.DisplayInstruction("CALL BUTTON PRESSED");
+            //Mark("Call Button Pressed");
 
-            Pause(5);
-            hw.DriveWheel.On();
-            Time("Drive Wheel On");
+            //Pause(5);
+            //hw.DriveWheel.On();
+            //Time("Drive Wheel On");
 
-            Pause(3);
-            hw.RopeLight.On();
-            Time("Rope Light On");
+            //Pause(3);
+            //hw.RopeLight.On();
+            //Time("Rope Light On");
 
-            Pause(22);
-            hw.DriveWheel.Off();
-            Time("Drive Wheel Off");
+            //Pause(22);
+            //hw.DriveWheel.Off();
+            //Time("Drive Wheel Off");
 
             CurrentFloor = 1;
             ceiling.Set(Colors.White);
@@ -110,7 +110,7 @@ namespace Hellevator.Behavior
 
             Time("White Light On, Open Doors");
 
-            hw.CarriageDoor.Open();
+            //hw.CarriageDoor.Open();
             hw.ExteriorZone.Loop(Playlists.Idle.DestinationExterior);
             hw.InteriorZone.Loop(Playlists.Accept.DestintationInterior);
             
@@ -153,9 +153,11 @@ namespace Hellevator.Behavior
             hw.InteriorZone.Wait();
 
             Time("Doors Open, Waiting on Panel Button");
-            hw.InteriorZone.Loop(Playlists.Heaven.DestinationInterior);
-            hw.ExteriorZone.Loop(Playlists.Idle.DestinationExterior);
-            hw.PanelButton.Wait();
+            hw.InteriorZone.Play(Playlists.Heaven.DestinationInterior);
+            hw.ExteriorZone.Play(Playlists.Idle.DestinationExterior);
+            Pause(5);
+            hw.InteriorZone.Wait();
+            //hw.PanelButton.Wait();
             hw.InteriorZone.Stop(true);
             hw.ExteriorZone.Stop(true);
             hw.ExteriorZone.Wait();
@@ -220,11 +222,13 @@ namespace Hellevator.Behavior
 
             hw.CarriageDoor.Open(false);
             hw.InteriorZone.Wait();
-            hw.InteriorZone.Loop(Playlists.Purgatory.DestinationInterior);
-            hw.ExteriorZone.Loop(Playlists.Idle.DestinationExterior);
+            hw.InteriorZone.Play(Playlists.Purgatory.DestinationInterior);
+            hw.ExteriorZone.Play(Playlists.Idle.DestinationExterior);
+            Pause(5);
+            hw.InteriorZone.Wait();
 
             Time("Doors Open, Waiting on Panel Button");
-            hw.PanelButton.Wait();
+            //hw.PanelButton.Wait();
             hw.InteriorZone.Stop(true);
             hw.ExteriorZone.Stop(true);
             hw.ExteriorZone.Wait();
@@ -292,7 +296,9 @@ namespace Hellevator.Behavior
             hw.InteriorZone.Wait();
             hw.InteriorZone.Play(Playlists.Hell.DestinationInterior);
             hw.ExteriorZone.Play(Playlists.Idle.DestinationExterior);
-            hw.PanelButton.Wait();
+            Pause(5);
+            hw.InteriorZone.Wait();
+            //hw.PanelButton.Wait();
             hw.InteriorZone.Stop(true);
             hw.ExteriorZone.Stop(true);
             hw.ExteriorZone.Wait();
